@@ -6,3 +6,6 @@ Making refined and qualified teachers available to all schools in Nigeria is our
 ## Centurion Confidence
 ## Uche Okorowu
 ## Abiokorigho Samuel
+## Nesisa Moyo
+## Adewoye Adegoke
+## Erasmus Mensah
