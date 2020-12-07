@@ -1,0 +1,29 @@
+.header {
+  width: 90%;
+  margin: auto;
+  margin-top: 1rem;
+}
+
+.logo {
+  display: flex;
+}
+
+.title {
+  align-self: center;
+  margin-left: 0.5rem;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar ul {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.navbar li {
+  margin-left: 2rem;
+}

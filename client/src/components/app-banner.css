@@ -1,0 +1,61 @@
+.banner {
+  margin-top: 6rem;
+  background: var(--primaryColor);
+  color: white;
+  display: flex;
+  padding: 1rem 8rem;
+}
+
+.banner p {
+  font-size: 1.7rem;
+}
+
+.banner-left {
+  flex: 45%;
+}
+
+.banner-right {
+  flex: 30%;
+}
+
+.banner-phone {
+  flex: 25%;
+}
+
+.phone-image {
+  position: relative;
+  left: 43%;
+  bottom: 35%;
+}
+
+.store {
+  padding: 0.5rem 2rem;
+  border-radius: 30px;
+  background: white;
+  color: black;
+  display: flex;
+  align-items: center;
+}
+
+.store-links {
+  display: flex;
+  width: 85%;
+  margin: 1rem auto 0;
+  justify-content: space-between;
+}
+
+.store-links span {
+  margin-right: 1rem;
+}
+
+.icon {
+  width: 1.5rem;
+}
+
+.social {
+  margin-top: 2rem;
+}
+
+.social > * {
+  margin-left: 1rem;
+}

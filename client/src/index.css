@@ -1,13 +1,43 @@
-body {
+@import url("https://fonts.googleapis.com/css2?family=Righteous&display=swap");
+
+:root {
+  --primaryColor: #9b51e0;
+  --textColor: #828282;
+  --backgroundLight: #f2f2f2;
+  --backgroundDark: #e0e0e0;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+}
+
+body {
+  font-family: "Righteous", cursive;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: var(--textColor);
+  font-size: 18px;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+li,
+a {
+  text-decoration: none;
+  list-style-type: none;
+}
+
+.button {
+  color: white;
+  background: var(--primaryColor);
+  padding: 0.5rem;
+}
+
+.purple {
+  color: var(--primaryColor);
 }
