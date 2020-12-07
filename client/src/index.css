@@ -27,9 +27,11 @@ code {
 }
 
 li,
-a {
+a, input {
   text-decoration: none;
   list-style-type: none;
+  color: inherit;
+  font-size: inherit;
 }
 
 .button {
