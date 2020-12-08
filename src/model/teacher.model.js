@@ -33,7 +33,7 @@ const teacherSchema = new Schema(
     },
     phone: {
       type: String,
-      required: false,
+      required: true,
       unique: true,
       validate(value) {
         if (!validator.isMobilePhone(value, ['en-NG', 'en-GH'])) {
