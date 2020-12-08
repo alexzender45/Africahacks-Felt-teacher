@@ -4,6 +4,8 @@ import SchoolLogin from './pages/school/school-login';
 import TeacherLogin from './pages/teacher/teacher-login';
 import RegisterTeacher from './pages/teacher/register-teacher';
 import RegisterSchool from './pages/school/register-school';
+import RecoverPassword from './pages/recover-password';
+import VerifyPassword from './pages/verify-password';
 import './App.css';
 
 import {
@@ -27,6 +29,12 @@ function App() {
         </Route>
         <Route path='/school/register'>
           <RegisterSchool />
+        </Route>
+        <Route path='/recover-password'>
+          <RecoverPassword />
+        </Route>
+        <Route path='/verify-password'>
+          <VerifyPassword />
         </Route>
         <Route path='/'>
           <Home />

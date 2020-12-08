@@ -5,14 +5,6 @@
     color: black;
 }
 
-
-
-.top{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .top img{
     margin-right: 1rem;
 }

@@ -22,7 +22,7 @@ const LoginForm = ({category}) => {
                     Keep me signed in
                 </label>
             </form>
-            <p className='button-container'><a href='/'>FORGOT PASSWORD</a></p>
+            <p className='button-container'><Link to='/recover-password'>FORGOT PASSWORD</Link></p>
             <div className='button-container'><Link to={`/${category}/register`} className='button'>Create a {category} account</Link></div>
             </div>
             </>

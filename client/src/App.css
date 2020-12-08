@@ -48,3 +48,8 @@
     background: var(--primaryColor);
 }
 
+.top{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
