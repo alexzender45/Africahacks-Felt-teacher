@@ -34,12 +34,6 @@ a, input {
   font-size: inherit;
 }
 
-.button {
-  color: white;
-  background: var(--primaryColor);
-  padding: 0.5rem;
-}
-
-.purple {
-  color: var(--primaryColor);
+form > * {
+  display: block;
 }

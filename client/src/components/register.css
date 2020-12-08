@@ -1,0 +1,46 @@
+.register{
+    width: 45%;
+    padding: 1rem 3rem;
+    margin-bottom: 5%;
+    color: black;
+}
+
+
+
+.top{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.top img{
+    margin-right: 1rem;
+}
+
+.group{
+    display: flex;
+    justify-content: space-between;
+  }
+  .group label{
+    flex: 20%;
+  }
+  
+  .group input{
+    flex: 80%;
+  }
+  
+
+.tel{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-column-gap: 1rem;
+    justify-items: end;
+}
+
+.tel > :nth-child(2){
+    width: 100%;
+}
+
+.tel > :nth-child(1){
+    width: 50%;
+}

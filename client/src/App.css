@@ -1,0 +1,50 @@
+.button {
+  color: white;
+  background: var(--primaryColor);
+  padding: 0.5rem;
+}
+
+.purple {
+  color: var(--primaryColor);
+}
+
+.container {
+  width: 30%;
+  margin: 6% auto 0;
+  background: var(--backgroundLight);
+  display: block;
+  text-align: center;
+  padding: 1rem 1rem 3rem;
+  -webkit-box-shadow: 5px 6px 0px 5px var(--primaryColor);
+  -moz-box-shadow: 5px 6px 0px 5px var(--primaryColor);
+  box-shadow: 5px 6px 0px 5px var(--primaryColor);
+}
+
+.container > * {
+  margin-top: 0.5rem;
+}
+.input {
+  padding: 0.5rem 1rem;
+  width: 70%;
+  margin: 0 auto 1.5rem;
+  background: var(--backgroundDark);
+  outline: none;
+  border: none;
+  border-top: 5px solid var(--primaryColor);
+}
+
+.submit {
+  padding: 0.5rem 1rem;
+  width: 70%;
+  margin: 0 auto 0.5rem;
+}
+
+.topbar{
+    position: absolute;
+    top:0;
+    left: 0;
+    height: 1.5rem;
+    width: 100%;
+    background: var(--primaryColor);
+}
+
