@@ -14,7 +14,12 @@ export class TeacherController extends BaseController {
       if (req.file) {
         data.image = req.file.path;
       }
-
+      if(data.password.length < 6){
+        res.send({
+          staus: 'error',
+          error: 'Password cannot be less than six',
+        });
+      }
       
       const newTeacher = new Teacher(data);
       const teacher = await newTeacher.save();
@@ -29,10 +34,8 @@ export class TeacherController extends BaseController {
 
   async login(req, res) {
     try {
-      const { email, password} = req.body;
-      console.log(email)
-      console.log(password)
-      const teacher = await Teacher.findByCredentials(email, password);
+      const { username, password} = req.body;
+      const teacher = await Teacher.findByCredentials(username, password);
       const token = await teacher.generateAuthToken();
       const body = { teacher, token };
 
@@ -67,9 +70,9 @@ export class TeacherController extends BaseController {
     }
   }
 
-  async approvedTeachersInEnglishAndMathmaticsAndBiology(req, res) {
+  async approvedTeachersInEnglish(req, res) {
     try {
-      const teachers = await Teacher.find({ approved: true, $or:[{interested_subject : 'English'}, {interested_subject : 'Biology'}, {interested_subject : 'Mathematics'}] });
+      const teachers = await Teacher.find({ approved: true, $or:[{interested_subject : 'English'}] });
 
       super.success(res, teachers || [], 'Successfully Retrieved all Teachers.');
     } catch (e) {
@@ -77,9 +80,9 @@ export class TeacherController extends BaseController {
     }
   }
 
-  async approvedTeachersInPhysisAndChemistryAndGeography(req, res) {
+  async approvedTeachersInPhysics(req, res) {
     try {
-      const teachers = await Teacher.find({ approved: true, $or:[{interested_subject : 'Physis'}, {interested_subject : 'Chemistry'}, {interested_subject : 'Geography'}] });
+      const teachers = await Teacher.find({ approved: true, $or:[{interested_subject : 'Physics'}] });
 
       super.success(res, teachers || [], 'Successfully Retrieved all Teachers.');
     } catch (e) {
@@ -87,18 +90,18 @@ export class TeacherController extends BaseController {
     }
   }
 
-  async approvedTeachersInCommerceAndGovernmentAndAccount(req, res) {
+  async approvedTeachersInCommerce(req, res) {
     try {
-      const teachers = await Teacher.find({ approved: true, $or:[{interested_subject : 'Commerce'}, {interested_subject : 'Government'}, {interested_subject : 'Account'}] });
+      const teachers = await Teacher.find({ approved: true, $or:[{interested_subject : 'Commerce'}] });
 
       super.success(res, teachers || [], 'Successfully Retrieved all Teachers.');
     } catch (e) {
       super.error(res, e);
     }
   }
-  async approvedTeachersInEnglishLitratureAndCrkAndEconomics(req, res) {
+  async approvedTeachersInEnglishLiterature(req, res) {
     try {
-      const teachers = await Teacher.find({ approved: true, $or:[{interested_subject : 'EnglishLitrature'}, {interested_subject : 'Crk'}, {interested_subject : 'Economics'}] });
+      const teachers = await Teacher.find({ approved: true, $or:[{interested_subject : 'EnglishLiterature'}] });
 
       super.success(res, teachers || [], 'Successfully Retrieved all Teachers.');
     } catch (e) {
@@ -106,9 +109,110 @@ export class TeacherController extends BaseController {
     }
   }
 
-  async approvedTeachersInIrkAndCivicEducationAndHistory(req, res) {
+  async approvedTeachersInIslamicReligiousStudies(req, res) {
     try {
-      const teachers = await Teacher.find({ approved: true, $or:[{interested_subject : 'Irk'}, {interested_subject : 'CivicEducation'}, {interested_subject : 'History'}] });
+      const teachers = await Teacher.find({ approved: true, $or:[{interested_subject : 'IslamicReligiousStudies'}] });
+
+      super.success(res, teachers || [], 'Successfully Retrieved all Teachers.');
+    } catch (e) {
+      super.error(res, e);
+    }
+  }
+
+  async approvedTeachersInMathematics(req, res) {
+    try {
+      const teachers = await Teacher.find({ approved: true, $or:[{interested_subject : 'Mathematics'}] });
+
+      super.success(res, teachers || [], 'Successfully Retrieved all Teachers.');
+    } catch (e) {
+      super.error(res, e);
+    }
+  }
+
+  async approvedTeachersInBiology(req, res) {
+    try {
+      const teachers = await Teacher.find({ approved: true, $or:[{interested_subject : 'Biology'}] });
+
+      super.success(res, teachers || [], 'Successfully Retrieved all Teachers.');
+    } catch (e) {
+      super.error(res, e);
+    }
+  }
+
+  async approvedTeachersInChemistry(req, res) {
+    try {
+      const teachers = await Teacher.find({ approved: true, $or:[{interested_subject : 'Chemistry'}] });
+
+      super.success(res, teachers || [], 'Successfully Retrieved all Teachers.');
+    } catch (e) {
+      super.error(res, e);
+    }
+  }
+
+  async approvedTeachersInGeography(req, res) {
+    try {
+      const teachers = await Teacher.find({ approved: true, $or:[{interested_subject : 'Geography'}] });
+
+      super.success(res, teachers || [], 'Successfully Retrieved all Teachers.');
+    } catch (e) {
+      super.error(res, e);
+    }
+  }
+
+  async approvedTeachersInGovernment(req, res) {
+    try {
+      const teachers = await Teacher.find({ approved: true, $or:[{interested_subject : 'Government'}] });
+
+      super.success(res, teachers || [], 'Successfully Retrieved all Teachers.');
+    } catch (e) {
+      super.error(res, e);
+    }
+  }
+
+  async approvedTeachersInAccount(req, res) {
+    try {
+      const teachers = await Teacher.find({ approved: true, $or:[{interested_subject : 'Account'}] });
+
+      super.success(res, teachers || [], 'Successfully Retrieved all Teachers.');
+    } catch (e) {
+      super.error(res, e);
+    }
+  }
+
+  async approvedTeachersInChristianReligiousStudies(req, res) {
+    try {
+      const teachers = await Teacher.find({ approved: true, $or:[{interested_subject : 'ChristianReligiousStudies'}] });
+
+      super.success(res, teachers || [], 'Successfully Retrieved all Teachers.');
+    } catch (e) {
+      super.error(res, e);
+    }
+  }
+
+
+  async approvedTeachersInEconomics(req, res) {
+    try {
+      const teachers = await Teacher.find({ approved: true, $or:[{interested_subject : 'Economis'}] });
+
+      super.success(res, teachers || [], 'Successfully Retrieved all Teachers.');
+    } catch (e) {
+      super.error(res, e);
+    }
+  }
+
+  async approvedTeachersInHistory(req, res) {
+    try {
+      const teachers = await Teacher.find({ approved: true, $or:[{interested_subject : 'History'}] });
+
+      super.success(res, teachers || [], 'Successfully Retrieved all Teachers.');
+    } catch (e) {
+      super.error(res, e);
+    }
+  }
+
+  async approvedTeachersInCivicEducation(req, res) {
+    try {
+      const teachers = await Teacher.find({ approved: true, $or:[{interested_subject : 'CivicEducation'}] });
 
       super.success(res, teachers || [], 'Successfully Retrieved all Teachers.');
     } catch (e) {
