@@ -69,7 +69,7 @@ export class TeacherController extends BaseController {
 
   async approvedTeachersInEnglishAndMathmaticsAndBiology(req, res) {
     try {
-      const teachers = await Teacher.find({ approved: true, $or:[{intrested_subject : 'English'}, {intrested_subject : 'Biology'}, {intrested_subject : 'Mathematics'}] });
+      const teachers = await Teacher.find({ approved: true, $or:[{interested_subject : 'English'}, {interested_subject : 'Biology'}, {interested_subject : 'Mathematics'}] });
 
       super.success(res, teachers || [], 'Successfully Retrieved all Teachers.');
     } catch (e) {
@@ -77,9 +77,9 @@ export class TeacherController extends BaseController {
     }
   }
 
-  async approvedTeachersInPhysicsAndChemistryAndGeography(req, res) {
+  async approvedTeachersInPhysisAndChemistryAndGeography(req, res) {
     try {
-      const teachers = await Teacher.find({ approved: true, $or:[{intrested_subject : 'Physics'}, {intrested_subject : 'Chemistry'}, {intrested_subject : 'Geography'}] });
+      const teachers = await Teacher.find({ approved: true, $or:[{interested_subject : 'Physis'}, {interested_subject : 'Chemistry'}, {interested_subject : 'Geography'}] });
 
       super.success(res, teachers || [], 'Successfully Retrieved all Teachers.');
     } catch (e) {
@@ -89,7 +89,7 @@ export class TeacherController extends BaseController {
 
   async approvedTeachersInCommerceAndGovernmentAndAccount(req, res) {
     try {
-      const teachers = await Teacher.find({ approved: true, $or:[{intrested_subject : 'Commerce'}, {intrested_subject : 'Government'}, {intrested_subject : 'Account'}] });
+      const teachers = await Teacher.find({ approved: true, $or:[{interested_subject : 'Commerce'}, {interested_subject : 'Government'}, {interested_subject : 'Account'}] });
 
       super.success(res, teachers || [], 'Successfully Retrieved all Teachers.');
     } catch (e) {
@@ -98,7 +98,7 @@ export class TeacherController extends BaseController {
   }
   async approvedTeachersInEnglishLitratureAndCrkAndEconomics(req, res) {
     try {
-      const teachers = await Teacher.find({ approved: true, $or:[{intrested_subject : 'EnglishLitrature'}, {intrested_subject : 'Crk'}, {intrested_subject : 'Economics'}] });
+      const teachers = await Teacher.find({ approved: true, $or:[{interested_subject : 'EnglishLitrature'}, {interested_subject : 'Crk'}, {interested_subject : 'Economics'}] });
 
       super.success(res, teachers || [], 'Successfully Retrieved all Teachers.');
     } catch (e) {
@@ -108,7 +108,7 @@ export class TeacherController extends BaseController {
 
   async approvedTeachersInIrkAndCivicEducationAndHistory(req, res) {
     try {
-      const teachers = await Teacher.find({ approved: true, $or:[{intrested_subject : 'Irk'}, {intrested_subject : 'CivicEducation'}, {intrested_subject : 'History'}] });
+      const teachers = await Teacher.find({ approved: true, $or:[{interested_subject : 'Irk'}, {interested_subject : 'CivicEducation'}, {interested_subject : 'History'}] });
 
       super.success(res, teachers || [], 'Successfully Retrieved all Teachers.');
     } catch (e) {
@@ -137,7 +137,9 @@ async adminApprovedTeachers(req, res) {
   try {
     const updates = Object.keys(req.body);
     const allowedUpdates = [
-      'approved'
+      'approved',
+      'status',
+      'role'
     ];
     const isValidUpdate = updates.every((update) => {
       return allowedUpdates.includes(update);
@@ -181,11 +183,9 @@ async adminApprovedTeachers(req, res) {
         'image',
         'state',
         'country',
-        'intrested_subject',
+        'interested_subject',
         'address',
-        'approved',
-        'about',
-        'role'
+        'about'
       ];
       const isValidUpdate = updates.every((update) => {
         return allowedUpdates.includes(update);

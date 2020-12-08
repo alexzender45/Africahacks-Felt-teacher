@@ -15,7 +15,7 @@ const {
    update, 
    adminApprovedTeachers,
    approvedTeachersInEnglishAndMathmaticsAndBiology,
-   approvedTeachersInPhysicsAndChemistryAndGeography,
+   approvedTeachersInPhysisAndChemistryAndGeography,
    approvedTeachersInCommerceAndGovernmentAndAccount,
    approvedTeachersInEnglishLitratureAndCrkAndEconomics,
    approvedTeachersInIrkAndCivicEducationAndHistory
@@ -35,8 +35,8 @@ router
   router.route('/teachers/CommerceAndGovernmentAndAccount')
   .get(authenticate, permit(['admin', 'user']), approvedTeachersInCommerceAndGovernmentAndAccount)
 
-  router.route('/teachers/PhysicsAndChemistryAndGeography')
-  .get(authenticate, permit(['admin', 'user']), approvedTeachersInPhysicsAndChemistryAndGeography)
+  router.route('/teachers/PhysisAndChemistryAndGeography')
+  .get(authenticate, permit(['admin', 'user']), approvedTeachersInPhysisAndChemistryAndGeography)
 
   router.route('/teachers/EnglishLitratureAndCrkAndEconomics')
   .get(authenticate, permit(['admin', 'user']), approvedTeachersInEnglishLitratureAndCrkAndEconomics)

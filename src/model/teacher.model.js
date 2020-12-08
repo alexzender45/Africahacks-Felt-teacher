@@ -114,7 +114,11 @@ const teacherSchema = new Schema(
       type: String,
       default: 'Please Update'
     },
-    intrested_subject: {
+    status: {
+      type: String,
+      default: 'Not Approved'
+    },
+    interested_subject: {
       type: Array,
       default: 'Please Update'
     },
