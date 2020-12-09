@@ -1,6 +1,5 @@
 import './login-form.css';
 import { Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
 
 const LoginForm = ({ category }) => {
     return (

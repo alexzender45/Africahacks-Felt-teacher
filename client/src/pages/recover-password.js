@@ -1,4 +1,4 @@
-import HomeIntro from "./verify-password";
+
 
 const RecoverPassword = () => {
   return (

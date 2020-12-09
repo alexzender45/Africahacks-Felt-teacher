@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
+
 
 const TeacherRegistrationForm = () => {
-  const [formData, setFormData] = useState({});
 
   return (
     <form className="regform">
