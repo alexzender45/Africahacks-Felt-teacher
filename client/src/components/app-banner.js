@@ -25,7 +25,6 @@ const AppBanner = () => {
         </div>
       </div>
       <div className="banner-phone">
-        <img src="/images/tiny-logo.svg" alt="" className="phone-image" />
         <img src="/images/phone.svg" alt="" className="phone" />
       </div>
       <div className="banner-right">

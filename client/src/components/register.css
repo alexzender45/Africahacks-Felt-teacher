@@ -1,5 +1,5 @@
 .register{
-    width: 45%;
+    width: 50%;
     padding: 1rem 3rem;
     margin-bottom: 5%;
     color: black;
@@ -35,4 +35,18 @@
 
 .tel > :nth-child(1){
     width: 50%;
+}
+
+@media all and (max-width: 1100px){
+  .register{
+    width: 80%;
+    padding: 1rem 1rem;
+  }
+}
+
+@media all and (max-width: 500px){
+  .register{
+    width: 90%;
+    margin-top: 10%;
+  }
 }

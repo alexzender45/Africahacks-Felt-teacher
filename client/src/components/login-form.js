@@ -1,7 +1,8 @@
 import './login-form.css';
 import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
-const LoginForm = ({category}) => {
+const LoginForm = ({ category }) => {
     return (
         <>
         <div className='topbar'></div>
@@ -9,7 +10,7 @@ const LoginForm = ({category}) => {
             <img src='/images/logo.svg' alt='felt teachers logo' />
             <h1 className='purple'>LOGIN</h1>
             <p>SIGN IN WITH YOUR {category.toUpperCase()} ACCOUNT</p>
-            <form>
+            <form method='POST'>
                 <label>
                     <input type='email' name='email' className='input' placeholder='Email...'/>
                 </label>

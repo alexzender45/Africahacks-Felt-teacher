@@ -34,4 +34,11 @@
 .intro-right {
   flex: 60%;
   margin-left: 1rem;
+  align-self: center;
+}
+
+@media all and (max-width: 760px){
+  .intro{
+    flex-direction: column-reverse;
+  }
 }
