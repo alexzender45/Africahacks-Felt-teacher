@@ -48,3 +48,21 @@
     background: var(--primaryColor);
 }
 
+.top{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media all and (max-width: 1100px){
+  .container{
+    width: 70%;
+  }
+}
+
+@media all and (max-width: 500px){
+  .container{
+    width: 90%;
+    margin-top: 10%;
+  }
+}

@@ -9,7 +9,7 @@ const NavBar = () => {
           <img src="/images/logo.svg" alt="Felt teacher logo" />
           <p className="title">FELT TEACHERS</p>
         </div>
-        <ul className="menu">
+        <div className='big-menu'><ul className="menu">
           <li>
             <Link to="/teacher/login" className="button">
               Sign in as a Teacher
@@ -20,7 +20,23 @@ const NavBar = () => {
               Sign in as a School Owner
             </Link>
           </li>
+        </ul></div>
+        
+        <div className="mobile-menu">
+        <ul className="menu">
+          <li>
+            <Link to="/teacher/login" className="button">
+              Teacher
+            </Link>
+          </li>
+          <li>
+            <Link to="/school/login" className="button">
+              School
+            </Link>
+          </li>
         </ul>
+        </div>
+        
       </nav>
     </header>
   );

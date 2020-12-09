@@ -37,3 +37,17 @@ a, input {
 form > * {
   display: block;
 }
+
+@media all and (max-width: 720px){
+  body{
+    font-size: 14px;
+  }
+  
+}
+
+@media all and (max-width: 500px){
+  body{
+    font-size: 12px;
+  }
+  
+}

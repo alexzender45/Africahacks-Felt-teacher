@@ -27,3 +27,24 @@
 .navbar li {
   margin-left: 2rem;
 }
+
+.mobile-menu{
+  display: none;
+}
+
+@media all and (max-width: 760px){
+  .mobile-menu{
+    display: flex;
+  }
+
+  .big-menu{
+    display: none;
+  }
+}
+
+@media all and (max-width: 500px){
+  .logo img{
+    width: 30px;
+  }
+  
+}

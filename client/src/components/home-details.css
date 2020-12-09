@@ -14,3 +14,13 @@
   text-align: center;
   margin-bottom: 1rem;
 }
+
+@media all and (max-width: 760px){
+  .details{
+    flex-direction: column;
+  }
+
+  .details-group{
+    margin-bottom: 1rem;
+  }
+}
