@@ -7,5 +7,3 @@ const HomeIntro = () => {
 }
 
 export default HomeIntro;
-
-test
