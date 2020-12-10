@@ -14,6 +14,8 @@
     flex: 40%;
     margin-left: 1rem;
     text-align: center;
+    display: flex;
+    flex-direction: column;
 
 }
 
@@ -45,12 +47,13 @@
 
 .icons-s{
     width: 1rem;
+    margin-right: 0.5rem;
 }
 
 .icons-div{
     background: var(--primaryColor);
     padding: 0.5rem;
-    margin-right: 1rem;
+    margin-right: 0.5rem;
 }
 
 .profile-icons{
@@ -89,10 +92,21 @@
 
 .bb{
     margin-bottom: 1rem;
+    padding: 1rem 2rem;
 }
 
 .connect{
     width: 60%;
+    align-self: center;
+    text-align: center;
+}
+
+.big{
+    font-size: 2rem;
+}
+
+.name{
+    color: black;
 }
 
 @media all and (max-width: 1020px){

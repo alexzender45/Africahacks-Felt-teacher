@@ -9,8 +9,11 @@ const Profile = () => {
         <div className="profile-left">
           <div className="profile-left-top">
             <div className="profile-image">
-              <img src="/images/big-profile.svg" alt="" id="big-profile" />
-              <p className="button"> Add Profile Picture </p>
+                          <img src="/images/big-profile.svg" alt="" id="big-profile" />
+                          <div className='center'>
+                          <p className="button"> Add Profile Picture </p>
+                          </div>
+              
               <p>Status</p>
               <p>
                 <img src="/images/approved.svg" alt="" className="icons-s" />
@@ -22,7 +25,7 @@ const Profile = () => {
               </p>
             </div>
             <div className="profile-name">
-              <p>Name Name</p>
+              <p className='big name'>Name Name</p>
               <div className="profile-icons">
                 <div className="icons-div">
                   <img src="/images/location.svg" alt="" className="icon" />
@@ -45,13 +48,13 @@ const Profile = () => {
           </div>
           <div className="profile-left-bottom">
             <div className="plbr">
-              <p>About teacher</p>
+              <p className='big'>About <span className='purple'>Teacher</span></p>
               <p>
                 A person who is willing to any changing circumstances and able
                 to work in a friendly environment.
               </p>
-              <div className="center">
-                <p className=" button half">Update Profile</p>
+              <div className="center half">
+                <p className=" button">Update Profile</p>
               </div>
               <p>Subjects Taken</p>
               <p>Mathematics</p>
@@ -66,9 +69,10 @@ const Profile = () => {
                 <img src="/images/behance.svg" alt="" className="icon" />
                 <img src="/images/google.svg" alt="" className="icon" />
               </div>
-              <p className=" button round-s">Take test</p>
-              <img src="/images/box.svg" alt="" />
-              <p className=" button round-s">upload video</p>
+              <div className='center'><p className=" button round-s">Take Test</p></div>
+                          <img src="/images/box.svg" alt="" />
+                          <div className='center'><p className=" button round-s">upload video</p></div>
+              
             </div>
           </div>
         </div>
@@ -87,8 +91,8 @@ const Profile = () => {
             <p>GPA</p>
             <p></p>
           </div>
-          <div>
-            <p className=" button round-s connect">Connect</p>
+          <div className='connect'>
+            <p className=" button round-s">Connect</p>
           </div>
         </div>
       </div>

@@ -3,7 +3,7 @@ import NavComponent from '../components/nav-component';
 
 const AllTeachers = () => {
   const details = {
-    src: "/images/p-image.svg",
+    src: "/images/tiny-p.svg",
     name: "Degoke FineBoy",
     description: "A willing person that is always ready to code work",
   };
@@ -33,7 +33,7 @@ const AllTeachers = () => {
 
       <div className="boxes">
       <div className="box button big-button">
-          <div className="set">
+          <div className="set det">
             <img src={details.src} alt="" />
             <div>
               <p>{details.name}</p>
@@ -41,12 +41,12 @@ const AllTeachers = () => {
             </div>
           </div>
           <div className="set">
-            <p>Connect with patient</p>
-            <p>View profle</p>
+            <p className='button white'>Connect</p>
+            <p className='button'>Profile</p>
           </div>
         </div>
         <div className="box button big-button">
-          <div className="set">
+          <div className="set det">
             <img src={details.src} alt="" />
             <div>
               <p>{details.name}</p>
@@ -54,12 +54,12 @@ const AllTeachers = () => {
             </div>
           </div>
           <div className="set">
-            <p>Connect with patient</p>
-            <p>View profle</p>
+            <p className='button white'>Connect</p>
+            <p className='button'>Profile</p>
           </div>
         </div>
         <div className="box button big-button">
-          <div className="set">
+          <div className="set det">
             <img src={details.src} alt="" />
             <div>
               <p>{details.name}</p>
@@ -67,8 +67,21 @@ const AllTeachers = () => {
             </div>
           </div>
           <div className="set">
-            <p>Connect with patient</p>
-            <p>View profle</p>
+            <p className='button white'>Connect</p>
+            <p className='button'>Profile</p>
+          </div>
+            </div>
+            <div className="box button big-button">
+          <div className="set det">
+            <img src={details.src} alt="" />
+            <div>
+              <p>{details.name}</p>
+              <p>{details.description}</p>
+            </div>
+          </div>
+          <div className="set">
+            <p className='button white'>Connect</p>
+            <p className='button'>Profile</p>
           </div>
         </div>
                 </div>
