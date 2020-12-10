@@ -1,0 +1,116 @@
+.profile{
+    width: 90%;
+    margin: auto;
+    display: flex;
+    padding-top: 2rem;
+}
+
+.profile-left{
+    flex: 60%;
+    margin-right: 1rem;
+}
+
+.profile-right{
+    flex: 40%;
+    margin-left: 1rem;
+    text-align: center;
+
+}
+
+.profile-left-top{
+    display: flex;
+    margin-bottom: 2rem;
+}
+
+.profile-left-bottom{
+    display: flex;
+}
+
+.plbr{
+    margin-right: 2rem;
+}
+
+.plbl{
+    margin-top: -5rem;
+}
+
+.plbr > *{
+    margin-bottom: 1rem;
+}
+
+.round-s{
+    border-radius: 30px;
+  padding: 0.5rem 5rem;
+}
+
+.icons-s{
+    width: 1rem;
+}
+
+.icons-div{
+    background: var(--primaryColor);
+    padding: 0.5rem;
+    margin-right: 1rem;
+}
+
+.profile-icons{
+    display: flex;
+    align-items: center;
+}
+
+.profile-image{
+    text-align: center;
+    margin-right: 2rem;
+}
+
+.profile-image > *+*{
+    text-align: start;
+    margin-bottom: 1rem;
+}
+
+.profile-name > *+*{
+    text-align: start;
+    margin-bottom: 1rem;
+    text-align: center;
+    padding: 0.5rem 1rem;
+}
+
+.half{
+    width: 50%;
+}
+
+.center{
+    text-align: center;
+}
+
+.socials > *{
+    margin-right: 1rem;
+}
+
+.bb{
+    margin-bottom: 1rem;
+}
+
+.connect{
+    width: 60%;
+}
+
+@media all and (max-width: 1020px){
+    .profile-left-top{
+        flex-direction: column;
+    }
+    
+    .profile-left-bottom{
+        flex-direction: column;
+    }
+
+    .plbl{
+        margin-top: 0;
+    }
+}
+
+@media all and (max-width: 650px){
+    .profile{
+        flex-direction: column
+    }
+}

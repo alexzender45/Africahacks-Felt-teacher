@@ -32,6 +32,22 @@
   display: none;
 }
 
+.menu{
+  align-items: center;
+}
+
+.b-head{
+  background: #BDBDBD;
+  width: 100%;
+  padding: 0.5rem 0;
+  margin-top: 0;
+}
+
+.b-nav{
+  width: 90%;
+  margin: auto;
+}
+
 @media all and (max-width: 760px){
   .mobile-menu{
     display: flex;

@@ -4,6 +4,16 @@
   padding: 0.5rem;
 }
 
+.round{
+  border-radius: 30px;
+  padding: 0.5rem 5rem;
+
+}
+
+.big-button{
+  padding: 1.5rem 2rem;
+  border-radius: 80px;
+}
 .purple {
   color: var(--primaryColor);
 }
@@ -48,6 +58,14 @@
     background: var(--primaryColor);
 }
 
+.bottom-bar{
+  position: absolute;
+    bottom: 0;
+    height: 1.5rem;
+    width: 100%;
+    background: var(--primaryColor);
+}
+
 .top{
   display: flex;
   justify-content: center;
@@ -64,5 +82,9 @@
   .container{
     width: 90%;
     margin-top: 10%;
+  }
+
+  .round{
+    padding: 0.2rem 2rem;
   }
 }

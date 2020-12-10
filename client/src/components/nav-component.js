@@ -1,10 +1,9 @@
-import "./navbar.css";
 import { Link } from "react-router-dom";
 
-const NavBar = () => {
+const NavComponent = () => {
   return (
-    <header className="header">
-      <nav className="navbar">
+    <header className="header b-head">
+      <nav className="navbar b-nav">
         <div className="logo">
           <img src="/images/logo.svg" alt="Felt teacher logo" />
           <p className="title">FELT TEACHERS</p>
@@ -13,28 +12,26 @@ const NavBar = () => {
           <ul className="menu">
             <li>
               <Link to="/teacher/login" className="button">
-                Sign in as a Teacher
+                Home
               </Link>
             </li>
             <li>
-              <Link to="/school/login" className="button">
-                Sign in as a School Owner
-              </Link>
+              <button className="button">Logout</button>
+            </li>
+            <li>
+              <img src="/images/p-image.svg" alt="profile" />
             </li>
           </ul>
         </div>
-
         <div className="mobile-menu">
           <ul className="menu">
             <li>
               <Link to="/" className="button">
-                Teacher
+                Home
               </Link>
             </li>
             <li>
-              <Link to="/school/login" className="button">
-                School
-              </Link>
+              <button className="button">Logout</button>
             </li>
           </ul>
         </div>
@@ -43,4 +40,4 @@ const NavBar = () => {
   );
 };
 
-export default NavBar;
+export default NavComponent;

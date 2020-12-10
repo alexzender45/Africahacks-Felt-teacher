@@ -13,6 +13,9 @@ import {
   Switch,
   Route
 } from "react-router-dom";
+import CompleteProfile from './pages/teacher/complete-profile';
+import AllTeachers from './pages/all-teachers';
+import Profile from './pages/teacher/profile';
 
 function App() {
   return (
@@ -35,6 +38,15 @@ function App() {
         </Route>
         <Route path='/verify-password'>
           <VerifyPassword />
+        </Route>
+        <Route path='/teacher/complete-profile/:id'>
+          <CompleteProfile />
+        </Route>
+        <Route path='/all-teachers'>
+          <AllTeachers />
+        </Route>
+        <Route path='/teacher/:id'>
+          <Profile />
         </Route>
         <Route path='/'>
           <Home />

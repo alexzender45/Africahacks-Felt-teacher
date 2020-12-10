@@ -27,11 +27,12 @@ code {
 }
 
 li,
-a, input {
+a, input, button {
   text-decoration: none;
   list-style-type: none;
   color: inherit;
   font-size: inherit;
+  outline: none;
 }
 
 form > * {
@@ -45,7 +46,7 @@ form > * {
   
 }
 
-@media all and (max-width: 500px){
+@media all and (max-width: 600px){
   body{
     font-size: 12px;
   }
