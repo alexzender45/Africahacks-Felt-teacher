@@ -1,21 +1,21 @@
 
 
-const TeacherRegistrationForm = () => {
+const TeacherRegistrationForm = ({handleChange, handleSubmit}) => {
 
   return (
-    <form className="regform">
+    <form className="regform" method='POST' onSubmit={handleSubmit}>
       <div className="group">
         <label> Name</label>
-        <input type="text" name="text" className="input" />
+        <input type="text" name="fullname" className="input" onChange={handleChange}/>
       </div>
       <div className="group">
         <label>Username</label>
-        <input type="text" name="text" className="input" />
+        <input type="text" name="username" className="input" onChange={handleChange}/>
       </div>
       <div className="group">
         {" "}
         <label>Email</label>
-        <input type="email" name="email" className="input" />
+        <input type="email" name="email" className="input" onChange={handleChange}/>
       </div>
       <div className="group">
         {" "}
@@ -26,17 +26,18 @@ const TeacherRegistrationForm = () => {
             name="suffix"
             className="input"
             placeholder="+234"
+            onChange={handleChange}
           />
-          <input type="tel" name="number" className="input" />
+          <input type="tel" name="number" className="input" onChange={handleChange}/>
         </div>
       </div>
       <div className="group">
         <label>Password</label>
-        <input type="password" name="password" className="input" />
+        <input type="password" name="password" className="input" onChange={handleChange}/>
       </div>
       <div className="group">
         <label>Confirm Password</label>
-        <input type="password" name="password" className="input" />
+        <input type="password" name="conpassword" className="input" onChange={handleChange}/>
       </div>
       <div className="group">
         <label></label>

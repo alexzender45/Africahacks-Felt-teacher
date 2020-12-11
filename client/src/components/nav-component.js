@@ -1,6 +1,33 @@
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 const NavComponent = () => {
+  const history = useHistory();
+
+  const logout = async () => {
+    const token = sessionStorage.getItem("token");
+    try {
+      const response = await fetch(
+        "https://felt-teacher.herokuapp.com/api/logout",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const result = await response.json();
+
+      if (result.status === "success") {
+        sessionStorage.removeItem("token");
+        history.push("/");
+      } else {
+        alert(result.message);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <header className="header b-head">
       <nav className="navbar b-nav">
@@ -31,7 +58,9 @@ const NavComponent = () => {
               </Link>
             </li>
             <li>
-              <button className="button">Logout</button>
+              <button className="button" onClick={logout}>
+                Logout
+              </button>
             </li>
           </ul>
         </div>

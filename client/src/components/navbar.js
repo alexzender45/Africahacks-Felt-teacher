@@ -27,7 +27,7 @@ const NavBar = () => {
         <div className="mobile-menu">
           <ul className="menu">
             <li>
-              <Link to="/" className="button">
+              <Link to="/teacher/login" className="button">
                 Teacher
               </Link>
             </li>

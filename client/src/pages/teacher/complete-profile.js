@@ -1,4 +1,30 @@
+import { useRef } from "react";
+
 const CompleteProfile = () => {
+  const form = useRef();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const token = sessionStorage.getItem("token");
+    const forms = document.getElementById('form')
+
+    const formData = new FormData(forms);
+    console.log(form.current)
+    console.log(formData)
+
+    const response = await fetch(
+      "https://felt-teacher.herokuapp.com/api/teachers/me",
+      {
+        method: "PUT",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      }
+    );
+
+    const result = await response.text()
+
+    console.log(result)
+  };
   return (
     <>
       <div className="topbar"></div>
@@ -7,11 +33,19 @@ const CompleteProfile = () => {
           <img src="/images/logo.svg" alt="felt teaher logo" />
           Complete your profile
         </div>
-        <form>
+        <form ref={form} id='form' onSubmit={handleSubmit} >
+        <label>
+            <input
+              type="text"
+              name="fullname"
+              className="input"
+              placeholder="Name"
+            />
+          </label>
           <label>
             <input
               type="text"
-              name="dob"
+              name="dateOfBirth"
               className="input"
               placeholder="Date of Birth"
             />
@@ -19,7 +53,7 @@ const CompleteProfile = () => {
           <label>
             <input
               type="text"
-              name="experience"
+              name="yearsOfExprience"
               className="input"
               placeholder="Years of Experience"
             />
@@ -35,9 +69,9 @@ const CompleteProfile = () => {
           <label>
             <input
               type="text"
-              name="qualifications"
+              name="about"
               className="input"
-              placeholder="Qualifications"
+              placeholder="Short description..."
             />
           </label>
           <div>
@@ -59,25 +93,12 @@ const CompleteProfile = () => {
             </label>
           </div>
           <label>
-            <input
-              type="file"
-              name="cert"
-              className="input"
-              placeholder="cert"
-            />
-          </label>
-          <label>
-            <input
-              type="file"
-              name="pic"
-              className="input"
-              placeholder="Picture"
-            />
+            <input type="file" name="image" className="input" />
           </label>
           <label>
             <input
               type="text"
-              name="text"
+              name="levelOfEducation"
               className="input"
               placeholder="Level of education"
             />
@@ -85,7 +106,7 @@ const CompleteProfile = () => {
           <label>
             <input
               type="text"
-              name="text"
+              name="courseOfStudy"
               className="input"
               placeholder="Course of study"
             />
@@ -93,23 +114,16 @@ const CompleteProfile = () => {
           <label>
             <input
               type="text"
-              name="text"
+              name="grade"
               className="input"
               placeholder="Grade"
             />
           </label>
+
           <label>
             <input
               type="text"
-              name="text"
-              className="input"
-              placeholder="School document"
-            />
-          </label>
-          <label>
-            <input
-              type="text"
-              name="text"
+              name="interested_subject"
               className="input"
               placeholder="interested subject"
             />
@@ -117,12 +131,12 @@ const CompleteProfile = () => {
           <label>
             <input
               type="text"
-              name="text"
+              name="gpa"
               className="input"
               placeholder="GPA"
             />
           </label>
-            <input type='submit' value='LOGIN' className='button submit'/>
+          <input type="submit" value="UPDATE" className="button submit" />
         </form>
       </div>
     </>
