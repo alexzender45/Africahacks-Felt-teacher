@@ -35,6 +35,10 @@ a, input, button {
   outline: none;
 }
 
+button:hover{
+  cursor: pointer;
+}
+
 form > * {
   display: block;
 }

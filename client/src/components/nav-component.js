@@ -2,6 +2,7 @@ import { Link, useHistory } from "react-router-dom";
 
 const NavComponent = () => {
   const history = useHistory();
+  const auth = sessionStorage.getItem('token');
 
   const logout = async () => {
     const token = sessionStorage.getItem("token");
@@ -35,15 +36,15 @@ const NavComponent = () => {
           <img src="/images/logo.svg" alt="Felt teacher logo" />
           <p className="title">FELT TEACHERS</p>
         </div>
-        <div className="big-menu">
+        {auth ? <div><div className="big-menu">
           <ul className="menu">
             <li>
-              <Link to="/teacher/login" className="button">
+              <Link to="/" className="button">
                 Home
               </Link>
             </li>
             <li>
-              <button className="button">Logout</button>
+              <button className="button" onClick={logout}>Logout</button>
             </li>
             <li>
               <img src="/images/p-image.svg" alt="profile" />
@@ -63,7 +64,26 @@ const NavComponent = () => {
               </button>
             </li>
           </ul>
+        </div> </div> : <div> <div className="big-menu">
+          <ul className="menu">
+            <li>
+              <Link to="/" className="button">
+                Back to Home
+              </Link>
+            </li>
+          </ul>
         </div>
+        <div className="mobile-menu">
+          <ul className="menu">
+            <li>
+              <Link to="/" className="button">
+                Home
+              </Link>
+            </li>
+          </ul>
+        </div> </div>}
+        
+        
       </nav>
     </header>
   );

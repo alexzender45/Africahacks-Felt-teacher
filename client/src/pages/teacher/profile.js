@@ -2,6 +2,7 @@ import "./profile.css";
 import NavComponent from "../.././components/nav-component.js";
 import { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
+import { withAuth } from '../.././components/utils';
 
 const Profile = () => {
   const [data, setData] = useState({});
@@ -43,7 +44,7 @@ const Profile = () => {
             <div className="profile-image">
               <img src="/images/big-profile.svg" alt="" id="big-profile" />
               <div className="center">
-                <p className="button"> Add Profile Picture </p>
+                <Link to={`/teacher/complete-profile/${data.username}`} className="button"> Add Profile Picture </Link>
               </div>
 
               <p>Status</p>
@@ -93,8 +94,8 @@ const Profile = () => {
               <p>
                 {data.about}
               </p>
-              <div className="center half">
-                <Link to={`/teacher/complete-profile/${data.username}`} className=" button">Update Profile</Link>
+              <div className="center">
+                <Link to={`/teacher/complete-profile/${data.username}`} className="button">Update Profile</Link>
               </div>
               <p>Subjects Taken</p>
               <p>{data.interested_subject}</p>
@@ -120,20 +121,17 @@ const Profile = () => {
         </div>
         <div className="profile-right">
           <div className="button round-s plbr bb">
-            <p>{data.dateOfBirth}</p>
-            <p>Years of Experience</p>
-            <p>Qualifications</p>
-            <p>{data.state}</p>
-            <p>{data.country}</p>
-            <p>{data.levelOfEducation}</p>
-            <p>{data.courseOfStudy}</p>
-            <p>{data.grade}</p>
-            <p>{data.school_document}</p>
-            <p>{data.gpa}</p>
-            <p>{data.grade}</p>
+            <p><span className='dark'>Date of Birth:</span>{data.dateOfBirth}</p>
+            <p><span className='dark'>State: </span>{data.state}</p>
+            <p><span className='dark'>Country:</span>Country: {data.country}</p>
+            <p><span className='dark'>Level of Education:</span> {data.levelOfEducation}</p>
+            <p><span className='dark'>Course of Study:</span> {data.courseOfStudy}</p>
+            <p><span className='dark'>Grade:</span> {data.grade}</p>
+            <p><span className='dark'>Gpa:</span> {data.gpa}</p>
+            <p><span className='dark'>Grade:</span> {data.grade}</p>
           </div>
-          <div className="connect">
-            <p className=" button round-s">Connect</p>
+          <div className="connect button round-s center">
+            <p>Connect</p>
           </div>
         </div>
       </div>
@@ -141,4 +139,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default withAuth(Profile);

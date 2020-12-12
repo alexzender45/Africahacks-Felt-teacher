@@ -1,6 +1,7 @@
 import "./login-form.css";
 import { Link, useHistory } from "react-router-dom";
-import { useState } from "react";
+import { useState} from "react";
+import NavComponent from "./nav-component";
 
 const LoginForm = ({ category }) => {
   const [data, SetData] = useState({});
@@ -22,6 +23,7 @@ const LoginForm = ({ category }) => {
 
       if (result.status === "success") {
         sessionStorage.setItem("token", result.data.token);
+        sessionStorage.setItem("username", result.data.teacher.username)
         history.push(`/teacher/${result.data.teacher.username}`);
       } else {
         alert(result.message);
@@ -42,7 +44,7 @@ const LoginForm = ({ category }) => {
 
   return (
     <>
-      <div className="topbar"></div>
+      <NavComponent />
       <div className="container">
         <img src="/images/logo.svg" alt="felt teachers logo" />
         <h1 className="purple">LOGIN</h1>
@@ -53,7 +55,7 @@ const LoginForm = ({ category }) => {
               type="text"
               name="username"
               className="input"
-              placeholder="Email..."
+              placeholder="Username..."
               onChange={handleChange}
             />
           </label>

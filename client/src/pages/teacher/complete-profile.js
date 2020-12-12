@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { withAuth } from '../.././components/utils';
 
 const CompleteProfile = () => {
   const form = useRef();
@@ -143,4 +144,4 @@ const CompleteProfile = () => {
   );
 };
 
-export default CompleteProfile;
+export default withAuth(CompleteProfile);

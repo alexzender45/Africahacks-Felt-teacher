@@ -15,11 +15,15 @@ import {
 } from "react-router-dom";
 import CompleteProfile from './pages/teacher/complete-profile';
 import AllTeachers from './pages/all-teachers';
+import AllSchools from './pages/all-schools';
 import Profile from './pages/teacher/profile';
 
 function App() {
+  
+  
+  
   return (
-    <Router>
+      <Router>
       <Switch>
         <Route path='/school/login'>
           <SchoolLogin />
@@ -39,13 +43,16 @@ function App() {
         <Route path='/verify-password'>
           <VerifyPassword />
         </Route>
-        <Route path='/teacher/complete-profile/:id'>
+        <Route path='/teacher/complete-profile/:username'>
           <CompleteProfile />
         </Route>
         <Route path='/all-teachers'>
           <AllTeachers />
         </Route>
-        <Route path='/teacher/:id'>
+        <Route path='/all-schools'>
+          <AllSchools />
+        </Route>
+        <Route path='/teacher/:username'>
           <Profile />
         </Route>
         <Route path='/'>

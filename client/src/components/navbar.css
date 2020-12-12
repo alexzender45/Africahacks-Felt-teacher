@@ -62,5 +62,9 @@
   .logo img{
     width: 30px;
   }
+
+  .navbar li {
+    margin-left: 1rem;
+  }
   
 }

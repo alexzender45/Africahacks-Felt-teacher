@@ -13,7 +13,6 @@
 .profile-right{
     flex: 40%;
     margin-left: 1rem;
-    text-align: center;
     display: flex;
     flex-direction: column;
 
@@ -98,8 +97,9 @@
 .connect{
     width: 60%;
     align-self: center;
-    text-align: center;
+    
 }
+
 
 .big{
     font-size: 2rem;
@@ -107,6 +107,11 @@
 
 .name{
     color: black;
+}
+
+.dark{
+    color: var(--textColor);
+    margin-right: 1rem;
 }
 
 @media all and (max-width: 1020px){
@@ -127,4 +132,8 @@
     .profile{
         flex-direction: column
     }
+    .round-s{
+      padding: 0.5rem 1rem;
+    }
+    
 }
