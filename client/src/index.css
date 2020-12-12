@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Righteous&display=swap");
 
 :root {
-  --primaryColor: #9b51e0;
+  --primaryColor: #3DC2BA;
   --textColor: #828282;
   --backgroundLight: #f2f2f2;
   --backgroundDark: #e0e0e0;
@@ -27,11 +27,16 @@ code {
 }
 
 li,
-a, input {
+a, input, button {
   text-decoration: none;
   list-style-type: none;
   color: inherit;
   font-size: inherit;
+  outline: none;
+}
+
+button:hover{
+  cursor: pointer;
 }
 
 form > * {
@@ -45,7 +50,7 @@ form > * {
   
 }
 
-@media all and (max-width: 500px){
+@media all and (max-width: 600px){
   body{
     font-size: 12px;
   }

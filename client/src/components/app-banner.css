@@ -1,5 +1,5 @@
 .banner {
-  margin-top: 6rem;
+  margin-top: 8rem;
   background: var(--primaryColor);
   color: white;
   display: flex;
@@ -51,6 +51,7 @@
 
 .icon {
   width: 1.5rem;
+  height: 1.5rem;
 }
 
 .social {
@@ -111,4 +112,19 @@
   .store{
     font-size: 12px;
   }
+}
+
+@media all and (max-width: 500px){
+  .banner, .store-links{
+    flex-direction: column;
+  }
+
+  .store-links{
+    margin-bottom: 1rem;
+  }
+
+  .store-links > *{
+    margin-top: 1rem;
+  }
+  
 }
