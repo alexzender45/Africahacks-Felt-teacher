@@ -1,0 +1,26 @@
+.details {
+  display: flex;
+  width: 90%;
+  margin: auto;
+  margin-top: 8rem;
+  justify-content: space-evenly;
+}
+
+.details > *:not(:last-child) {
+  margin-right: 2rem;
+}
+
+.details-group h2 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+@media all and (max-width: 760px){
+  .details{
+    flex-direction: column;
+  }
+
+  .details-group{
+    margin-bottom: 1rem;
+  }
+}

@@ -1,0 +1,52 @@
+.register{
+    width: 50%;
+    padding: 1rem 3rem;
+    margin-bottom: 5%;
+    color: black;
+}
+
+.top img{
+    margin-right: 1rem;
+}
+
+.group{
+    display: flex;
+    justify-content: space-between;
+  }
+  .group label{
+    flex: 20%;
+  }
+  
+  .group input{
+    flex: 80%;
+  }
+  
+
+.tel{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-column-gap: 1rem;
+    justify-items: end;
+}
+
+.tel > :nth-child(2){
+    width: 100%;
+}
+
+.tel > :nth-child(1){
+    width: 50%;
+}
+
+@media all and (max-width: 1100px){
+  .register{
+    width: 80%;
+    padding: 1rem 1rem;
+  }
+}
+
+@media all and (max-width: 500px){
+  .register{
+    width: 90%;
+    margin-top: 10%;
+  }
+}
