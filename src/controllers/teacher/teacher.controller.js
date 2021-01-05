@@ -1,10 +1,12 @@
 const Vonage = require('@vonage/server-sdk');
-import dotenv from 'dotenv';
-import jwt from 'jsonwebtoken';
 import { BaseController } from '.';
+import { config as dotConfig } from 'dotenv';
+import 'dotenv/config';
 import Teacher from '../../model/teacher.model';
 import { throwError } from '../../utils/handleErrors';
-dotenv.config();
+
+dotConfig();
+
 const vonage = new Vonage({
   apiKey: process.env.API_KEY_VONAGEAPP,
   apiSecret: process.env.API_SECRET_VONAGEAPP

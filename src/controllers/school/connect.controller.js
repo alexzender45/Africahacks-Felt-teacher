@@ -1,11 +1,12 @@
 const Vonage = require('@vonage/server-sdk');
-import dotenv from 'dotenv';
+import { config as dotConfig } from 'dotenv';
+import 'dotenv/config';
 import jwt from 'jsonwebtoken';
 import { BaseController } from '.';
 import Teacher from '../../model/teacher.model';
 import School from '../../model/school.model';
-import { throwError } from '../../utils/handleErrors';
-dotenv.config();
+
+dotConfig();
 
 const vonage = new Vonage({
   apiKey: process.env.API_KEY_VONAGEAPP,
@@ -38,7 +39,7 @@ export class Connect extends BaseController {
           if (!user) {
             return res.status(400).send({ error: 'User does not exist' });
           }
-          const from = visitor.nameOfSchool + " From Felt Teacher"
+          const from = " From Felt Teacher"
           const to = user.phone
           const more = `You can email me ${visitor.email}, and also check School on Felt Teacher Platform ${visitor.link}`
           const text = `I will love to connect with you ${more}`

@@ -1,8 +1,10 @@
 import { BaseController } from '.';
 const Vonage = require('@vonage/server-sdk');
+import { config as dotConfig } from 'dotenv';
+import 'dotenv/config';
 import School from '../../model/sch';
 import { throwError } from '../../utils/handleErrors';
-
+dotConfig();
 
 const vonage = new Vonage({
   apiKey: process.env.API_KEY_VONAGEAPP,
