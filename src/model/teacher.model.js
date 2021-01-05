@@ -188,8 +188,6 @@ teacherSchema.statics.findByCredentials = async (loginKey, password) => {
 teacherSchema.methods.generateAuthToken = async function () {
   const user = this;
   const token = jwt.sign({ _id: user._id, type: 'teacher' }, process.env.JWT_SECRETE_KEY);
-
-  user.tokens = user.tokens.concat({ token });
   await user.save();
 
   return token;
