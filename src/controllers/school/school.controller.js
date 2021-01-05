@@ -5,8 +5,8 @@ import { throwError } from '../../utils/handleErrors';
 
 
 const vonage = new Vonage({
-  apiKey: '892feb2a',
-  apiSecret: 'strZSEYTUSs3M3s2'
+  apiKey: process.env.API_KEY_VONAGEAPP,
+  apiSecret: process.env.API_SECRET_VONAGEAPP
 });
 
 export class SchoolController extends BaseController {

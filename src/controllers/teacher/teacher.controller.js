@@ -5,10 +5,9 @@ import { BaseController } from '.';
 import Teacher from '../../model/teacher.model';
 import { throwError } from '../../utils/handleErrors';
 dotenv.config();
-
 const vonage = new Vonage({
-  apiKey: '892feb2a',
-  apiSecret: 'strZSEYTUSs3M3s2'
+  apiKey: process.env.API_KEY_VONAGEAPP,
+  apiSecret: process.env.API_SECRET_VONAGEAPP
 });
 
 export class TeacherController extends BaseController {
