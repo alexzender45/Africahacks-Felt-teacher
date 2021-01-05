@@ -57,31 +57,34 @@ const teacherSchema = new Schema(
       required: true,
       minlength: 6
     },
+    imageName: {
+     type: String
+    },
     role: {
       type: String,
       default: 'user'
     },
-    yearOfExperience: {
-      type: String
-    },
-    school: {
+    nameOfSchool: {
       type: String,
       required: false,
       default: 'Please Update'
     },
-    levelOfEducation: {
+    yearOfExperience: {
       type: String,
       default: 'Please Update'
     },
-    courseOfStudy: {
-      type: String,
-      default: 'Please Update'
+    connectPoint: {
+      type: Number,
+      default: 1
     },
     approved: {
       type: Boolean,
       default: false
     },
-    address: {
+    link: {
+      type: String,
+    },
+    video: {
       type: String,
       default: 'Please Update'
     },
@@ -94,14 +97,6 @@ const teacherSchema = new Schema(
       type: String,
       default: 'Nigeria'
     },
-    grade: {
-      type: String,
-      default: 'Please Update'
-    },
-    gpa: {
-      type: String,
-      default: 'Please Update'
-    },
     image: {
       type: String,
       default: 'Please Update'
@@ -110,7 +105,7 @@ const teacherSchema = new Schema(
       type: String,
       default: 'Please Update'
     },
-    school_document: {
+    resume: {
       type: String,
       default: 'Please Update'
     },
@@ -118,7 +113,7 @@ const teacherSchema = new Schema(
       type: String,
       default: 'Not Approved'
     },
-    interested_subject: {
+    subjectOrClass: {
       type: Array,
       default: 'Please Update'
     },
@@ -131,8 +126,15 @@ const teacherSchema = new Schema(
       type: String,
       required: false,
       default: 'Please Update'
-    }
+    },
+    address: {
+      type: String,
+      required: false,
+      default: 'Please Update'
+    },
   },
+  
+  
   {
     timestamps: true,
     toJSON: {
@@ -185,7 +187,7 @@ teacherSchema.statics.findByCredentials = async (loginKey, password) => {
 
 teacherSchema.methods.generateAuthToken = async function () {
   const user = this;
-  const token = jwt.sign({ _id: user._id, type: 'user' }, process.env.JWT_SECRETE_KEY);
+  const token = jwt.sign({ _id: user._id, type: 'teacher' }, process.env.JWT_SECRETE_KEY);
 
   user.tokens = user.tokens.concat({ token });
   await user.save();
