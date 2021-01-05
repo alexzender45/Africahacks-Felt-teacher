@@ -32,6 +32,7 @@ coverage
 bower_components
 # node_modules
 # uploads
+# files
 # node-waf configuration
 .lock-wscript
 
