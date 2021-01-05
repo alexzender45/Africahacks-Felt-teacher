@@ -22,7 +22,7 @@ export class Connect extends BaseController {
           }else{
         const usertoken = req.headers.authorization;
         const token = usertoken.split(' ');
-        const decoded = jwt.verify(token[1], 'jsonwebtokenhack');
+        const decoded = jwt.verify(token[1], process.env.JWT_SECRETE_KEY);
         if(decoded.type === "teacher"){
           const visitor = await Teacher.findById(decoded._id)
            if(visitor.connectPoint <= 0){
