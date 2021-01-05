@@ -4,7 +4,7 @@ const multer = require("multer"),
 const imageStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
-      cb(null, path.join(__dirname, "../files"));
+      cb(null, path.join(__dirname, ".././files"));
     } else {
       cb({ message: "This file is not an image file" }, false);
     }
