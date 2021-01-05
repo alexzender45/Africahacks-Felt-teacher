@@ -25,15 +25,15 @@ const schoolSchema = new Schema(
         type: String,
         default: 'Please Update'
       },
-      aboutSchool: {
+      about: {
         type: String,
         default: 'Please Update' 
       },
-    schoolAddress: {
+    address: {
       type: String,
       default: 'Please Update'
     },
-    schoolRegistrationNo: {
+    RCNumber: {
       type: String,
       default: 'Please Update'
     },
@@ -41,7 +41,18 @@ const schoolSchema = new Schema(
       type: String,
       default: 'Please Upload'
     },
-    schoolEmail: {
+    link: {
+      type: String,
+    },
+    requirements: {
+      type: String,
+      default: 'Please Update'
+    },
+    connectPoint: {
+      type: Number,
+      default: 1
+    },
+    email: {
       type: String,
       lowercase: true,
       unique: true,
@@ -53,7 +64,7 @@ const schoolSchema = new Schema(
         return validator.isEmail(value);
       }
     },
-    schoolPhone: {
+    phone: {
       type: String,
       required: true,
       unique: true,
@@ -74,7 +85,7 @@ const schoolSchema = new Schema(
         }
       ]
     },
-    schoolPassword: {
+    password: {
       type: String,
       required: true,
       minlength: 6
@@ -83,11 +94,19 @@ const schoolSchema = new Schema(
       type: String,
       default: 'school'
     },
+    status: {
+      type: String,
+      default: 'Not Approved'
+    },
     approved: {
       type: Boolean,
       default: false
-    }
     },
+    jobs: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Job'
+    }]
+  },
   {
     timestamps: true,
     toJSON: {
@@ -102,6 +121,7 @@ const schoolSchema = new Schema(
         delete ref.tokens;
       }
     }
+  
   }
 );
 
@@ -121,7 +141,7 @@ schoolSchema.pre('save', async function save(next) {
 
 schoolSchema.statics.findByCredentials = async (loginKey, password) => {
   const user = await School.findOne({ phone: loginKey }) ||
-    await Teacher.findOne({ email: loginKey });
+    await School.findOne({ email: loginKey });
 
   if (!user) {
     throw new Error('Invalid login details');
@@ -138,9 +158,7 @@ schoolSchema.statics.findByCredentials = async (loginKey, password) => {
 
 schoolSchema.methods.generateAuthToken = async function () {
   const user = this;
-  const token = jwt.sign({ _id: user._id, type: 'school' }, process.env.JWT_SECRETE_KEY);
-
-  user.tokens = user.tokens.concat({ token });
+  const token = jwt.sign({ _id: user._id, type: 'school' }, process.env.JWT_SECRETE_KEY, {expiresIn:'4hrs'});
   await user.save();
 
   return token;

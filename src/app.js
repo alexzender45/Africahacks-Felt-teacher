@@ -3,7 +3,9 @@ import cors from 'cors';
 import helmet from 'helmet';
 import RateLimit from 'express-rate-limit';
 import mongoSanitize from 'express-mongo-sanitize';
-import { healthRoute, teacherRoute } from './routes';
+import { healthRoute, teacherRoute, uploadRoute, connectRoute } from './routes/teacher';
+import {  schoolRoute, imageUploadRoute, schoolConnectRoute } from './routes/school';
+import {schoolJobRoute } from './routes/jobSchool';
 import { Database } from './db';
 
 //
@@ -22,13 +24,18 @@ const limiter = new RateLimit({
 app.enable('trust proxy');
 app.use(cors());
 app.use(helmet());
-app.use(express.json({ limit: '10kb' }));
+app.use(express.json({ limit: '50mb' }));
 app.use(limiter);
 app.use(mongoSanitize());
-app.use(express.static(`${__dirname}/uploads`));
 
 // Endpoints
 app.use('/api/', healthRoute);
 app.use('/api/', teacherRoute);
+app.use('/api/', schoolRoute);
+app.use('/api/', uploadRoute);
+app.use('/api/', connectRoute);
+app.use('/api/', imageUploadRoute);
+app.use('/api/', schoolConnectRoute)
+app.use('/api/', schoolJobRoute)
 
 export default app;
