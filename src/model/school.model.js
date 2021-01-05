@@ -160,7 +160,7 @@ schoolSchema.methods.generateAuthToken = async function () {
   const user = this;
   const token = jwt.sign({ _id: user._id, type: 'school' }, process.env.JWT_SECRETE_KEY, {expiresIn:'4hrs'});
   await user.save();
-
+  user.tokens = user.tokens.concat({ token });
   return token;
 };
 

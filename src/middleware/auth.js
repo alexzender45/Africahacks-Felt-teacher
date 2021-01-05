@@ -4,7 +4,6 @@ import jwt from 'jsonwebtoken';
 import path from 'path';
 
 import Teacher from '../model/teacher.model';
-import School from '../model/school.model';
 import { throwError } from '../utils/handleErrors';
 
 dotConfig();
@@ -12,23 +11,13 @@ dotConfig();
 export async function authenticate(req, res, next) {
   try {
     const jwtPayload = decodeJwtToken(req);
-    console.log(jwtPayload.type)
-    if(jwtPayload.type === "teacher"){
-      console.log("yes")
-    const user = await getUserTeacherPayload(jwtPayload);
+    const user = await getUserPayload(jwtPayload);
+
     req.token = jwtPayload.token;
     req.user = user;
 
     next();
-    }
-      else if(jwtPayload.type === "school"){
-      const user = await getUserSchoolPayload(jwtPayload);
-      req.token = jwtPayload.token;
-      req.user = user;
-      next();
-      }  
-    }
-  catch (e) {
+  } catch (e) {
     res.status(401).send({
       error: {
         message: e.message
@@ -50,37 +39,32 @@ export function decodeJwtToken(req) {
     throw new Error('Authentication Failed');
   }
 
-  const jwtPayload = jwt.verify(token, process.env.JWT_SECRETE_KEY)
+  const jwtPayload = jwt.verify(token, process.env.JWT_SECRETE_KEY);
 
   jwtPayload.token = token;
 
   return jwtPayload;
 }
 
-export function getUserTeacherPayload(payload) {
-const user = userPayload(Teacher, payload)
+export function getUserPayload(payload) {
+  const user = userPayload(Teacher, payload);
+
   return user;
-    }
+}
 
+export async function userPayload(userModel, payload) {
+  const user = await userModel.findOne({
+    _id: payload._id,
+    'tokens.token': payload.token
+  });
 
-  export function getUserSchoolPayload(payload) {
-    const user = userPayload(School, payload)
-      return user;
-      }
+  if (!user) {
+    throwError(401, 'Access denied. Please login or create an account');
+  }
 
-    export async function userPayload(userModel, payload) {
-      const user = await userModel.findOne({
-        _id: payload._id,
-      })
-    console.log(user)
-      if (!user) {
-        throwError(401, 'Access denied. Please login or create an account');
-      }
-    
-      return user;
-    }
-      
-  
+  return user;
+}
+
 export function permit(users) {
   return (req, res, next) => {
     const isAuthorized = users.includes(req.user.role);
