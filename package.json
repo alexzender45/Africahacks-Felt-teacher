@@ -21,7 +21,7 @@
     "test:cover": "jest --coverage",
     "lint": "eslint \"src/**/*.js\"",
     "start": "node dist/index.js",
-    "build": "babel src -s -d dist",
+    "build": "rimraf dist/  && babel src -s -d dist",
     "dev": "yarn build && nodemon --exec babel-node src/index.js"
   },
   "author": {
