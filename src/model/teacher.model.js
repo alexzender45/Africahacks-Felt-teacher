@@ -14,11 +14,6 @@ const teacherSchema = new Schema(
       required: true,
       trim: true
     },
-    username: {
-      type: String,
-      trim: true,
-      unique: true
-    },
     email: {
       type: String,
       lowercase: true,
@@ -132,6 +127,9 @@ const teacherSchema = new Schema(
       required: false,
       default: 'Please Update'
     },
+    messages: [{
+      type: String
+    }]
   },
   
   
@@ -168,9 +166,7 @@ teacherSchema.pre('save', async function save(next) {
 
 teacherSchema.statics.findByCredentials = async (loginKey, password) => {
 
-  const user = await Teacher.findOne({ phone: loginKey}) ||
-    await Teacher.findOne({ username: loginKey }) ||
-    await Teacher.findOne({ email: loginKey });
+  const user = await Teacher.findOne({ email: loginKey})
 
   if (!user) {
     throw new Error('Invalid login details');

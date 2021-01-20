@@ -31,11 +31,11 @@ router
   .delete(authenticate, permit(['admin']), deleteAllSchool);
 
   router.route('/schools/approved')
-  .get(authenticate, permit(['admin', 'user', 'school']), approvedSchools)
+  .get(authenticate, permit(['admin', 'user', 'school', 'parent']), approvedSchools)
 
 router
   .route('/schools/:_id')
-  .get(authenticate, permit(['admin', 'user', 'school']), fetchOne)
+  .get(authenticate, permit(['admin', 'user', 'school', 'parent']), fetchOne)
   .delete(authenticate, permit(['admin', 'school']), deleteOne)
   .put(authenticate, permit(['admin', 'school']), update)
 

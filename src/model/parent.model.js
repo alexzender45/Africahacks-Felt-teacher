@@ -7,13 +7,9 @@ import uniqueValidator from 'mongoose-unique-validator';
 
 dotConfig();
 
-const schoolSchema = new Schema(
+const parentSchema = new Schema(
   {
-    ownerOfSchool: {
-      type: String,
-      default: 'Please Update'
-    },
-    nameOfSchool: {
+    nameOfParent: {
       type: String,
        required: true,
     },
@@ -30,10 +26,6 @@ const schoolSchema = new Schema(
         default: 'Please Update' 
       },
     address: {
-      type: String,
-      default: 'Please Update'
-    },
-    RCNumber: {
       type: String,
       default: 'Please Update'
     },
@@ -92,7 +84,7 @@ const schoolSchema = new Schema(
     },
     role: {
       type: String,
-      default: 'school'
+      default: 'parent'
     },
     status: {
       type: String,
@@ -103,9 +95,9 @@ const schoolSchema = new Schema(
       default: false
     },
     jobs: [{
-      type: Schema.Types.ObjectId,
-      ref: 'Job'
-    }]
+        type: Schema.Types.ObjectId,
+        ref: 'JobParent'
+      }]
   },
   {
     timestamps: true,
@@ -125,7 +117,7 @@ const schoolSchema = new Schema(
   }
 );
 
-schoolSchema.pre('save', async function save(next) {
+parentSchema.pre('save', async function save(next) {
   try {
     const user = this;
 
@@ -139,8 +131,8 @@ schoolSchema.pre('save', async function save(next) {
   }
 });
 
-schoolSchema.statics.findByCredentials = async (loginKey, password) => {
-  const user = await School.findOne({ email: loginKey })
+parentSchema.statics.findByCredentials = async (loginKey, password) => {
+  const user = await Parent.findOne({ phone: loginKey })
 
   if (!user) {
     throw new Error('Invalid login details');
@@ -155,15 +147,15 @@ schoolSchema.statics.findByCredentials = async (loginKey, password) => {
   return user;
 };
 
-schoolSchema.methods.generateAuthToken = async function () {
+parentSchema.methods.generateAuthToken = async function () {
   const user = this;
-  const token = jwt.sign({ _id: user._id, type: 'school' }, process.env.JWT_SECRETE_KEY, {expiresIn:'4hrs'});
+  const token = jwt.sign({ _id: user._id, type: 'parent' }, process.env.JWT_SECRETE_KEY, {expiresIn:'4hrs'});
   await user.save();
   return token;
 };
 
-schoolSchema.plugin(uniqueValidator, { message: '{TYPE} must be unique.' });
+parentSchema.plugin(uniqueValidator, { message: '{TYPE} must be unique.' });
 
-const School = model('School', schoolSchema);
+const Parent = model('Parent', parentSchema);
 
-export default School;
+export default Parent;
