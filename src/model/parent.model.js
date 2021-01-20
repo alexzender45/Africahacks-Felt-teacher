@@ -97,6 +97,9 @@ const parentSchema = new Schema(
     jobs: [{
         type: Schema.Types.ObjectId,
         ref: 'JobParent'
+      }],
+      messages: [{
+        type: String
       }]
   },
   {

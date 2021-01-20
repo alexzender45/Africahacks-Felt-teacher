@@ -105,6 +105,9 @@ const schoolSchema = new Schema(
     jobs: [{
       type: Schema.Types.ObjectId,
       ref: 'Job'
+    }],
+    messages: [{
+      type: String
     }]
   },
   {
