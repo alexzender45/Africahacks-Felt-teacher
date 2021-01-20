@@ -10,5 +10,5 @@ connectWithApprovedTeacher
 
 router
   .route('/teachers/:_id/connect')
-  .post(authenticate, permit(['admin', 'user', 'school']), connectWithApprovedTeacher)
+  .post(authenticate, permit(['admin', 'user', 'school', 'parent']), connectWithApprovedTeacher)
   export default router;

@@ -9,6 +9,7 @@ const router = Router();
 const { 
 changePicture,
   changeVideo,
+  UploadResume
 } = new UploadVideoAndImage();
 
 router
@@ -18,4 +19,8 @@ router
   router
   .route('/teachers/:_id/video')
   .put(upload.videoUpload.any(), authenticate, permit(['admin', 'user']), changeVideo)
+
+  router
+  .route('/teachers/:_id/resume')
+  .put(upload.imageUpload.any(), authenticate, permit(['admin', 'user']), UploadResume)
   export default router;

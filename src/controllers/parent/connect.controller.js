@@ -5,19 +5,20 @@ import jwt from 'jsonwebtoken';
 import { BaseController } from '.';
 import Teacher from '../../model/teacher.model';
 import School from '../../model/school.model';
-import Parent from '../../model/parent.model';
+import Parent from '../../model/parent.model'
+
 dotConfig();
 
 const vonage = new Vonage({
-    apiKey: process.env.API_KEY_VONAGEAPP,
-    apiSecret: process.env.API_SECRET_VONAGEAPP
-  });
+  apiKey: process.env.API_KEY_VONAGEAPP,
+  apiSecret: process.env.API_SECRET_VONAGEAPP
+});
 
 export class Connect extends BaseController {
     constructor() {
       super();
     }
-    async connectWithApprovedTeacher (req, res){
+    async connectWithApprovedParent (req, res){
         if(req.user.approved !== true && req.user.status !== 'Approved'){
             return res.status(400).send({ message: 'You Are Not Approved To Perform This Action' });
           }else{
@@ -25,30 +26,30 @@ export class Connect extends BaseController {
         const token = usertoken.split(' ');
         const decoded = jwt.verify(token[1], process.env.JWT_SECRETE_KEY);
 
-        // User that is a teacher 
-        if(decoded.type === "teacher"){
-          const visitor = await Teacher.findById(decoded._id)
+        // User that is a  school
+        if(decoded.type === "school"){
+          const visitor = await School.findById(decoded._id)
            if(visitor.connectPoint <= 0){
             return res.status(400).json({
               error: "Please buy more connectPoint"
              });
           }else{
-            Teacher.updateOne({ "_id": visitor._id},
+            School.updateOne({ "_id": visitor._id},
             { "$inc": { "connectPoint": -1 } }, function (err) {
                 if (err) return new Error(err);
         });
-          const user = await Teacher.findById(req.params._id);
+          const user = await School.findById(req.params._id);
           if (!user) {
             return res.status(400).send({ error: 'User does not exist' });
           }
 
-          // messages 
-          user.messages.push(`${visitor.fullname} requested to connect with you, ${visitor.email}, ${visitor.link}`)
+          // Messages
+          user.messages.push(`${visitor.nameOfSchool} requested to connect with you, ${visitor.email}, ${visitor.link}`)
           user.save()
           const from = " From Felt Teacher"
           const to = user.phone
-          const more = `You can email me ${visitor.email}, and also check my profile on Felt Teacher Platform ${visitor.link}`
-          const text = `I will love connect ${more}`
+          const more = `You can email me ${visitor.email}, and also check School on Felt Teacher Platform ${visitor.link}`
+          const text = `I will love to connect with you ${more}`
           
           vonage.message.sendSms(from, to, text, (err, responseData) => {
               if (err) {
@@ -63,9 +64,9 @@ export class Connect extends BaseController {
           })
         }
 
-        // User that is a school
-        }else if (decoded.type === "school"){
-            const visitor = await School.findById(decoded._id)
+        // User that is a Teacher
+        }else if (decoded.type === "teacher"){
+            const visitor = await Teacher.findById(decoded._id)
              if(visitor.connectPoint <= 0){
               return res.status(400).json({
                 error: "Please buy more connectPoint"
@@ -75,13 +76,14 @@ export class Connect extends BaseController {
               { "$inc": { "connectPoint": -1 } }, function (err) {
                   if (err) return new Error(err);
           });
-            const user = await Teacher.findById(req.params._id);
+              console.log(visitor)
+            const user = await Parent.findById(req.params._id);
             if (!user) {
               return res.status(400).send({ error: 'User does not exist' });
             }
 
-            // messages
-            user.messages.push(`${visitor.nameOfSchool} requested to connect with you, ${visitor.email}, ${visitor.link}`)
+            // Messages
+            user.messages.push(`${visitor.fullname} requested to connect with you, ${visitor.email}, ${visitor.link}`)
           user.save()
             const from = " From Felt Teacher"
             const to = user.phone
@@ -101,7 +103,7 @@ export class Connect extends BaseController {
             })
           }
 
-          // User that is a parent
+          // User that is a Parent
         }else if (decoded.type === "parent"){
           const visitor = await Parent.findById(decoded._id)
            if(visitor.connectPoint <= 0){
@@ -113,13 +115,12 @@ export class Connect extends BaseController {
             { "$inc": { "connectPoint": -1 } }, function (err) {
                 if (err) return new Error(err);
         });
-        
-          const user = await Teacher.findById(req.params._id);
+          const user = await Parent.findById(req.params._id);
           if (!user) {
             return res.status(400).send({ error: 'User does not exist' });
           }
-          
-          // messages
+
+          // Messages
           user.messages.push(`${visitor.nameOfParent} requested to connect with you, ${visitor.email}, ${visitor.link}`)
           user.save()
           const from = " From Felt Teacher"
@@ -140,7 +141,7 @@ export class Connect extends BaseController {
           })
         }
       }
-      super.success(res, 'Connected Successful');
+        super.success(res, 'Connected Successful');
 }
 }
 }

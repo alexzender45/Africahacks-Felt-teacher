@@ -5,7 +5,9 @@ import RateLimit from 'express-rate-limit';
 import mongoSanitize from 'express-mongo-sanitize';
 import { healthRoute, teacherRoute, uploadRoute, connectRoute } from './routes/teacher';
 import {  schoolRoute, imageUploadRoute, schoolConnectRoute } from './routes/school';
+import {  parentRoute, imageUploadRoute2, parentConnectRoute } from './routes/parent';
 import {schoolJobRoute } from './routes/jobSchool';
+import {parentJobRoute } from './routes/jobParent';
 import { Database } from './db';
 
 //
@@ -32,10 +34,14 @@ app.use(mongoSanitize());
 app.use('/api/', healthRoute);
 app.use('/api/', teacherRoute);
 app.use('/api/', schoolRoute);
+app.use('/api/', parentRoute);
 app.use('/api/', uploadRoute);
 app.use('/api/', connectRoute);
 app.use('/api/', imageUploadRoute);
+app.use('/api/', imageUploadRoute2);
 app.use('/api/', schoolConnectRoute)
 app.use('/api/', schoolJobRoute)
+app.use('/api/', parentJobRoute)
+app.use('/api/', parentConnectRoute);
 
 export default app;

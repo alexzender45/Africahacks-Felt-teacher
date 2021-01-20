@@ -74,8 +74,8 @@ export class TeacherController extends BaseController {
 
   async login(req, res) {
     try {
-      const { username, password} = req.body;
-      const teacher = await Teacher.findByCredentials(username, password);
+      const { email, password} = req.body;
+      const teacher = await Teacher.findByCredentials(email, password);
       const token = await teacher.generateAuthToken();
       const body = { teacher, token };
 
@@ -374,7 +374,6 @@ async fetchOne(req, res, next) {
      user
     });
   } catch (e) {
-    console.log(e)
     super.error(res, e);
   }
 }
@@ -418,8 +417,6 @@ async adminApprovedTeachers(req, res) {
       const allowedUpdates = [
         'phone',
         'fullname',
-        'username',
-        'email',
         'password',
         'yearsOfExperience',
         'nameOfSchool',

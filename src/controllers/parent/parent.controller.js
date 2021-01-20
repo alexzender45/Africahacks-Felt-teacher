@@ -1,8 +1,9 @@
 import { BaseController } from '.';
+const Mailgun = require('mailgun-js');
 const Vonage = require('@vonage/server-sdk');
 import { config as dotConfig } from 'dotenv';
 import 'dotenv/config';
-import School from '../../model/sch';
+import Parent from '../../model/parent.index';
 import { throwError } from '../../utils/handleErrors';
 dotConfig();
 
@@ -11,7 +12,11 @@ const vonage = new Vonage({
   apiSecret: process.env.API_SECRET_VONAGEAPP
 });
 
-export class SchoolController extends BaseController {
+const api_key = process.env.API_KEY_MAILGUN;
+const domain = process.env.DOMAIN_MAILGUN;
+const from_who = process.env.FROM_WHO_MAILGUN;
+
+export class ParentController extends BaseController {
   constructor() {
     super();
   }
@@ -21,9 +26,9 @@ export class SchoolController extends BaseController {
     const data = req.body;
 
     try {
-      const newSchool = new School(data);
-      const school = await newSchool.save();
-      const token = await school.generateAuthToken();
+      const newParent = new Parent(data);
+      const parent = await newParent.save();
+      const token = await parent.generateAuthToken();
       vonage.verify.request({
         number: req.body.phone,
         // You can customize this to show the name of your company
@@ -37,11 +42,25 @@ export class SchoolController extends BaseController {
             return;
         }
     });
-      const body = { school, token };
 
-      super.success(res, body, 'School Registration Successful', 201);
+    //Mailgun
+    const mailgun = new Mailgun({apiKey: api_key, domain: domain});
+       const data1 = {
+       //Specify email data
+       from: from_who,
+       //The email to contact
+       to: req.body.email,
+       //Subject and text data  
+       subject: 'Hello from Mailgun',
+       html: `<h1>Welcom to Felt-Teacher Platform  ${req.body.nameOfParent} </h1> <p>We are happy to see you register with us</p>`
+       }
+     //Invokes the method to send emails given the above data with the helper library
+      mailgun.messages().send(data1)
+      const body = { parent, token };
+
+      super.success(res, body, 'Parent Registration Successful', 201);
     } catch (e) {
-    super.error(e);
+      supper.error(e);
     }
   }
 
@@ -73,21 +92,20 @@ export class SchoolController extends BaseController {
     });
   }
 
-  async schoolLogin(req, res) {
+  async parentLogin(req, res) {
     try {
-      const { email, password} = req.body;
-      const school = await School.findByCredentials(email, password);
-      const token = await school.generateAuthToken();
-      const body = { school, token };
+      const { phone, password} = req.body;
+      const parent = await Parent.findByCredentials(phone, password);
+      const token = await parent.generateAuthToken();
+      const body = { parent, token };
 
       super.success(res, body, 'Login Successful');
     } catch (e) {
-      console.log(e)
       super.error(res, e);
     }
   }
 
-  async schoolLogOut(req, res) {
+  async parentLogOut(req, res) {
     try {
       req.user.tokens = req.user.tokens.filter((token) => {
         return token.token !== req.token;
@@ -101,36 +119,36 @@ export class SchoolController extends BaseController {
     }
   }
 
-  async readAllSchool(req, res) {
+  async readAllParent(req, res) {
     if(req.user.approved !== true && req.user.status !== 'Approved'){
       return res.status(400).send({ message: 'You Are Not Approved To Perform This Action' });
     }else{
     try {
-      const schools = await School.find({});
+      const parents = await Parent.find({});
 
-      super.success(res, schools || [], 'Successfully Retrieved all Schools.');
+      super.success(res, parents || [], 'Successfully Retrieved all Parents.');
     } catch (e) {
       super.error(res, e);
     }
   }
   }
-  async approvedSchools(req, res) {
+  async approvedParents(req, res) {
     try {
-      const schools = await School.find({ approved: true });
+      const parents = await Parent.find({ approved: true });
 
-      super.success(res, schools || [], 'Successfully Retrieved all Schools.');
+      super.success(res, parents || [], 'Successfully Retrieved all Parents.');
   }
   catch (e) {
       super.error(res, e);
     }
   }
 
-  async deleteAllSchool(req, res) {
+  async deleteAllParent(req, res) {
     if(req.user.approved !== true && req.user.status !== 'Approved'){
       return res.status(400).send({ message: 'You Are Not Approved To Perform This Action' });
     }else{
     try {
-      await School.deleteMany({});
+      await Parent.deleteMany({});
 
       super.success(res, [], 'Delete Successful.');
     } catch (e) {
@@ -139,11 +157,11 @@ export class SchoolController extends BaseController {
   }
 }
 
-  async fetchOne(req, res, next) {
+  async fetchOneParent(req, res, next) {
     try {
-      const user = await School.findById(req.params._id);
+      const user = await Parent.findById(req.params._id);
       if (!user) {
-        return res.status(400).send({ error: 'School does not exist' });
+        return res.status(400).send({ error: 'Parent does not exist' });
       }
       if(user)
       return res.status(200).send(user);
@@ -153,7 +171,7 @@ export class SchoolController extends BaseController {
   }
 
 
-async adminApprovedSchools(req, res) {
+async adminApprovedParents(req, res) {
   if(req.user.approved !== true && req.user.status !== 'Approved'){
     return res.status(400).send({ message: 'You Are Not Approved To Perform This Action' });
   }else{
@@ -172,31 +190,28 @@ async adminApprovedSchools(req, res) {
       throwError(400, 'Invalid Field.');
     }
 
-    const schoolUpdate = req.body;
+    const parentUpdate = req.body;
 
     updates.map((update) => {
-      req.user[update] = schoolUpdate[update];
+      req.user[update] = parentUpdate[update];
     });
 
-    const updatedSchool = await req.user.save();
-    super.success(res, updatedSchool, 'Update Successful');
+    const updatedParent = await req.user.save();
+    super.success(res, updatedParent, 'Update Successful');
   } catch (e) {
     super.error(res, e);
   }
 }
 }
 
-  async update(req, res) {
+  async updateParent(req, res) {
     try {
       const updates = Object.keys(req.body);
       const allowedUpdates = [
         'Phone',
-        'RCNumber',
         'password',
         'address',
-        'schoolName',
-        'ownerOfSchool',
-        'neededTeacher',
+        'nameOfParent',
         'state',
         'country',
         'about',
@@ -210,26 +225,27 @@ async adminApprovedSchools(req, res) {
         throwError(400, 'Invalid Field.');
       }
 
-      const schoolUpdate = req.body;
+      const parentUpdate = req.body;
 
       updates.map((update) => {
-        req.user[update] = schoolUpdate[update];
+        req.user[update] = parentUpdate[update];
       });
 
-      const updatedSchool = await req.user.save();
-      super.success(res, updatedSchool, 'Update Successful');
+      const updatedParent = await req.user.save();
+      super.success(res, updatedParent, 'Update Successful');
     } catch (e) {
       super.error(res, e);
     }
   }
 
-  async deleteOne(req, res) {
+  async deleteOneParent(req, res) {
     try {
-      const school = await req.user.remove();
+      const parent = await req.user.remove();
 
-      super.success(res, school, 'Delete Successful');
+      super.success(res, parent, 'Delete Successful');
     } catch (e) {
       super.error(res, e);
     }
   }
 }
+

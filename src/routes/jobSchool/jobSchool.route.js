@@ -17,7 +17,7 @@ deleteOneJob
 
 router
   .route('/job')
-  .get(authenticate, permit(['admin','user','school']), readAllJob)
+  .get(authenticate, permit(['admin','user','school', 'parent']), readAllJob)
   .post(authenticate, permit(['admin','school']), createJob)
   .delete(authenticate, permit(['admin']), deleteAllJob);
 

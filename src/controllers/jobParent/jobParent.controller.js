@@ -1,15 +1,15 @@
 import { BaseController } from '.';
-import Job from '../../model/job.indexSchool';
+import JobParent from '../../model/job.indexParent';
 import { throwError } from '../../utils/handleErrors';
-import School from '../../model/sch';
+import Parent from '../../model/parent.model';
 
-export class JobController extends BaseController {
+export class JobParentController extends BaseController {
   constructor() {
     super();
   }
 
   async createJob(req, res) {
- if(req.user.role !== 'school'){
+ if(req.user.role !== 'parent'){
   return res.status(401).json({
     message: 'You Are Not Approved To Perform This Action'
   });
@@ -18,9 +18,9 @@ export class JobController extends BaseController {
     const data = req.body;
 
     try {
-      const newJob = new Job(data);
+      const newJob = new JobParent(data);
       const job = await newJob.save();
-      const finduser= await School.findById(author)
+      const finduser= await Parent.findById(author)
       finduser.jobs.push(job)
       await finduser.save();
       job.owner.push(author)
@@ -42,7 +42,7 @@ export class JobController extends BaseController {
     }else{
     try {
 
-      const job = await Job.find({});
+      const job = await JobParent.find({});
 
       super.success(res, job || [], 'Successfully Retrieved all jobs.');
     } catch (e) {
@@ -53,7 +53,7 @@ export class JobController extends BaseController {
 
   async deleteAllJob(req, res) {
     try {
-      await Job.deleteMany({});
+      await JobParent.deleteMany({});
 
       super.success(res, [], 'Delete Successful.');
     } catch (e) {
@@ -62,7 +62,7 @@ export class JobController extends BaseController {
   }
   async fetchOneJob(req, res, next) {
     try {
-      const job = await Job.findById(req.params._id);
+      const job = await JobParent.findById(req.params._id);
       if (!job) {
         return res.status(400).send({ error: 'Job does not exist' });
       }
@@ -92,14 +92,14 @@ async updateJob(req, res) {
       throwError(400, 'Invalid Field.');
     }
 
-    const jobUpdate = req.body;
+    const jobParentUpdate = req.body;
 
     updates.map((update) => {
-      req.user[update] = jobUpdate[update];
+      req.user[update] = jobParentUpdate[update];
     });
 
-    const updatedJob = await req.user.save();
-    super.success(res, updatedJob, 'Update Successful');
+    const updatedJobParent = await req.user.save();
+    super.success(res, updatedJobParent, 'Update Successful');
   } catch (e) {
     super.error(res, e);
   }
