@@ -16,7 +16,8 @@
       "warn",
       {
         "singleQuote": true,
-        "semi": false
+        "semi": false,
+        "endOfLine": "auto"
       }
     ],
     "no-unused-vars": "off",
@@ -31,6 +32,7 @@
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/camelcase": "off",
     "@typescript-eslint/explicit-member-accessibility": "off",
-    "@typescript-eslint/ban-ts-ignore": "off"
+    "@typescript-eslint/ban-ts-ignore": "off",
+    "react/react-in-jsx-scope": "off"
   }
 }
