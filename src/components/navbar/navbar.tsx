@@ -3,6 +3,7 @@ import { AppBar, Toolbar, Typography, Button, Grid } from '@material-ui/core'
 import Logo from '../../assets/logo'
 import { Link } from 'react-router-dom'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
+import MyButton from '../global/button'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -46,14 +47,7 @@ const NavBar: React.FC = () => {
                 </Button>
               </Grid>
               <Grid item>
-                <Button
-                  component={Link}
-                  to="/register"
-                  variant="outlined"
-                  color="secondary"
-                >
-                  Sign Up
-                </Button>
+                <MyButton pto="/register" ptext="Login" />
               </Grid>
             </Grid>
           </Grid>

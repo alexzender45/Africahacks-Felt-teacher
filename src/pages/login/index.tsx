@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-const SignUp: React.FC = () => {
+const Login: React.FC = (): React.ReactElement => {
   const classes = useStyles()
   return (
     <div>
@@ -46,19 +46,12 @@ const SignUp: React.FC = () => {
             <Grid item>
               <form>
                 <Grid container direction="column" spacing={2}>
-                  <Grid item>
-                    <MyInput pname="fullname" plabel="Full Name" ptype="text" />
-                  </Grid>
+
                   <Grid item>
                     <MyInput
                       pname="emailaddress"
                       plabel="Email Address"
                       ptype="email"
-                    />
-                    <MyInput
-                      pname="phonenumber"
-                      plabel="Phone Number"
-                      ptype="text"
                     />
                   </Grid>
                   <Grid item>
@@ -69,20 +62,13 @@ const SignUp: React.FC = () => {
                     />
                   </Grid>
                   <Grid item>
-                    <MyInput
-                      pname="confirm"
-                      plabel="Confiirm Password"
-                      ptype="password"
-                    />
-                  </Grid>
-                  <Grid item>
-                    <MyButton pto="/register" ptext="SignUp" />
+                  <MyButton pto="/login" ptext="Login" />
                   </Grid>
                 </Grid>
               </form>
             </Grid>
             <Grid item>
-              <Typography>Already Have an account? Login</Typography>
+              <Typography>Dont Have an account? Signup</Typography>
             </Grid>
           </Grid>
         </Paper>
@@ -91,4 +77,4 @@ const SignUp: React.FC = () => {
   )
 }
 
-export default SignUp
+export default Login
