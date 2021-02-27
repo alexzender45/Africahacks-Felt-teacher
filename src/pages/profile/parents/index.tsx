@@ -8,10 +8,10 @@ import {
   Grid,
   Divider,
 } from '@material-ui/core'
-import NavBar from '../../components/navbar/navbar'
+import NavBar from '../../../components/navbar/navbar'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import CallIcon from '@material-ui/icons/Call'
-import MyButton from '../../components/global/button'
+import MyButton from '../../../components/global/button'
 import EmailIcon from '@material-ui/icons/Email'
 import RoomIcon from '@material-ui/icons/Room'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-const Profile: React.FC = (): React.ReactElement => {
+const ParentsProfile: React.FC = (): React.ReactElement => {
   const classes = useStyles()
   return (
     <div>
@@ -235,4 +235,4 @@ const Profile: React.FC = (): React.ReactElement => {
   )
 }
 
-export default Profile
+export default ParentsProfile

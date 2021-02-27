@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     bigMargin: {
       marginTop: theme.spacing(6),
-      marginButtom: theme.spacing(6),
+      marginBottom: theme.spacing(12),
     },
     image: {
       height: '100%',
@@ -50,7 +50,7 @@ const HomePage: React.FC = (): React.ReactElement => {
           container
           spacing={6}
           className={classes.bigMargin}
-          justify="flex-end"
+          justify="space-between"
         >
           <Grid item xs={8}>
             <Grid
@@ -83,7 +83,12 @@ const HomePage: React.FC = (): React.ReactElement => {
             />
           </Grid>
         </Grid>
-        <Grid container spacing={10} justify="center">
+        <Grid
+          container
+          spacing={10}
+          justify="center"
+          className={classes.bigMargin}
+        >
           <Grid item>
             <Paper elevation={3} className={classes.buttonGroup}>
               <Grid container spacing={3} justify="center">
@@ -104,7 +109,7 @@ const HomePage: React.FC = (): React.ReactElement => {
                 </Grid>
               </Grid>
             </Paper>
-            <Typography variant="h3" className={classes.paperType}>
+            <Typography variant="h4" className={classes.paperType}>
               Registered Schoools
             </Typography>
           </Grid>
@@ -128,7 +133,7 @@ const HomePage: React.FC = (): React.ReactElement => {
                 </Grid>
               </Grid>
             </Paper>
-            <Typography variant="h3" className={classes.paperType}>
+            <Typography variant="h4" className={classes.paperType}>
               Qualified Teachers
             </Typography>
           </Grid>
@@ -137,7 +142,7 @@ const HomePage: React.FC = (): React.ReactElement => {
           container
           spacing={6}
           className={classes.bigMargin}
-          justify="flex-end"
+          justify="space-between"
         >
           <Grid item xs={4}>
             <img
@@ -173,7 +178,7 @@ const HomePage: React.FC = (): React.ReactElement => {
           container
           spacing={6}
           className={classes.bigMargin}
-          justify="flex-end"
+          justify="space-between"
         >
           <Grid item xs={8}>
             <Grid
@@ -208,7 +213,7 @@ const HomePage: React.FC = (): React.ReactElement => {
           container
           spacing={6}
           className={classes.bigMargin}
-          justify="flex-end"
+          justify="space-between"
         >
           <Grid item xs={4}>
             <img

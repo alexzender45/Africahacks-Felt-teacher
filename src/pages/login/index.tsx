@@ -84,7 +84,7 @@ const Login: React.FC = () => {
                         <Typography color="error">Forgot Password?</Typography>
                       </Grid>
                       <Grid item>
-                        <MyButton pto="/register" ptext="Login" />
+                        <MyButton pto="/profile" ptext="Login" />
                       </Grid>
                     </Grid>
                   </Grid>
