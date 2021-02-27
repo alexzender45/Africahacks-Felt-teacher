@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-const Login: React.FC = () => {
+const Login: React.FC = (): React.ReactElement => {
   const classes = useStyles()
   return (
     <div>

@@ -99,7 +99,7 @@ const SignUp: React.FC = () => {
                     />
                   </Grid>
                   <Grid item className={classes.centerB}>
-                    <MyButton pto="/register" ptext="SignUp" />
+                    <MyButton pto="/verify" ptext="SignUp" />
                   </Grid>
                 </Grid>
               </form>
