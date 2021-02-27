@@ -47,7 +47,7 @@ const NavBar: React.FC = () => {
                 </Button>
               </Grid>
               <Grid item>
-                <MyButton pto="/register" ptext="Login" />
+                <MyButton pto="/login" ptext="Login" />
               </Grid>
             </Grid>
           </Grid>

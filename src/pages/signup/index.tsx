@@ -10,6 +10,7 @@ import {
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
 import MyInput from '../../components/global/input'
 import MyButton from '../../components/global/button'
+import { Link } from 'react-router-dom'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -17,10 +18,20 @@ const useStyles = makeStyles((theme: Theme) =>
       marginTop: theme.spacing(4),
     },
     paper: {
-      padding: theme.spacing(4, 0),
+      padding: theme.spacing(4, 2),
+      textAlign: 'center',
     },
     border: {
       borderRadius: '25px',
+    },
+    centerB: {
+      textAlign: 'center',
+    },
+    insetB: {
+      boxShadow: 'inset 0px 2px 4px 1px rgba(33, 32, 156, 0.2)',
+    },
+    span: {
+      color: 'red',
     },
   })
 )
@@ -32,15 +43,21 @@ const SignUp: React.FC = () => {
       <NavBar />
       <Container maxWidth="sm" className={classes.root}>
         <Paper elevation={4} className={classes.paper}>
-          <Grid container alignItems="center" direction="column" spacing={2}>
+          <Grid container direction="column" spacing={2}>
             <Grid item>
               <Typography variant="h5">Sign Up</Typography>
             </Grid>
             <Grid item>
               <ButtonGroup variant="outlined">
-                <Button size="large">Teacher</Button>
-                <Button size="large">School</Button>
-                <Button size="large">Parent</Button>
+                <Button size="large" className={classes.insetB}>
+                  Teacher
+                </Button>
+                <Button size="large" className={classes.insetB}>
+                  School
+                </Button>
+                <Button size="large" className={classes.insetB}>
+                  Parent
+                </Button>
               </ButtonGroup>
             </Grid>
             <Grid item>
@@ -50,16 +67,22 @@ const SignUp: React.FC = () => {
                     <MyInput pname="fullname" plabel="Full Name" ptype="text" />
                   </Grid>
                   <Grid item>
-                    <MyInput
-                      pname="emailaddress"
-                      plabel="Email Address"
-                      ptype="email"
-                    />
-                    <MyInput
-                      pname="phonenumber"
-                      plabel="Phone Number"
-                      ptype="text"
-                    />
+                    <Grid container spacing={1}>
+                      <Grid item>
+                        <MyInput
+                          pname="emailaddress"
+                          plabel="Email Address"
+                          ptype="email"
+                        />
+                      </Grid>
+                      <Grid item>
+                        <MyInput
+                          pname="phonenumber"
+                          plabel="Phone Number"
+                          ptype="text"
+                        />
+                      </Grid>
+                    </Grid>
                   </Grid>
                   <Grid item>
                     <MyInput
@@ -75,14 +98,19 @@ const SignUp: React.FC = () => {
                       ptype="password"
                     />
                   </Grid>
-                  <Grid item>
+                  <Grid item className={classes.centerB}>
                     <MyButton pto="/register" ptext="SignUp" />
                   </Grid>
                 </Grid>
               </form>
             </Grid>
             <Grid item>
-              <Typography>Already Have an account? Login</Typography>
+              <Typography>
+                Already Have an account?{' '}
+                <span className={classes.span}>
+                  <Link to="/login">Login</Link>
+                </span>
+              </Typography>
             </Grid>
           </Grid>
         </Paper>

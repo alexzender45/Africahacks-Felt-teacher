@@ -5,14 +5,15 @@ import { Link } from 'react-router-dom'
 const useStyles = makeStyles(() =>
   createStyles({
     border: {
-      borderRadius: '25px',
+      borderRadius: '12px',
+      boxShadow: '0px 2px 8px rgba(33, 32, 156, 0.1)',
     },
   })
 )
 
 type IProps = {
-  pto: string
   ptext: string
+  pto: string
 }
 
 const MyButton: React.FC<IProps> = (props: IProps): React.ReactElement => {

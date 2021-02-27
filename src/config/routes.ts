@@ -1,6 +1,7 @@
 import Iroute from '../interfaces/route'
 import HomePage from '../pages/homepage'
 import Login from '../pages/login'
+import Profile from '../pages/profile'
 import SignUp from '../pages/signup'
 
 const Routes: Iroute[] = [
@@ -18,6 +19,11 @@ const Routes: Iroute[] = [
     path: '/login',
     name: 'Login',
     component: Login,
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: Profile,
   },
 ]
 

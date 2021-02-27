@@ -1,4 +1,4 @@
-const Logo: React.FC = () => {
+const Logo: React.FC = (): React.ReactElement => {
   return (
     <svg
       width="56"
