@@ -120,7 +120,7 @@ const Verify: React.FC = (): React.ReactElement => {
                 </Grid>
               </Grid>
               <Grid item>
-                <MyButton pto="/register" ptext="SignUp" />
+                <MyButton pto="/register" ptext="SignUp" plink={true} />
               </Grid>
               <Grid item>
                 <Typography>Didnt get code? Resend</Typography>

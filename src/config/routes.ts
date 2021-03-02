@@ -1,7 +1,7 @@
 import Iroute from '../interfaces/route'
 import HomePage from '../pages/homepage'
 import Login from '../pages/login'
-import Profile from '../pages/profile'
+import TeachersProfile from '../pages/profile/teachers'
 import SignUp from '../pages/signup'
 import Verify from '../pages/verify'
 
@@ -22,9 +22,9 @@ const Routes: Iroute[] = [
     component: Login,
   },
   {
-    path: '/profile',
-    name: 'Profile',
-    component: Profile,
+    path: '/teacher',
+    name: 'Teacher Profile',
+    component: TeachersProfile,
   },
   {
     path: '/verify',

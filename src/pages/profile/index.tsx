@@ -85,7 +85,7 @@ const Profile: React.FC = (): React.ReactElement => {
               </Grid>
             </Grid>
             <Grid item>
-              <MyButton pto="/" ptext="connect" />
+              <MyButton pto="/" ptext="connect" plink={true} />
             </Grid>
           </Grid>
         </div>

@@ -1,4 +1,4 @@
-import { Paper, Typography, Grid } from '@material-ui/core'
+import { Paper, Typography, Grid, TextField } from '@material-ui/core'
 import MyButton from '../../components/global/button'
 import MyInput from '../../components/global/input'
 import NavBar from '../../components/navbar/navbar'
@@ -37,6 +37,9 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '60%',
       margin: 'auto',
     },
+    border: {
+      borderRadius: '25px',
+    },
   })
 )
 
@@ -71,7 +74,7 @@ const HomePage: React.FC = (): React.ReactElement => {
                 </Typography>
               </Grid>
               <Grid item>
-                <MyButton pto="/register" ptext="SignUp" />
+                <MyButton pto="/register" ptext="SignUp" plink={true} />
               </Grid>
             </Grid>
           </Grid>
@@ -168,7 +171,7 @@ const HomePage: React.FC = (): React.ReactElement => {
                 </Typography>
               </Grid>
               <Grid item>
-                <MyButton pto="/register" ptext="SignUp" />
+                <MyButton pto="/register" ptext="SignUp" plink={true} />
               </Grid>
             </Grid>
           </Grid>
@@ -196,7 +199,7 @@ const HomePage: React.FC = (): React.ReactElement => {
                 </Typography>
               </Grid>
               <Grid item>
-                <MyButton pto="/register" ptext="SignUp" />
+                <MyButton pto="/register" ptext="SignUp" plink={true} />
               </Grid>
             </Grid>
           </Grid>
@@ -237,7 +240,7 @@ const HomePage: React.FC = (): React.ReactElement => {
                 </Typography>
               </Grid>
               <Grid item>
-                <MyButton pto="/register" ptext="SignUp" />
+                <MyButton pto="/register" ptext="SignUp" plink={true} />
               </Grid>
             </Grid>
           </Grid>
@@ -255,14 +258,22 @@ const HomePage: React.FC = (): React.ReactElement => {
               ></MyInput>
             </Grid>
             <Grid item>
-              <MyInput
-                pname="message"
-                plabel="Message"
-                ptype="textfield"
-              ></MyInput>
+              <TextField
+                name="message"
+                label="Message"
+                type="text"
+                multiline={true}
+                rows={4}
+                variant="outlined"
+                size="medium"
+                fullWidth={true}
+                InputProps={{
+                  className: classes.border,
+                }}
+              />
             </Grid>
             <Grid item className={classes.header}>
-              <MyButton pto="/register" ptext="SignUp" />
+              <MyButton pto="/register" ptext="SignUp" plink={true} />
             </Grid>
           </Grid>
         </div>

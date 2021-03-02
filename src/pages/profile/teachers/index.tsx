@@ -16,6 +16,8 @@ import EmailIcon from '@material-ui/icons/Email'
 import RoomIcon from '@material-ui/icons/Room'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
+import { useState, useEffect } from 'react'
+import { Teacher } from '../../../interfaces/interface'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -52,12 +54,24 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const TeachersProfile: React.FC = (): React.ReactElement => {
   const classes = useStyles()
+  const [data, setData] = useState<Teacher>()
+
+  useEffect(() => {
+    const stuff = localStorage.getItem('teacher')
+    if (stuff) {
+      setData(JSON.parse(stuff))
+    }
+  }, [])
   return (
     <div>
       <NavBar />
       <div className={classes.header}></div>
       <div className={classes.root}>
-        <Avatar alt="profile picture" className={classes.avatar}>
+        <Avatar
+          alt="profile picture"
+          src={data?.image}
+          className={classes.avatar}
+        >
           AA
         </Avatar>
         <div className={classes.deev}>
@@ -67,25 +81,23 @@ const TeachersProfile: React.FC = (): React.ReactElement => {
                 <Grid item>
                   <Grid container alignItems="center" spacing={2}>
                     <Grid item>
-                      <Typography variant="h5">
-                        ADEWOYE ADEGOKE ADEDEJI
-                      </Typography>
+                      <Typography variant="h5">{data?.fullname}</Typography>
                     </Grid>
                     <Grid item>
                       <FiberManualRecordIcon color="error" fontSize="small" />
                     </Grid>
                     <Grid item>
-                      <Typography>Approved</Typography>
+                      <Typography>{data?.status}</Typography>
                     </Grid>
                   </Grid>
                 </Grid>
                 <Grid item>
-                  <Typography>Ilove food plenty plenty</Typography>
+                  <Typography>{data?.about}</Typography>
                 </Grid>
               </Grid>
             </Grid>
             <Grid item>
-              <MyButton pto="/" ptext="connect" />
+              <MyButton pto="/" ptext="connect" plink={true} />
             </Grid>
           </Grid>
         </div>
@@ -111,7 +123,7 @@ const TeachersProfile: React.FC = (): React.ReactElement => {
                     </Grid>
                   </Grid>
                   <Grid item>
-                    <Typography>08153125924</Typography>
+                    <Typography>{data?.phone}</Typography>
                   </Grid>
                 </Grid>
               </Paper>
@@ -136,7 +148,7 @@ const TeachersProfile: React.FC = (): React.ReactElement => {
                     </Grid>
                   </Grid>
                   <Grid item>
-                    <Typography>example@gmail.com</Typography>
+                    <Typography>{data?.email}</Typography>
                   </Grid>
                 </Grid>
               </Paper>
@@ -161,7 +173,7 @@ const TeachersProfile: React.FC = (): React.ReactElement => {
                     </Grid>
                   </Grid>
                   <Grid item>
-                    <Typography>Lagos Nigeria</Typography>
+                    <Typography>{data?.address}</Typography>
                   </Grid>
                 </Grid>
               </Paper>

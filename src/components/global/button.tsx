@@ -13,19 +13,22 @@ const useStyles = makeStyles(() =>
 
 type IProps = {
   ptext: string
-  pto: string
+  pto?: string
+  plink: boolean
+  pclick?: (e: React.MouseEvent) => void
 }
 
 const MyButton: React.FC<IProps> = (props: IProps): React.ReactElement => {
   const classes = useStyles()
   return (
     <Button
-      component={Link}
+      component={props.plink ? Link : Button}
       variant="outlined"
       size="large"
       color="secondary"
       className={classes.border}
       to={props.pto}
+      onClick={props.pclick}
     >
       {props.ptext}
     </Button>
