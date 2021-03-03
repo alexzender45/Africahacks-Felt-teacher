@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from 'axios'
 import {
   Idata,
   LoginResponse,
   LoginResponseData,
-  Teacher
+  Teacher,
 } from '../interfaces/interface'
 
 export const loginTeacher = async (
