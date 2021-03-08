@@ -36,7 +36,7 @@ const Verify: React.FC = (): React.ReactElement => {
   const classes = useStyles()
   return (
     <div>
-      <NavBar />
+      <NavBar page="none" />
       <Grid container className={classes.root}>
         <Grid item xs={1}>
           <Typography>Back</Typography>

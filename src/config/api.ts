@@ -23,7 +23,7 @@ export const loginTeacher = async (
     if (response.data.status === 'success') {
       localStorage.setItem('token', loginData.token)
       localStorage.setItem('teacher', JSON.stringify(teacher))
-      history.push('/teacher')
+      history.push('/profile')
     }
   } catch (err) {
     alert('error logging in')

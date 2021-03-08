@@ -1,7 +1,11 @@
 import Iroute from '../interfaces/route'
+import Faqs from '../pages/faqs'
 import HomePage from '../pages/homepage'
 import Login from '../pages/login'
-import TeachersProfile from '../pages/profile/teachers'
+import PrivateProfile from '../pages/profile/private'
+import PublicProfile from '../pages/profile/public'
+import SearchParents from '../pages/search/parent'
+import SearchTeacher from '../pages/search/teacher'
 import SignUp from '../pages/signup'
 import Verify from '../pages/verify'
 
@@ -22,14 +26,34 @@ const Routes: Iroute[] = [
     component: Login,
   },
   {
-    path: '/teacher',
-    name: 'Teacher Profile',
-    component: TeachersProfile,
+    path: '/profile',
+    name: 'Private Profile',
+    component: PrivateProfile,
+  },
+  {
+    path: '/public',
+    name: 'Public Profile',
+    component: PublicProfile,
   },
   {
     path: '/verify',
     name: 'Verify',
     component: Verify,
+  },
+  {
+    path: '/faqs',
+    name: 'FAQS',
+    component: Faqs,
+  },
+  {
+    path: '/teachers',
+    name: 'Teachers',
+    component: SearchTeacher,
+  },
+  {
+    path: '/parents',
+    name: 'Parents',
+    component: SearchParents,
   },
 ]
 

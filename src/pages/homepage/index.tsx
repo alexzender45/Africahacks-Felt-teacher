@@ -47,7 +47,7 @@ const HomePage: React.FC = (): React.ReactElement => {
   const classes = useStyles()
   return (
     <div>
-      <NavBar />
+      <NavBar page="home" />
       <div className={classes.root}>
         <Grid
           container

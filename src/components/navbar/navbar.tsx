@@ -1,5 +1,12 @@
 /* eslint-disable react/no-unescaped-entities */
-import { AppBar, Toolbar, Typography, Button, Grid } from '@material-ui/core'
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Grid,
+  Avatar,
+} from '@material-ui/core'
 import Logo from '../../assets/logo'
 import { Link } from 'react-router-dom'
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles'
@@ -10,10 +17,20 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       padding: theme.spacing(0, 6),
     },
+    avatar: {
+      height: theme.spacing(4),
+      width: theme.spacing(4),
+    },
   })
 )
 
-const NavBar: React.FC = () => {
+type Tcomponent = 'home' | 'none' | 'profile'
+
+type Pprops = {
+  page: Tcomponent
+}
+
+const NavBar: React.FC<Pprops> = (props: Pprops) => {
   const classes = useStyles()
   return (
     <AppBar position="sticky" className={classes.root}>
@@ -29,28 +46,55 @@ const NavBar: React.FC = () => {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item>
-            <Grid container spacing={4}>
-              <Grid item>
-                <Button component={Link} to="/">
-                  Home
-                </Button>
-              </Grid>
-              <Grid item>
-                <Button component={Link} to="/">
-                  About Us
-                </Button>
-              </Grid>
-              <Grid item>
-                <Button component={Link} to="/">
-                  FAQ'S
-                </Button>
-              </Grid>
-              <Grid item>
-                <MyButton pto="/login" ptext="Login" plink={true} />
+          {props.page === 'home' ? (
+            <Grid item>
+              <Grid container spacing={4}>
+                <Grid item>
+                  <Button component={Link} to="/">
+                    Home
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Button component={Link} to="/">
+                    About Us
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Button component={Link} to="/faqs">
+                    FAQ'S
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <MyButton pto="/login" ptext="Login" plink={true} />
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
+          ) : props.page === 'profile' ? (
+            <Grid item>
+              <Grid container spacing={4}>
+                <Grid item>
+                  <Button component={Link} to="/">
+                    Home
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Button component={Link} to="/">
+                    Teachers
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Button component={Link} to="/">
+                    Help
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Avatar alt="profile picture">AA</Avatar>
+                </Grid>
+              </Grid>
+            </Grid>
+          ) : (
+            ''
+          )}
         </Grid>
       </Toolbar>
     </AppBar>

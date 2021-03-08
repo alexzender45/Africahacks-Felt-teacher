@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 )
 
-const TeachersProfile: React.FC = (): React.ReactElement => {
+const PublicProfile: React.FC = (): React.ReactElement => {
   const classes = useStyles()
   const [data, setData] = useState<Teacher>()
 
@@ -64,7 +64,7 @@ const TeachersProfile: React.FC = (): React.ReactElement => {
   }, [])
   return (
     <div>
-      <NavBar />
+      <NavBar page="profile" />
       <div className={classes.header}></div>
       <div className={classes.root}>
         <Avatar
@@ -247,4 +247,4 @@ const TeachersProfile: React.FC = (): React.ReactElement => {
   )
 }
 
-export default TeachersProfile
+export default PublicProfile

@@ -66,7 +66,7 @@ const Login: React.FC = (): React.ReactElement => {
 
   return (
     <div>
-      <NavBar />
+      <NavBar page="none" />
       <Grid container className={classes.root}>
         <Grid item xs={1}>
           <Typography>Back</Typography>
