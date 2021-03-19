@@ -36,6 +36,7 @@ const {
 //
 router.route('/login').post(login);
 router.route('/logout').get(authenticate, logOut);
+router.route('/sendcode').post(sendCode)
 router.route('/cancel').post(cancel)
 router
   .route('/teachers')
