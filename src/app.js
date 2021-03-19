@@ -9,6 +9,8 @@ import {  parentRoute, imageUploadRoute2, parentConnectRoute } from './routes/pa
 import {schoolJobRoute } from './routes/jobSchool';
 import {parentJobRoute } from './routes/jobParent';
 import { Database } from './db';
+const swaggerUi = require('swagger-ui-express')
+const swaggerDocument = require('../swagger.json');
 
 //
 // Initialize DB
@@ -43,5 +45,5 @@ app.use('/api/', schoolConnectRoute)
 app.use('/api/', schoolJobRoute)
 app.use('/api/', parentJobRoute)
 app.use('/api/', parentConnectRoute);
-
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 export default app;

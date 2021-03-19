@@ -4,25 +4,25 @@ import { SchoolController } from '../../controllers/school';
 //
 
 const router = Router();
-const { 
-  schoolLogin, 
-  schoolLogOut, 
-  deleteAllSchool, 
-  deleteOne, 
-  readAllSchool, 
-  fetchOne, 
+const {
+  schoolLogin,
+  schoolLogOut,
+  deleteAllSchool,
+  deleteOne,
+  readAllSchool,
+  fetchOne,
   register,
-   update,
-   cancel,
-   verifyUser, 
-   adminApprovedSchools,
-   approvedSchools
-   
- } = new SchoolController();
+  update,
+  cancel,
+  sendCode,
+  adminApprovedSchools,
+  approvedSchools
+
+} = new SchoolController();
 
 router.route('/login/school').post(schoolLogin);
 router.route('/logout/school').get(authenticate, schoolLogOut);
-router.route('/verifyschool').get(verifyUser);
+router.route('/sendcode').post(sendCode)
 router.route('/cancelschool').get(cancel);
 router
   .route('/schools')
@@ -30,7 +30,7 @@ router
   .post(register)
   .delete(authenticate, permit(['admin']), deleteAllSchool);
 
-  router.route('/schools/approved')
+router.route('/schools/approved')
   .get(authenticate, permit(['admin', 'user', 'school', 'parent']), approvedSchools)
 
 router
@@ -40,5 +40,5 @@ router
   .put(authenticate, permit(['admin', 'school']), update)
 
 
- router.route('/school/me/approve').put(authenticate, permit(['admin']), adminApprovedSchools)
- export default router;
+router.route('/school/me/approve').put(authenticate, permit(['admin']), adminApprovedSchools)
+export default router;

@@ -1,5 +1,5 @@
 import { BaseController } from '.';
-const Mailgun = require('mailgun-js');
+//const Mailgun = require('mailgun-js');
 const Vonage = require('@vonage/server-sdk');
 import { config as dotConfig } from 'dotenv';
 import 'dotenv/config';
@@ -12,9 +12,11 @@ const vonage = new Vonage({
   apiSecret: process.env.API_SECRET_VONAGEAPP
 });
 
-const api_key = process.env.API_KEY_MAILGUN;
-const domain = process.env.DOMAIN_MAILGUN;
-const from_who = process.env.FROM_WHO_MAILGUN;
+let REQUEST_ID;
+
+// const api_key = process.env.API_KEY_MAILGUN;
+// const domain = process.env.DOMAIN_MAILGUN;
+// const from_who = process.env.FROM_WHO_MAILGUN;
 
 export class ParentController extends BaseController {
   constructor() {
@@ -23,39 +25,25 @@ export class ParentController extends BaseController {
 
   async register(req, res) {
 
-    const data = req.body;
-
     try {
+      if (!req.body.code) {
+        res.status(400).send({ message: "You must supply a `code` to verify your number" })
+        return;
+      }
+      // Run the check against Vonage's servers
+      vonage.verify.check({
+        request_id: REQUEST_ID,
+        code: req.body.code
+      }, (err, result) => {
+        if (err) {
+          res.status(500).send({ message: "Something went wrong" });
+          return;
+        }
+      });
+      const data = req.body;
       const newParent = new Parent(data);
       const parent = await newParent.save();
       const token = await parent.generateAuthToken();
-      vonage.verify.request({
-        number: req.body.phone,
-        // You can customize this to show the name of your company
-        brand: 'Felt Teacher',
-        // We could put `'6'` instead of `'4'` if we wanted a longer verification code
-        code_length: '4'
-    }, (err, result) => {
-        if (err) {
-            // If there was an error, return it to the client
-            res.status(500).send(err.error_text);
-            return;
-        }
-    });
-
-    //Mailgun
-    const mailgun = new Mailgun({apiKey: api_key, domain: domain});
-       const data1 = {
-       //Specify email data
-       from: from_who,
-       //The email to contact
-       to: req.body.email,
-       //Subject and text data  
-       subject: 'Hello from Mailgun',
-       html: `<h1>Welcom to Felt-Teacher Platform  ${req.body.nameOfParent} </h1> <p>We are happy to see you register with us</p>`
-       }
-     //Invokes the method to send emails given the above data with the helper library
-      mailgun.messages().send(data1)
       const body = { parent, token };
 
       super.success(res, body, 'Parent Registration Successful', 201);
@@ -64,26 +52,24 @@ export class ParentController extends BaseController {
     }
   }
 
-  async verifyUser() {
-    // We require clients to submit a request id (for identification) and a code (to check)
-    if (!req.body.requestId || !req.body.code) {
-        res.status(400).send({message: "You must supply a `code` and `request_id` prop to send the request to"})
-        return;
-    }
-    // Run the check against Vonage's servers
-    vonage.verify.check({
-        request_id: req.body.requestId,
-        code: req.body.code
+  async sendCode(req, res) {
+    vonage.verify.request({
+      number: req.body.phone,
+      // You can customize this to show the name of your company
+      brand: 'Felt Teacher',
+      // We could put `'6'` instead of `'4'` if we wanted a longer verification code
+      code_length: '4'
     }, (err, result) => {
-        if (err) {
-            res.status(500).send(err.error_text);
-            return;
-        }
-        res.send(result);
+      if (err) {
+        // If there was an error, return it to the client
+        res.status(500).send(err.error_text);
+      }
+      REQUEST_ID = result.request_id;
+      res.send(result)
     });
-}
+  }
 
-  async cancel(req, res){
+  async cancel(req, res) {
     nexmo.verify.control({
       request_id: 'REQUEST_ID',
       cmd: 'cancel'
@@ -94,7 +80,7 @@ export class ParentController extends BaseController {
 
   async parentLogin(req, res) {
     try {
-      const { phone, password} = req.body;
+      const { phone, password } = req.body;
       const parent = await Parent.findByCredentials(phone, password);
       const token = await parent.generateAuthToken();
       const body = { parent, token };
@@ -120,42 +106,42 @@ export class ParentController extends BaseController {
   }
 
   async readAllParent(req, res) {
-    if(req.user.approved !== true && req.user.status !== 'Approved'){
+    if (req.user.approved !== true && req.user.status !== 'Approved') {
       return res.status(400).send({ message: 'You Are Not Approved To Perform This Action' });
-    }else{
-    try {
-      const parents = await Parent.find({});
+    } else {
+      try {
+        const parents = await Parent.find({});
 
-      super.success(res, parents || [], 'Successfully Retrieved all Parents.');
-    } catch (e) {
-      super.error(res, e);
+        super.success(res, parents || [], 'Successfully Retrieved all Parents.');
+      } catch (e) {
+        super.error(res, e);
+      }
     }
-  }
   }
   async approvedParents(req, res) {
     try {
       const parents = await Parent.find({ approved: true });
 
       super.success(res, parents || [], 'Successfully Retrieved all Parents.');
-  }
-  catch (e) {
+    }
+    catch (e) {
       super.error(res, e);
     }
   }
 
   async deleteAllParent(req, res) {
-    if(req.user.approved !== true && req.user.status !== 'Approved'){
+    if (req.user.approved !== true && req.user.status !== 'Approved') {
       return res.status(400).send({ message: 'You Are Not Approved To Perform This Action' });
-    }else{
-    try {
-      await Parent.deleteMany({});
+    } else {
+      try {
+        await Parent.deleteMany({});
 
-      super.success(res, [], 'Delete Successful.');
-    } catch (e) {
-      super.error(res, e);
+        super.success(res, [], 'Delete Successful.');
+      } catch (e) {
+        super.error(res, e);
+      }
     }
   }
-}
 
   async fetchOneParent(req, res, next) {
     try {
@@ -163,46 +149,46 @@ export class ParentController extends BaseController {
       if (!user) {
         return res.status(400).send({ error: 'Parent does not exist' });
       }
-      if(user)
-      return res.status(200).send(user);
+      if (user)
+        return res.status(200).send(user);
     } catch (e) {
       super.error(res, e);
     }
   }
 
 
-async adminApprovedParents(req, res) {
-  if(req.user.approved !== true && req.user.status !== 'Approved'){
-    return res.status(400).send({ message: 'You Are Not Approved To Perform This Action' });
-  }else{
-  try {
-    const updates = Object.keys(req.body);
-    const allowedUpdates = [
-      'approved',
-      'status',
-      'role'
-    ];
-    const isValidUpdate = updates.every((update) => {
-      return allowedUpdates.includes(update);
-    });
+  async adminApprovedParents(req, res) {
+    if (req.user.approved !== true && req.user.status !== 'Approved') {
+      return res.status(400).send({ message: 'You Are Not Approved To Perform This Action' });
+    } else {
+      try {
+        const updates = Object.keys(req.body);
+        const allowedUpdates = [
+          'approved',
+          'status',
+          'role'
+        ];
+        const isValidUpdate = updates.every((update) => {
+          return allowedUpdates.includes(update);
+        });
 
-    if (!isValidUpdate) {
-      throwError(400, 'Invalid Field.');
+        if (!isValidUpdate) {
+          throwError(400, 'Invalid Field.');
+        }
+
+        const parentUpdate = req.body;
+
+        updates.map((update) => {
+          req.user[update] = parentUpdate[update];
+        });
+
+        const updatedParent = await req.user.save();
+        super.success(res, updatedParent, 'Update Successful');
+      } catch (e) {
+        super.error(res, e);
+      }
     }
-
-    const parentUpdate = req.body;
-
-    updates.map((update) => {
-      req.user[update] = parentUpdate[update];
-    });
-
-    const updatedParent = await req.user.save();
-    super.success(res, updatedParent, 'Update Successful');
-  } catch (e) {
-    super.error(res, e);
   }
-}
-}
 
   async updateParent(req, res) {
     try {

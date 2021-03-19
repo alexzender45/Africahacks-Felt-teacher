@@ -11,6 +11,8 @@ const vonage = new Vonage({
   apiSecret: process.env.API_SECRET_VONAGEAPP
 });
 
+let REQUEST_ID;
+
 export class SchoolController extends BaseController {
   constructor() {
     super();
@@ -18,53 +20,51 @@ export class SchoolController extends BaseController {
 
   async register(req, res) {
 
-    const data = req.body;
-
     try {
+
+      if (!req.body.code) {
+        res.status(400).send({ message: "You must supply a `code` to verify your number" })
+        return;
+      }
+      // Run the check against Vonage's servers
+      vonage.verify.check({
+        request_id: REQUEST_ID,
+        code: req.body.code
+      }, (err, result) => {
+        if (err) {
+          res.status(500).send({ message: "Something went wrong" });
+          return;
+        }
+      });
+      const data = req.body;
       const newSchool = new School(data);
       const school = await newSchool.save();
       const token = await school.generateAuthToken();
-      vonage.verify.request({
-        number: req.body.phone,
-        // You can customize this to show the name of your company
-        brand: 'Felt Teacher',
-        // We could put `'6'` instead of `'4'` if we wanted a longer verification code
-        code_length: '4'
-    }, (err, result) => {
-        if (err) {
-            // If there was an error, return it to the client
-            res.status(500).send(err.error_text);
-            return;
-        }
-    });
       const body = { school, token };
-
       super.success(res, body, 'School Registration Successful', 201);
     } catch (e) {
-    super.error(e);
+      super.error(e);
     }
   }
 
-  async verifyUser() {
-    // We require clients to submit a request id (for identification) and a code (to check)
-    if (!req.body.requestId || !req.body.code) {
-        res.status(400).send({message: "You must supply a `code` and `request_id` prop to send the request to"})
-        return;
-    }
-    // Run the check against Vonage's servers
-    vonage.verify.check({
-        request_id: req.body.requestId,
-        code: req.body.code
+  async sendCode(req, res) {
+    vonage.verify.request({
+      number: req.body.phone,
+      // You can customize this to show the name of your company
+      brand: 'Felt Teacher',
+      // We could put `'6'` instead of `'4'` if we wanted a longer verification code
+      code_length: '4'
     }, (err, result) => {
-        if (err) {
-            res.status(500).send(err.error_text);
-            return;
-        }
-        res.send(result);
+      if (err) {
+        // If there was an error, return it to the client
+        res.status(500).send(err.error_text);
+      }
+      REQUEST_ID = result.request_id;
+      res.send(result)
     });
-}
+  }
 
-  async cancel(req, res){
+  async cancel(req, res) {
     nexmo.verify.control({
       request_id: 'REQUEST_ID',
       cmd: 'cancel'
@@ -75,7 +75,7 @@ export class SchoolController extends BaseController {
 
   async schoolLogin(req, res) {
     try {
-      const { email, password} = req.body;
+      const { email, password } = req.body;
       const school = await School.findByCredentials(email, password);
       const token = await school.generateAuthToken();
       const body = { school, token };
@@ -102,42 +102,42 @@ export class SchoolController extends BaseController {
   }
 
   async readAllSchool(req, res) {
-    if(req.user.approved !== true && req.user.status !== 'Approved'){
+    if (req.user.approved !== true && req.user.status !== 'Approved') {
       return res.status(400).send({ message: 'You Are Not Approved To Perform This Action' });
-    }else{
-    try {
-      const schools = await School.find({});
+    } else {
+      try {
+        const schools = await School.find({});
 
-      super.success(res, schools || [], 'Successfully Retrieved all Schools.');
-    } catch (e) {
-      super.error(res, e);
+        super.success(res, schools || [], 'Successfully Retrieved all Schools.');
+      } catch (e) {
+        super.error(res, e);
+      }
     }
-  }
   }
   async approvedSchools(req, res) {
     try {
       const schools = await School.find({ approved: true });
 
       super.success(res, schools || [], 'Successfully Retrieved all Schools.');
-  }
-  catch (e) {
+    }
+    catch (e) {
       super.error(res, e);
     }
   }
 
   async deleteAllSchool(req, res) {
-    if(req.user.approved !== true && req.user.status !== 'Approved'){
+    if (req.user.approved !== true && req.user.status !== 'Approved') {
       return res.status(400).send({ message: 'You Are Not Approved To Perform This Action' });
-    }else{
-    try {
-      await School.deleteMany({});
+    } else {
+      try {
+        await School.deleteMany({});
 
-      super.success(res, [], 'Delete Successful.');
-    } catch (e) {
-      super.error(res, e);
+        super.success(res, [], 'Delete Successful.');
+      } catch (e) {
+        super.error(res, e);
+      }
     }
   }
-}
 
   async fetchOne(req, res, next) {
     try {
@@ -145,46 +145,46 @@ export class SchoolController extends BaseController {
       if (!user) {
         return res.status(400).send({ error: 'School does not exist' });
       }
-      if(user)
-      return res.status(200).send(user);
+      if (user)
+        return res.status(200).send(user);
     } catch (e) {
       super.error(res, e);
     }
   }
 
 
-async adminApprovedSchools(req, res) {
-  if(req.user.approved !== true && req.user.status !== 'Approved'){
-    return res.status(400).send({ message: 'You Are Not Approved To Perform This Action' });
-  }else{
-  try {
-    const updates = Object.keys(req.body);
-    const allowedUpdates = [
-      'approved',
-      'status',
-      'role'
-    ];
-    const isValidUpdate = updates.every((update) => {
-      return allowedUpdates.includes(update);
-    });
+  async adminApprovedSchools(req, res) {
+    if (req.user.approved !== true && req.user.status !== 'Approved') {
+      return res.status(400).send({ message: 'You Are Not Approved To Perform This Action' });
+    } else {
+      try {
+        const updates = Object.keys(req.body);
+        const allowedUpdates = [
+          'approved',
+          'status',
+          'role'
+        ];
+        const isValidUpdate = updates.every((update) => {
+          return allowedUpdates.includes(update);
+        });
 
-    if (!isValidUpdate) {
-      throwError(400, 'Invalid Field.');
+        if (!isValidUpdate) {
+          throwError(400, 'Invalid Field.');
+        }
+
+        const schoolUpdate = req.body;
+
+        updates.map((update) => {
+          req.user[update] = schoolUpdate[update];
+        });
+
+        const updatedSchool = await req.user.save();
+        super.success(res, updatedSchool, 'Update Successful');
+      } catch (e) {
+        super.error(res, e);
+      }
     }
-
-    const schoolUpdate = req.body;
-
-    updates.map((update) => {
-      req.user[update] = schoolUpdate[update];
-    });
-
-    const updatedSchool = await req.user.save();
-    super.success(res, updatedSchool, 'Update Successful');
-  } catch (e) {
-    super.error(res, e);
   }
-}
-}
 
   async update(req, res) {
     try {

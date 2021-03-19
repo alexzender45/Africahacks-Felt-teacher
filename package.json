@@ -49,6 +49,7 @@
     "nodemon": "^2.0.6",
     "npm-install": "^1.6.2",
     "path": "^0.12.7",
+    "swagger-ui-express": "^4.1.6",
     "unirest": "^0.6.0",
     "validator": "^13.5.1"
   },

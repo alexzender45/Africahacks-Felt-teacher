@@ -1,0 +1,270 @@
+
+
+{
+    
+    "swagger": "2.0",
+    
+    "info": {
+      "version": "1.0.0",
+      "title": "Felt-Teacher API",
+      "description": "A Platform that helps to provide quality and qualified Teachers to schools",
+      "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+      }
+    },
+    "host": " https://felt-teacher.herokuapp.com",
+    "basePath": "/api/",
+    "tags": [
+      {
+        "name": "Teachers",
+        "description": "API for Teachers in the platform"
+      }
+    ],
+    "schemes": [
+      "https"
+    ],
+    
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    
+    "paths": {
+      "/teachers": {
+        "post": {
+          "tags": [
+            "Teachers"
+          ],
+          "description": "Create new Teacher in the platform",
+          "parameters": [
+            {
+              "name": "teacher",
+              "in": "body",
+              "description": "Teacher that we want to create",
+              "schema": {
+                "$ref": "#/definitions/Teacher"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary": "Create New Teacher",
+          "responses": {
+            "200": {
+              "description": "New user is created",
+              "schema": {
+                "$ref": "#/definitions/Teacher"
+              }
+            }
+          }
+        } 
+      },
+
+      "/login": {
+        "post": {
+          "tags": [
+            "Teachers"
+          ],
+          "description": "Login Teachers",
+          "parameters": [
+            {
+              "name": "teacher",
+              "in": "body",
+              "description": "Provide Teachers Login details",
+              "schema": {
+                "$ref": "#/definitions/TeacherLogin"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary": "Login Teachers",
+          "responses": {
+            "200": {
+              "description": "New user is created",
+              "schema": {
+                "$ref": "#/definitions/TeacherLogin"
+              }
+            }
+          }
+        }
+      },
+
+      "/logout": {
+        "get": {
+          "tags": [
+            "Teachers"
+          ],
+          "summary": "Logout Teachers",
+          "responses": {
+            "200": {
+              "description": "New user is created",
+              "schema": {
+                "$ref": "#/definitions/Teacher"
+              }
+            }
+          }
+        }
+      },
+
+      "/verify": {
+        "get": {
+          "tags": [
+            "Teachers"
+          ],
+          "summary": "Endpoint from vonage to verify Teacher",
+          "responses": {
+            "200": {
+              "description": "Vonage verification endpoint",
+              "schema": {
+                "$ref": "#/definitions/Teacher"
+              }
+            }
+          }
+        }
+      },
+
+      "/cancel": {
+        "post": {
+          "tags": [
+            "Teachers"
+          ],
+          "summary": "Endpoint from vonage to cancel verification",
+          "responses": {
+            "200": {
+              "description": "Cancel Verification from vonage",
+              "schema": {
+                "$ref": "#/definitions/Teacher"
+              }
+            }
+          }
+        }
+      },
+
+      "/teachers/{userId}": {
+        "parameters": [
+                     {
+                    "type": "string",
+                    "in": "header",
+                    "name": "token",
+                    "required":true
+                  },
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "description": "ID of Teacher that we want to find",
+            "type": "string"
+          }
+        ],
+        "get": {
+          "tags": [
+            "Teachers"
+          ],
+          "summary": "Get Teacher with given ID",
+          "security": [
+            {
+              "ApiKeyAuth": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Teacher is found",
+              "schema": {
+                "$ref": "#/definitions/Teacher"
+              }
+            }
+          }
+        },
+        "delete": {
+          "summary": "Delete user with given ID",
+          "tags": [
+            "Users"
+          ],
+          "responses": {
+            "200": {
+              "description": "User is deleted",
+              "schema": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          }
+        },
+        "put": {
+          "summary": "Update user with give ID",
+          "tags": [
+            "Users"
+          ],
+          "parameters": [
+            {
+              "name": "user",
+              "in": "body",
+              "description": "User with new values of properties",
+              "schema": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "User is updated",
+              "schema": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "Teacher": {
+        "required": [
+          "fullname",
+          "email",
+          "phone",
+          "password"
+        ],
+        "properties": {
+          "fullname": {
+            "type": "string",
+            "uniqueItems": false
+          },
+          "email": {
+            "type": "string",
+            "uniqueItems": true
+          },
+          "phone": {
+            "type": "number"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+
+      "TeacherLogin": {
+        "required": [
+          "email",
+          "password"
+        ],
+        "properties": {
+          "email": {
+            "type": "string",
+            "uniqueItems": true
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "Teachers": {
+        "type": "array",
+        "$ref": "#/definitions/Teacher"
+      }
+    }
+      }
