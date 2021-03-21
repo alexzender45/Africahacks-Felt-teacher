@@ -15,20 +15,20 @@ const schoolSchema = new Schema(
     },
     nameOfSchool: {
       type: String,
-       required: true,
+      required: true,
     },
     state: {
-        type: String,
-        default: 'Please Update' 
-      },
-      contry: {
-        type: String,
-        default: 'Please Update'
-      },
-      about: {
-        type: String,
-        default: 'Please Update' 
-      },
+      type: String,
+      default: 'Please Update'
+    },
+    country: {
+      type: String,
+      default: 'Please Update'
+    },
+    about: {
+      type: String,
+      default: 'Please Update'
+    },
     address: {
       type: String,
       default: 'Please Update'
@@ -124,7 +124,7 @@ const schoolSchema = new Schema(
         delete ref.tokens;
       }
     }
-  
+
   }
 );
 
@@ -160,7 +160,7 @@ schoolSchema.statics.findByCredentials = async (loginKey, password) => {
 
 schoolSchema.methods.generateAuthToken = async function () {
   const user = this;
-  const token = jwt.sign({ _id: user._id, type: 'school' }, process.env.JWT_SECRETE_KEY, {expiresIn:'4hrs'});
+  const token = jwt.sign({ _id: user._id, type: 'school' }, process.env.JWT_SECRETE_KEY, { expiresIn: '4hrs' });
   await user.save();
   return token;
 };
