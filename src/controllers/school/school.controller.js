@@ -11,7 +11,6 @@ const vonage = new Vonage({
   apiSecret: process.env.API_SECRET_VONAGEAPP
 });
 
-let REQUEST_ID;
 
 export class SchoolController extends BaseController {
   constructor() {
@@ -22,20 +21,20 @@ export class SchoolController extends BaseController {
 
     try {
 
-      if (!req.body.code) {
-        res.status(400).send({ message: "You must supply a `code` to verify your number" })
-        return;
-      }
-      // Run the check against Vonage's servers
-      vonage.verify.check({
-        request_id: REQUEST_ID,
-        code: req.body.code
-      }, (err, result) => {
-        if (err) {
-          res.status(500).send({ message: "Something went wrong" });
-          return;
-        }
-      });
+      // if (!req.body.code) {
+      //   res.status(400).send({ message: "You must supply a `code` to verify your number" })
+      //   return;
+      // }
+      // // Run the check against Vonage's servers
+      // vonage.verify.check({
+      //   request_id: REQUEST_ID,
+      //   code: req.body.code
+      // }, (err, result) => {
+      //   if (err) {
+      //     res.status(500).send({ message: "Invalid Code" });
+      //     return;
+      //   }
+      // });
       const data = req.body;
       const newSchool = new School(data);
       const school = await newSchool.save();
@@ -43,9 +42,10 @@ export class SchoolController extends BaseController {
       const body = { school, token };
       super.success(res, body, 'School Registration Successful', 201);
     } catch (e) {
-      super.error(e);
+      console.log(e)
+      super.error(res, 400, e);
     }
-  }
+  };
 
   async sendCode(req, res) {
     vonage.verify.request({
