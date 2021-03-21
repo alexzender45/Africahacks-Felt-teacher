@@ -190,7 +190,7 @@ export class SchoolController extends BaseController {
     try {
       const updates = Object.keys(req.body);
       const allowedUpdates = [
-        'Phone',
+        'phone',
         'RCNumber',
         'password',
         'address',
