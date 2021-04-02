@@ -1,4 +1,3 @@
-
 import dotenv from 'dotenv';
 import { BaseController } from '.';
 import School from '../../model/school.model';

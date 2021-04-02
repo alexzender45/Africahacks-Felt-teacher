@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import { TeacherController } from '../../controllers/teacher';
 import { authenticate, permit } from '../../middleware';
+import { sendCode, cancel } from '../../utils/verifyVonage'
+import { passwordReset } from '../../utils/passwordReset'
 
 const router = Router();
 const {
@@ -11,10 +13,8 @@ const {
   readAll,
   fetchOne,
   register,
-  cancel,
   update,
   adminApprovedTeachers,
-  sendCode,
   approvedTeachersInEnglish,
   approvedTeachersInMathematics,
   approvedTeachersInBiology,
@@ -38,6 +38,7 @@ router.route('/login').post(login);
 router.route('/logout').get(authenticate, logOut);
 router.route('/sendcode').post(sendCode)
 router.route('/cancel').post(cancel)
+router.route('/reset-password').post(passwordReset)
 router
   .route('/teachers')
   .get(authenticate, permit(['admin']), readAll)

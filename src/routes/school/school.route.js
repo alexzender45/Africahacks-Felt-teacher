@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { authenticate, permit } from '../../middleware';
 import { SchoolController } from '../../controllers/school';
+import { sendCode, cancel } from '../../utils/verifyVonage'
 //
 
 const router = Router();
@@ -13,8 +14,6 @@ const {
   fetchOne,
   register,
   update,
-  cancel,
-  sendCode,
   adminApprovedSchools,
   approvedSchools
 

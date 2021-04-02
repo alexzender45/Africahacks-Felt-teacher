@@ -81,7 +81,7 @@ async updateJob(req, res) {
   try {
     const updates = Object.keys(req.body);
     const allowedUpdates = [
-      ' neededTeacher',
+      'neededTeacher',
       'shortNoteAboutTeacherYouWant',
     ];
     const isValidUpdate = updates.every((update) => {

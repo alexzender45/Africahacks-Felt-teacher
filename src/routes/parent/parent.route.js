@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { authenticate, permit } from '../../middleware';
 import { ParentController } from '../../controllers/parent';
+import { sendCode, cancel } from '../../utils/verifyVonage';
 //
 
 const router = Router();
@@ -13,8 +14,6 @@ const {
   fetchOneParent,
   register,
   updateParent,
-  cancel,
-  sendCode,
   adminApprovedParents,
   approvedParents
 

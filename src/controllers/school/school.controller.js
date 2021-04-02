@@ -1,16 +1,7 @@
 import { BaseController } from '.';
-const Vonage = require('@vonage/server-sdk');
-import { config as dotConfig } from 'dotenv';
-import 'dotenv/config';
 import School from '../../model/sch';
 import { throwError } from '../../utils/handleErrors';
-dotConfig();
-
-const vonage = new Vonage({
-  apiKey: process.env.API_KEY_VONAGEAPP,
-  apiSecret: process.env.API_SECRET_VONAGEAPP
-});
-
+import { vonage } from '../../utils/verifyVonage';
 
 export class SchoolController extends BaseController {
   constructor() {
@@ -18,60 +9,33 @@ export class SchoolController extends BaseController {
   }
 
   async register(req, res) {
-
     try {
-
-      // if (!req.body.code) {
-      //   res.status(400).send({ message: "You must supply a `code` to verify your number" })
-      //   return;
-      // }
-      // // Run the check against Vonage's servers
-      // vonage.verify.check({
-      //   request_id: REQUEST_ID,
-      //   code: req.body.code
-      // }, (err, result) => {
-      //   if (err) {
-      //     res.status(500).send({ message: "Invalid Code" });
-      //     return;
-      //   }
-      // });
-      const data = req.body;
-      const newSchool = new School(data);
-      const school = await newSchool.save();
-      const token = await school.generateAuthToken();
-      const body = { school, token };
-      super.success(res, body, 'School Registration Successful', 201);
+      if (!req.body.code) {
+        res.status(400).send({ message: "You must supply a `code` to verify your number" })
+        return;
+      }
+      let code = req.body.code;
+      let requestId = req.body.requestId;
+      vonage.verify.check({ request_id: requestId, code: code }, async (err, result) => {
+        if (err) {
+          res.status(500).send({ message: 'Please Provide a Code' });
+        } else if (result.status != 0) {
+          res.status(500).send({ message: 'Invalid Code' });
+        } else {
+          if (result && result.status == '0') {
+            const data = req.body;
+            const newSchool = new School(data);
+            const school = await newSchool.save();
+            const token = await school.generateAuthToken();
+            const body = { school, token };
+            super.success(res, body, 'School Registration Successful', 201);
+          }
+        }
+      });
     } catch (e) {
-      console.log(e)
       super.error(res, 400, e);
     }
   };
-
-  async sendCode(req, res) {
-    vonage.verify.request({
-      number: req.body.phone,
-      // You can customize this to show the name of your company
-      brand: 'Felt Teacher',
-      // We could put `'6'` instead of `'4'` if we wanted a longer verification code
-      code_length: '4'
-    }, (err, result) => {
-      if (err) {
-        // If there was an error, return it to the client
-        res.status(500).send(err.error_text);
-      }
-      REQUEST_ID = result.request_id;
-      res.send(result)
-    });
-  }
-
-  async cancel(req, res) {
-    nexmo.verify.control({
-      request_id: 'REQUEST_ID',
-      cmd: 'cancel'
-    }, (err, result) => {
-      console.log(err ? err : result)
-    });
-  }
 
   async schoolLogin(req, res) {
     try {
@@ -82,7 +46,6 @@ export class SchoolController extends BaseController {
 
       super.success(res, body, 'Login Successful');
     } catch (e) {
-      console.log(e)
       super.error(res, e);
     }
   }
