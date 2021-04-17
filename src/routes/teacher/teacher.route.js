@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { TeacherController } from '../../controllers/teacher';
 import { authenticate, permit } from '../../middleware';
 import { sendCode, cancel } from '../../utils/verifyVonage'
-import { passwordReset } from '../../utils/passwordReset'
+import { passwordReset, confirmPasswordReset } from '../../utils/passwordReset'
 
 const router = Router();
 const {
@@ -36,14 +36,13 @@ const {
 //
 router.route('/login').post(login);
 router.route('/logout').get(authenticate, logOut);
-router.route('/sendcode').post(sendCode)
-router.route('/cancel').post(cancel)
-router.route('/reset-password').post(passwordReset)
+router.route('/sendcode').post(sendCode);
+router.route('/cancel').post(cancel);
+router.route('/reset-password').post(passwordReset);
+router.route('/change-password').post(confirmPasswordReset)
 router
   .route('/teachers')
-  .get(authenticate, permit(['admin']), readAll)
   .post(register)
-  .delete(authenticate, permit(['admin']), deleteAll);
 
 router.route('/teachers/Mathematics')
   .get(authenticate, permit(['user', 'school', 'admin', 'parent']), approvedTeachersInMathematics)
@@ -102,5 +101,4 @@ router
   .delete(authenticate, permit(['admin', 'user']), deleteOne)
   .put(authenticate, permit(['admin', 'user']), update)
 
-router.route('/teachers/:_id/approved').put(authenticate, permit(['admin']), adminApprovedTeachers)
 export default router;

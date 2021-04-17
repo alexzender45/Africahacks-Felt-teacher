@@ -21,7 +21,7 @@ export async function sendCode(req, res) {
             // If there was an error, return it to the client
             res.status(500).send(err.error_text);
         }
-        res.send(result.request_id)
+        res.send(result)
     });
 }
 

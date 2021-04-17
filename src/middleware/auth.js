@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 import Teacher from '../model/teacher.model';
 import School from '../model/school.model';
 import Parent from '../model/parent.model';
+import Admin from '../model/admin.model'
 import { throwError } from '../utils/handleErrors';
 
 dotConfig();
@@ -20,6 +21,12 @@ export async function authenticate(req, res, next) {
     }
     else if (jwtPayload.type === "school") {
       const user = await getUserSchoolPayload(jwtPayload);
+      req.token = jwtPayload.token;
+      req.user = user;
+      next();
+    }
+    else if (jwtPayload.type === "modrator") {
+      const user = await getUserModratorPayload(jwtPayload);
       req.token = jwtPayload.token;
       req.user = user;
       next();
@@ -69,6 +76,12 @@ export function getUserSchoolPayload(payload) {
   const user = userPayload(School, payload)
   return user;
 }
+
+export function getUserModratorPayload(payload) {
+  const user = userPayload(Admin, payload)
+  return user;
+}
+
 export function getUserParentPayload(payload) {
   const user = userPayload(Parent, payload)
   return user;

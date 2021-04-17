@@ -2,6 +2,7 @@ import { BaseController } from '.';
 import Teacher from '../../model/teacher.model';
 import { throwError } from '../../utils/handleErrors';
 import { vonage } from '../../utils/verifyVonage';
+import { sendEmail, deleteAccountEmail } from '../../utils/sendgrid';
 
 export class TeacherController extends BaseController {
   constructor() {
@@ -28,6 +29,8 @@ export class TeacherController extends BaseController {
             const teacher = await newTeacher.save();
             const token = await teacher.generateAuthToken();
             const body = { teacher, token };
+            const Email = teacher.email;
+            sendEmail(Email);
             super.success(res, body, 'Teacher Registration Successful', 201);
           }
         }
@@ -43,10 +46,8 @@ export class TeacherController extends BaseController {
       const teacher = await Teacher.findByCredentials(email, password);
       const token = await teacher.generateAuthToken();
       const body = { teacher, token };
-
       super.success(res, body, 'Login Successful');
     } catch (e) {
-      console.log(e)
       super.error(res, e);
     }
   }
@@ -56,26 +57,10 @@ export class TeacherController extends BaseController {
       req.user.tokens = req.user.tokens.filter((token) => {
         return token.token !== req.token;
       });
-
       await req.user.save();
-
       super.success(res, [], 'Logout Successful');
     } catch (e) {
       super.error(res, e);
-    }
-  }
-
-  async readAll(req, res) {
-    if (req.user.approved !== true && req.user.status !== 'Approved') {
-      return res.status(400).send({ message: 'You Are Not Approved To Perform This Action' });
-    } else {
-      try {
-        const teachers = await Teacher.find({});
-
-        super.success(res, teachers || [], 'Successfully Retrieved all Teachers.');
-      } catch (e) {
-        super.error(res, e);
-      }
     }
   }
 
@@ -314,20 +299,6 @@ export class TeacherController extends BaseController {
     }
   }
 
-  async deleteAll(req, res) {
-    if (req.user.approved !== true && req.user.status !== 'Approved') {
-      return res.status(400).send({ message: 'You Are Not Approved To Perform This Action' });
-    } else {
-      try {
-        await Teacher.deleteMany({});
-
-        super.success(res, [], 'Delete Successful.');
-      } catch (e) {
-        super.error(res, e);
-      }
-    }
-  }
-
   async fetchOne(req, res, next) {
     try {
       const user = await Teacher.findById(req.params._id);
@@ -340,39 +311,6 @@ export class TeacherController extends BaseController {
         });
     } catch (e) {
       super.error(res, e);
-    }
-  }
-
-  async adminApprovedTeachers(req, res) {
-    if (req.user.approved !== true && req.user.status !== 'Approved') {
-      return res.status(400).send({ message: 'You Are Not Approved To Perform This Action' });
-    } else {
-      try {
-        const updates = Object.keys(req.body);
-        const allowedUpdates = [
-          'approved',
-          'status',
-          'role'
-        ];
-        const isValidUpdate = updates.every((update, link) => {
-          return allowedUpdates.includes(update);
-        });
-
-        if (!isValidUpdate) {
-          throwError(400, 'Invalid Field.');
-        }
-
-        const teacherUpdate = req.body;
-
-        updates.map((update) => {
-          req.user[update] = teacherUpdate[update];
-        });
-
-        const updatedTeacher = await req.user.save();
-        super.success(res, updatedTeacher, 'Update Successful');
-      } catch (e) {
-        super.error(res, e);
-      }
     }
   }
 
@@ -417,7 +355,9 @@ export class TeacherController extends BaseController {
   async deleteOne(req, res) {
     try {
       const teacher = await req.user.remove();
-
+      const Name = teacher.fullname;
+      const Email = teacher.email;
+      deleteAccountEmail(Name, Email);
       super.success(res, teacher, 'Delete Successful');
     } catch (e) {
       super.error(res, e);

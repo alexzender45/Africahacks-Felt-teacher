@@ -3,7 +3,8 @@ import { BaseController } from '.';
 import Teacher from '../../model/teacher.model';
 import School from '../../model/school.model';
 import Parent from '../../model/parent.model';
-import { connect } from '../../utils/connect'
+import { connect } from '../../utils/connect';
+import { connectWithUser } from '../../utils/sendgrid'
 
 export class Connect extends BaseController {
   constructor() {
@@ -37,8 +38,14 @@ export class Connect extends BaseController {
           // messages
           user.messages.push(`${visitor.nameOfSchool} requested to connect with you, ${visitor.email}, ${visitor.link}`)
           user.save()
-          const message = `You can email me ${visitor.email}, and also check School on Felt Teacher Platform ${visitor.link}`
-          connect(user.phone, message)
+          const message = `You can email me ${visitor.email}, and also check School Profile on Felt Teacher Platform ${visitor.link}`
+          const sendMessage = `<h1> Congrats ${user.nameOfSchool} Someone Wants To Connect With You </h1>
+          <p> I will love to connect with you</p>
+          <p> You can email me ${visitor.email},  and also check School Profile on Felt Teacher Platform <a href = "${visitor.link}"> <b>My Profile</b> </a></p>
+          <p><b> Thanks For Reading My Message </b></p>`
+          const Email = user.email;
+          connect(user.phone, message);
+          connectWithUser(sendMessage, Email);
         }
 
         //User that is a teacher
@@ -61,8 +68,14 @@ export class Connect extends BaseController {
           // messages
           user.messages.push(`${visitor.fullname} requested to connect with you, ${visitor.email}, ${visitor.link}`)
           user.save()
-          const message = `You can email me ${visitor.email}, and also check my profile on Felt Teacher Platform ${visitor.link}`
-          connect(user.phone, message)
+          const message = `You can email me ${visitor.email}, and also check School Profile on Felt Teacher Platform ${visitor.link}`
+          const sendMessage = `<h1> Congrats ${user.nameOfSchool} Someone Wants To Connect With You </h1>
+          <p> I will love to connect with you</p>
+          <p> You can email me ${visitor.email},  and also check School Profile on Felt Teacher Platform <a href = "${visitor.link}"> <b>My Profile</b> </a></p>
+          <p><b> Thanks For Reading My Message </b></p>`
+          const Email = user.email;
+          connect(user.phone, message);
+          connectWithUser(sendMessage, Email);
         }
 
         //User that is a parent
@@ -85,8 +98,14 @@ export class Connect extends BaseController {
           // messages
           user.messages.push(`${visitor.nameOfParent} requested to connect with you, ${visitor.email}, ${visitor.link}`)
           user.save()
-          const message = `You can email me ${visitor.email}, and also check my profile on Felt Teacher Platform ${visitor.link}`
-          connect(user.phone, message)
+          const message = `You can email me ${visitor.email}, and also check School Profile on Felt Teacher Platform ${visitor.link}`
+          const sendMessage = `<h1> Congrats ${user.nameOfSchool} Someone Wants To Connect With You </h1>
+          <p> I will love to connect with you</p>
+          <p> You can email me ${visitor.email},  and also check School Profile on Felt Teacher Platform <a href = "${visitor.link}"> <b>My Profile</b> </a></p>
+          <p><b> Thanks For Reading My Message </b></p>`
+          const Email = user.email;
+          connect(user.phone, message);
+          connectWithUser(sendMessage, Email);
         }
       }
       super.success(res, 'Connected Successful');

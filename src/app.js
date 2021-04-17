@@ -4,10 +4,11 @@ import helmet from 'helmet';
 import RateLimit from 'express-rate-limit';
 import mongoSanitize from 'express-mongo-sanitize';
 import { healthRoute, teacherRoute, uploadRoute, connectRoute } from './routes/teacher';
-import {  schoolRoute, imageUploadRoute, schoolConnectRoute } from './routes/school';
-import {  parentRoute, imageUploadRoute2, parentConnectRoute } from './routes/parent';
-import {schoolJobRoute } from './routes/jobSchool';
-import {parentJobRoute } from './routes/jobParent';
+import { schoolRoute, imageUploadRoute, schoolConnectRoute } from './routes/school';
+import { parentRoute, imageUploadRoute2, parentConnectRoute } from './routes/parent';
+import { schoolJobRoute } from './routes/jobSchool';
+import { parentJobRoute } from './routes/jobParent';
+import { adminRoute } from './routes/admin'
 import { Database } from './db';
 const swaggerUi = require('swagger-ui-express')
 const swaggerDocument = require('../swagger.json');
@@ -45,5 +46,6 @@ app.use('/api/', schoolConnectRoute)
 app.use('/api/', schoolJobRoute)
 app.use('/api/', parentJobRoute)
 app.use('/api/', parentConnectRoute);
+app.use('/api/admin/felt-teacher', adminRoute);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 export default app;
