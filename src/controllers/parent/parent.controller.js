@@ -94,7 +94,7 @@ export class ParentController extends BaseController {
     try {
       const updates = Object.keys(req.body);
       const allowedUpdates = [
-        'Phone',
+        'phone',
         'password',
         'address',
         'nameOfParent',

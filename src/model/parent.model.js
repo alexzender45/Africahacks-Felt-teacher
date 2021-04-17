@@ -11,20 +11,20 @@ const parentSchema = new Schema(
   {
     nameOfParent: {
       type: String,
-       required: true,
+      required: true,
     },
     state: {
-        type: String,
-        default: 'Please Update' 
-      },
-      contry: {
-        type: String,
-        default: 'Please Update'
-      },
-      about: {
-        type: String,
-        default: 'Please Update' 
-      },
+      type: String,
+      default: 'Please Update'
+    },
+    country: {
+      type: String,
+      default: 'Please Update'
+    },
+    about: {
+      type: String,
+      default: 'Please Update'
+    },
     address: {
       type: String,
       default: 'Please Update'
@@ -95,12 +95,12 @@ const parentSchema = new Schema(
       default: false
     },
     jobs: [{
-        type: Schema.Types.ObjectId,
-        ref: 'JobParent'
-      }],
-      messages: [{
-        type: String
-      }]
+      type: Schema.Types.ObjectId,
+      ref: 'JobParent'
+    }],
+    messages: [{
+      type: String
+    }]
   },
   {
     timestamps: true,
@@ -116,7 +116,7 @@ const parentSchema = new Schema(
         delete ref.tokens;
       }
     }
-  
+
   }
 );
 
@@ -152,7 +152,7 @@ parentSchema.statics.findByCredentials = async (loginKey, password) => {
 
 parentSchema.methods.generateAuthToken = async function () {
   const user = this;
-  const token = jwt.sign({ _id: user._id, type: 'parent' }, process.env.JWT_SECRETE_KEY, {expiresIn:'4hrs'});
+  const token = jwt.sign({ _id: user._id, type: 'parent' }, process.env.JWT_SECRETE_KEY, { expiresIn: '4hrs' });
   await user.save();
   return token;
 };
