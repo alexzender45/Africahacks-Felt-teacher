@@ -22,9 +22,12 @@ export class UploadImage extends BaseController {
     cloud.uploads(attempt.imageUrl).then((result) => {
       const view = result.url;
       Parent.updateOne({ "_id": ObjectId(user._id) },
-        { $set: { "image": view, "link": `http://localhost:6060/api/parents/${user._id}` } }, function (err) {
-          return err;
-        })
+        { $set: { "image": view, "link": `http://localhost:6060/api/parents/${user._id}` }, }, {
+        new: true,
+        upsert: true
+      }, function (err) {
+        return err;
+      })
       return res.status(200).json({
         user
       });

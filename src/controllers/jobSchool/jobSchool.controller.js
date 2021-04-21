@@ -1,6 +1,5 @@
 import { BaseController } from '.';
 import Job from '../../model/job.indexSchool';
-import { throwError } from '../../utils/handleErrors';
 import School from '../../model/sch';
 
 export class JobController extends BaseController {
@@ -79,27 +78,14 @@ export class JobController extends BaseController {
       return res.status(400).send({ message: 'You Are Not Approved To Perform This Action' });
     } else {
       try {
-        const updates = Object.keys(req.body);
-        const allowedUpdates = [
-          'neededTeacher',
-          'shortNoteAboutTeacherYouWant',
-        ];
-        const isValidUpdate = updates.every((update) => {
-          return allowedUpdates.includes(update);
-        });
-
-        if (!isValidUpdate) {
-          throwError(400, 'Invalid Field.');
-        }
-
-        const jobUpdate = req.body;
-
-        updates.map((update) => {
-          req.user[update] = jobUpdate[update];
-        });
-
-        const updatedJob = await req.user.save();
-        super.success(res, updatedJob, 'Update Successful');
+        const { neededTeacher, shortNoteAboutTeacherYouWant } = req.body;
+        const updatedJobSchool = await Job.findOneAndUpdate({ _id: req.params._id }, {
+          neededTeacher,
+          shortNoteAboutTeacherYouWant
+        }, {
+          new: true,
+        })
+        super.success(res, updatedJobSchool, 'Update Successful');
       } catch (e) {
         super.error(res, e);
       }
@@ -112,8 +98,10 @@ export class JobController extends BaseController {
       return res.status(400).send({ message: 'You Are Not Approved To Perform This Action' });
     } else {
       try {
-        await req.user.remove();
-
+        const ID = req.params._id;
+        await School.updateOne({ jobs: ID },
+          { $pull: { jobs: ID } });
+        await Job.deleteOne({ _id: ID })
         super.success(res, 'Delete Successful');
       } catch (e) {
         super.error(res, e);

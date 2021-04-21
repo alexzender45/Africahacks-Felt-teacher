@@ -9,47 +9,47 @@ export class JobParentController extends BaseController {
   }
 
   async createJob(req, res) {
- if(req.user.role !== 'parent'){
-  return res.status(401).json({
-    message: 'You Are Not Approved To Perform This Action'
-  });
- }else{
-  const author = req.user._id
-    const data = req.body;
-
-    try {
-      const newJob = new JobParent(data);
-      const job = await newJob.save();
-      const finduser= await Parent.findById(author)
-      finduser.jobs.push(job)
-      await finduser.save();
-      job.owner.push(author)
-      await job.save()
-      return res.status(201).json({
-       job
-
+    if (req.user.role !== 'parent') {
+      return res.status(401).json({
+        message: 'You Are Not Approved To Perform This Action'
       });
-    }
-    catch (e) {
-      super.error(e);
+    } else {
+      const author = req.user._id
+      const data = req.body;
+
+      try {
+        const newJob = new JobParent(data);
+        const job = await newJob.save();
+        const finduser = await Parent.findById(author)
+        finduser.jobs.push(job)
+        await finduser.save();
+        job.owner.push(author)
+        await job.save()
+        return res.status(201).json({
+          job
+
+        });
+      }
+      catch (e) {
+        super.error(e);
+      }
     }
   }
-}
 
   async readAllJob(req, res) {
-    if(req.user.approved !== true && req.user.status !== 'Approved'){
+    if (req.user.approved !== true && req.user.status !== 'Approved') {
       return res.status(400).send({ message: 'You Are Not Approved To Perform This Action' });
-    }else{
-    try {
+    } else {
+      try {
 
-      const job = await JobParent.find({});
+        const job = await JobParent.find({});
 
-      super.success(res, job || [], 'Successfully Retrieved all jobs.');
-    } catch (e) {
-      super.error(res, e);
+        super.success(res, job || [], 'Successfully Retrieved all jobs.');
+      } catch (e) {
+        super.error(res, e);
+      }
     }
   }
-}
 
   async deleteAllJob(req, res) {
     try {
@@ -66,58 +66,47 @@ export class JobParentController extends BaseController {
       if (!job) {
         return res.status(400).send({ error: 'Job does not exist' });
       }
-      if(job)
-      return res.status(200).send(job);
+      if (job)
+        return res.status(200).send(job);
     } catch (e) {
       super.error(res, e);
     }
   }
 
 
-async updateJob(req, res) {
-  if(req.user.approved !== true && req.user.status !== 'Approved'){
-    return res.status(400).send({ message: 'You Are Not Approved To Perform This Action' });
-  }else{
-  try {
-    const updates = Object.keys(req.body);
-    const allowedUpdates = [
-      'neededTeacher',
-      'shortNoteAboutTeacherYouWant',
-    ];
-    const isValidUpdate = updates.every((update) => {
-      return allowedUpdates.includes(update);
-    });
-
-    if (!isValidUpdate) {
-      throwError(400, 'Invalid Field.');
+  async updateJob(req, res) {
+    if (req.user.approved !== true && req.user.status !== 'Approved') {
+      return res.status(400).send({ message: 'You Are Not Approved To Perform This Action' });
+    } else {
+      try {
+        const { neededTeacher, shortNoteAboutTeacherYouWant } = req.body;
+        const updatedJobParent = await JobParent.findOneAndUpdate({ _id: req.params._id }, {
+          neededTeacher,
+          shortNoteAboutTeacherYouWant
+        }, {
+          new: true,
+        })
+        super.success(res, updatedJobParent, 'Update Successful');
+      } catch (e) {
+        super.error(res, e);
+      }
     }
-
-    const jobParentUpdate = req.body;
-
-    updates.map((update) => {
-      req.user[update] = jobParentUpdate[update];
-    });
-
-    const updatedJobParent = await req.user.save();
-    super.success(res, updatedJobParent, 'Update Successful');
-  } catch (e) {
-    super.error(res, e);
   }
-}
-}
 
 
   async deleteOneJob(req, res) {
-    if(req.user.approved !== true && req.user.status !== 'Approved'){
+    if (req.user.approved !== true && req.user.status !== 'Approved') {
       return res.status(400).send({ message: 'You Are Not Approved To Perform This Action' });
-    }else{
-    try {
-      const job = await req.user.remove();
-
-      super.success(res, job, 'Delete Successful');
-    } catch (e) {
-      super.error(res, e);
+    } else {
+      try {
+        const ID = req.params._id;
+        await Parent.updateOne({ jobs: ID },
+          { $pull: { jobs: ID } });
+        await JobParent.deleteOne({ _id: ID })
+        super.success(res, 'Delete Successful');
+      } catch (e) {
+        super.error(res, e);
+      }
     }
   }
-}
 }
