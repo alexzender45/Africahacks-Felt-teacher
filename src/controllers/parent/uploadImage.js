@@ -22,7 +22,7 @@ export class UploadImage extends BaseController {
     cloud.uploads(attempt.imageUrl).then((result) => {
       const view = result.url;
       Parent.updateOne({ "_id": ObjectId(user._id) },
-        { $set: { "image": view, "link": `http://localhost:6060/api/parents/${user._id}` }, }, {
+        { $set: { "image": view, "link": ` https://felt-teacher.herokuapp.com/api/parents/${user._id}` }, }, {
         new: true,
         upsert: true
       }, function (err) {

@@ -24,7 +24,7 @@ export class UploadVideoAndImage extends BaseController {
     cloud.uploads(attempt.imageUrl).then((result) => {
       const view = result.url;
       Teacher.updateOne({ "_id": ObjectId(user._id) },
-        { $set: { "image": view, "link": `http://localhost:6060/api/teachers/${user._id}` } }, function (err) {
+        { $set: { "image": view, "link": ` https://felt-teacher.herokuapp.com/api/teachers/${user._id}` } }, function (err) {
           console.log(err)
         })
       return res.status(200).json({

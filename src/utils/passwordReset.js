@@ -24,7 +24,7 @@ export async function passwordReset(req, res) {
             res.status(400).send({ message: "User with this email not found" })
         } else {
             const token = jwt.sign({ _id: user._id, type: 'teacher' }, process.env.JWT_SECRETE_KEY, { expiresIn: '1hr' });
-            const link = ` https://felt-teacher.herokuapp.com/api/change-password?token=${token}`;
+            const link = `  https://felt-teacher.herokuapp.com/api/change-password?token=${token}`;
             passwordEmail(Name, Email, link)
             res.status(200).send({ message: 'Please Check Your Email For Next Step', link: link });
         }
@@ -47,7 +47,7 @@ export async function passwordResetSchool(req, res) {
             res.status(400).send({ message: "User with this email not found" })
         } else {
             const token = jwt.sign({ _id: user._id, type: 'school' }, process.env.JWT_SECRETE_KEY, { expiresIn: '1hr' });
-            const link = `http:localhost:6060/api/change-password/school?token=${token}`;
+            const link = ` https://felt-teacher.herokuapp.com/api/change-password/school?token=${token}`;
             passwordEmail(Name, Email, link)
             res.status(200).send({ message: 'Please Check Your Email For Next Step' });
         }
@@ -71,7 +71,7 @@ export async function passwordResetParent(req, res) {
             res.status(400).send({ message: "User with this email not found" })
         } else {
             const token = jwt.sign({ _id: user._id, type: 'parent' }, process.env.JWT_SECRETE_KEY, { expiresIn: '1hr' });
-            const link = `http:localhost:6060/api/change-password/parent?token=${token}`;
+            const link = ` https://felt-teacher.herokuapp.com/api/change-password/parent?token=${token}`;
             passwordEmail(Name, Email, link)
             res.status(200).send({ message: 'Please Check Your Email For Next Step', link });
         }
