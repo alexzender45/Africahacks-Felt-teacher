@@ -1,7 +1,6 @@
 import { config as dotConfig } from 'dotenv';
 import 'dotenv/config';
 import jwt from 'jsonwebtoken';
-
 import Teacher from '../model/teacher.model';
 import School from '../model/school.model';
 import Parent from '../model/parent.model';

@@ -98,7 +98,7 @@ adminSchema.pre('save', async function save(next) {
 });
 
 adminSchema.statics.findByCredentials = async (loginKey, password) => {
-    const user = await Parent.findOne({ email: loginKey });
+    const user = await Admin.findOne({ email: loginKey });
     if (!user) {
         throw new Error('Invalid login details');
     }

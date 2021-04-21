@@ -6,7 +6,7 @@ import { authenticate, permit } from '../../middleware';
 const router = Router();
 const {
   registerAdmin,
-  adminLogin,
+  loginAdmin,
   adminLogout,
   deleteAllParent,
   deleteOneParent,
@@ -25,12 +25,15 @@ const {
   deleteAllSchools,
   deleteOneSchool,
   readAllSchool,
-  fetchOneSchool
+  fetchOneSchool,
+  unApprovedParents,
+  unApprovedSchools,
+  unApprovedTeachers
 } = new AdminController();
 
 //Parent Admin Route
 router.route('/register/admin').post(registerAdmin);
-router.route('/login/admin').post(adminLogin);
+router.route('/login/admin').post(loginAdmin);
 router.route('/logout/admin').get(authenticate, adminLogout);
 
 router
@@ -38,6 +41,7 @@ router
   .get(authenticate, permit(['admin', 'superAdmin', 'administrator', 'godAdmin']), readAllParent)
   .delete(authenticate, permit(['godAdmin']), deleteAllParent);
 router.route('/admin/parent/approved').get(authenticate, permit(['admin', 'superAdmin', 'administrator', 'godAdmin']), approvedParents);
+router.route('/admin/parent/unapproved').get(authenticate, permit(['admin', 'superAdmin', 'administrator', 'godAdmin']), unApprovedParents);
 router
   .route('/admin/parent/:_id')
   .get(authenticate, permit(['admin', 'superAdmin', 'administrator', 'godAdmin']), fetchOneParent)
@@ -50,6 +54,7 @@ router
   .get(authenticate, permit(['admin', 'superAdmin', 'administrator', 'godAdmin']), readAllTeachers)
   .delete(authenticate, permit(['godAdmin']), deleteAllTeachers);
 router.route('/admin/teacher/approved').get(authenticate, permit(['admin', 'superAdmin', 'administrator', 'godAdmin']), approvedTeachers);
+router.route('/admin/teacher/unapproved').get(authenticate, permit(['admin', 'superAdmin', 'administrator', 'godAdmin']), unApprovedTeachers);
 router
   .route('/admin/teacher/:_id')
   .get(authenticate, permit(['admin', 'superAdmin', 'administrator', 'godAdmin']), fetchOneTeacher)
@@ -61,8 +66,8 @@ router
   .route('/admin/school')
   .get(authenticate, permit(['admin', 'superAdmin', 'administrator', 'godAdmin']), readAllSchool)
   .delete(authenticate, permit(['godAdmin']), deleteAllSchools);
-router.route('/admin/school/approved')
-  .get(authenticate, permit(['admin', 'superAdmin', 'administrator', 'godAdmin']), approvedSchools);
+router.route('/admin/school/approved').get(authenticate, permit(['admin', 'superAdmin', 'administrator', 'godAdmin']), approvedSchools);
+router.route('/admin/school/unapproved').get(authenticate, permit(['admin', 'superAdmin', 'administrator', 'godAdmin']), unApprovedSchools);
 router
   .route('/admin/school/:_id')
   .get(authenticate, permit(['admin', 'superAdmin', 'administrator', 'godAdmin']), fetchOneSchool)

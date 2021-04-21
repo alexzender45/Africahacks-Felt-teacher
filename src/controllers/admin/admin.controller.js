@@ -3,7 +3,7 @@ import Admin from '../../model/admin.model';
 import Parent from '../../model/parent.model';
 import Teacher from '../../model/teacher.model';
 import School from '../../model/school.model';
-import { approveUsers } from '../../utils/sendgrid';
+import { approveUsers, deleteAccountEmail } from '../../utils/sendgrid';
 
 export class AdminController extends BaseController {
   constructor() {
@@ -12,7 +12,6 @@ export class AdminController extends BaseController {
 
   async registerAdmin(req, res) {
     try {
-
       const data = req.body;
       const newAdmin = new Admin(data);
       const admin = await newAdmin.save();
@@ -24,13 +23,12 @@ export class AdminController extends BaseController {
     }
   }
 
-  async adminLogin(req, res) {
+  async loginAdmin(req, res) {
     try {
       const { email, password } = req.body;
       const admin = await Admin.findByCredentials(email, password);
       const token = await admin.generateAuthToken();
       const body = { admin, token };
-
       super.success(res, body, 'Login Successful');
     } catch (e) {
       super.error(res, e);
@@ -69,6 +67,17 @@ export class AdminController extends BaseController {
       const parents = await Parent.find({ approved: true });
 
       super.success(res, parents || [], 'Successfully Retrieved all Parents.');
+    }
+    catch (e) {
+      super.error(res, e);
+    }
+  }
+
+  async unApprovedParents(req, res) {
+    try {
+      const parents = await Parent.find({ approved: false });
+
+      super.success(res, parents || [], 'Successfully Retrieved all Unapproved Parents.');
     }
     catch (e) {
       super.error(res, e);
@@ -127,7 +136,7 @@ export class AdminController extends BaseController {
 
   async deleteOneParent(req, res) {
     try {
-      const parent = await req.user.remove();
+      const parent = await Parent.findByIdAndDelete(req.params._id);
       const Name = parent.nameOfParent;
       const Email = parent.email;
       deleteAccountEmail(Name, Email);
@@ -205,7 +214,7 @@ export class AdminController extends BaseController {
 
   async deleteOneTeacher(req, res) {
     try {
-      const teacher = await req.user.remove();
+      const teacher = await Teacher.findByIdAndDelete(req.params._id);
       const Name = teacher.fullname;
       const Email = teacher.email;
       deleteAccountEmail(Name, Email);
@@ -226,11 +235,22 @@ export class AdminController extends BaseController {
     }
   }
 
+  async unApprovedTeachers(req, res) {
+    try {
+      const teachers = await Teacher.find({ approved: false });
+
+      super.success(res, teachers || [], 'Successfully Retrieved all Unapproved Teachers.');
+    }
+    catch (e) {
+      super.error(res, e);
+    }
+  }
+
   // School Admin Controller 
 
   async deleteOneSchool(req, res) {
     try {
-      const school = await req.user.remove();
+      const school = await School.findByIdAndDelete(req.params._id);
       const Name = school.nameOfSchool;
       const Email = school.email;
       deleteAccountEmail(Name, Email);
@@ -292,6 +312,17 @@ export class AdminController extends BaseController {
       const schools = await School.find({ approved: true });
 
       super.success(res, schools || [], 'Successfully Retrieved all Schools.');
+    }
+    catch (e) {
+      super.error(res, e);
+    }
+  }
+
+  async unApprovedSchools(req, res) {
+    try {
+      const schools = await School.find({ approved: false });
+
+      super.success(res, schools || [], 'Successfully Retrieved all Unapproved Schools.');
     }
     catch (e) {
       super.error(res, e);
