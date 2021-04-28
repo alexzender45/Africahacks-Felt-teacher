@@ -34,7 +34,7 @@ export class TeacherController extends BaseController {
             super.success(res, body, 'Teacher Registration Successful', 201);
           }
         }
-      });
+      })
     } catch (e) {
       super.error(res, 400, e);
     }

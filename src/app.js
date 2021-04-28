@@ -27,7 +27,11 @@ const limiter = new RateLimit({
 
 // Middleware
 app.enable('trust proxy');
-app.use(cors());
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 app.use(helmet());
 app.use(express.json({ limit: '50mb' }));
 app.use(limiter);
