@@ -3,6 +3,7 @@ import { BaseController } from '.';
 import Teacher from '../../model/teacher.model';
 const cloud = require("../../server/cloudinaryConfig");
 const ObjectId = require('mongodb').ObjectID;
+import { completeProfile } from '../../utils/sendgrid';
 dotenv.config();
 
 export class UploadVideoAndImage extends BaseController {
@@ -27,11 +28,10 @@ export class UploadVideoAndImage extends BaseController {
         { $set: { "image": view, "link": ` https://felt-teacher.herokuapp.com/api/teachers/${user._id}` } }, function (err) {
           console.log(err)
         })
-      return res.status(200).json({
-        user
-      });
+      return res.status(200).json({ user });
     })
   } catch(e) {
+
     super.error(res, e);
   }
 
@@ -49,8 +49,11 @@ export class UploadVideoAndImage extends BaseController {
       const view = result.url;
       Teacher.updateOne({ "_id": ObjectId(user._id) },
         { $set: { "video": view } }, function (err) {
-          console.log(err)
         })
+      const Name = user.fullname;
+      const Email = user.email;
+      const Account = 'Teacher'
+      completeProfile(Name, Email, Account);
       return res.status(200).json({
         user
       });

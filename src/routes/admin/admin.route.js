@@ -28,7 +28,10 @@ const {
   fetchOneSchool,
   unApprovedParents,
   unApprovedSchools,
-  unApprovedTeachers
+  unApprovedTeachers,
+  fetchOneParentByEmail,
+  fetchOneTeacherByEmail,
+  fetchOneSchoolByEmail
 } = new AdminController();
 
 //Parent Admin Route
@@ -42,6 +45,7 @@ router
   .delete(authenticate, permit(['godAdmin']), deleteAllParent);
 router.route('/admin/parent/approved').get(authenticate, permit(['admin', 'superAdmin', 'administrator', 'godAdmin']), approvedParents);
 router.route('/admin/parent/unapproved').get(authenticate, permit(['admin', 'superAdmin', 'administrator', 'godAdmin']), unApprovedParents);
+router.route('/admin/parent/byEmail').post(authenticate, permit(['admin', 'superAdmin', 'administrator', 'godAdmin']), fetchOneParentByEmail);
 router
   .route('/admin/parent/:_id')
   .get(authenticate, permit(['admin', 'superAdmin', 'administrator', 'godAdmin']), fetchOneParent)
@@ -55,6 +59,7 @@ router
   .delete(authenticate, permit(['godAdmin']), deleteAllTeachers);
 router.route('/admin/teacher/approved').get(authenticate, permit(['admin', 'superAdmin', 'administrator', 'godAdmin']), approvedTeachers);
 router.route('/admin/teacher/unapproved').get(authenticate, permit(['admin', 'superAdmin', 'administrator', 'godAdmin']), unApprovedTeachers);
+router.route('/admin/teacher/byEmail').post(authenticate, permit(['admin', 'superAdmin', 'administrator', 'godAdmin']), fetchOneTeacherByEmail);
 router
   .route('/admin/teacher/:_id')
   .get(authenticate, permit(['admin', 'superAdmin', 'administrator', 'godAdmin']), fetchOneTeacher)
@@ -68,6 +73,7 @@ router
   .delete(authenticate, permit(['godAdmin']), deleteAllSchools);
 router.route('/admin/school/approved').get(authenticate, permit(['admin', 'superAdmin', 'administrator', 'godAdmin']), approvedSchools);
 router.route('/admin/school/unapproved').get(authenticate, permit(['admin', 'superAdmin', 'administrator', 'godAdmin']), unApprovedSchools);
+router.route('/admin/school/byEmail').post(authenticate, permit(['admin', 'superAdmin', 'administrator', 'godAdmin']), fetchOneSchoolByEmail);
 router
   .route('/admin/school/:_id')
   .get(authenticate, permit(['admin', 'superAdmin', 'administrator', 'godAdmin']), fetchOneSchool)

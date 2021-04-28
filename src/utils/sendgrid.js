@@ -189,3 +189,33 @@ export function approveUsers(Name, Email, link) {
             }
         });
 }
+
+export function completeProfile(Name, Email, Account) {
+    const msg = {
+        to: process.env.AUTOMATED_EMAIL, // Change to your recipient
+        from: process.env.VERIFIED_EMAIL, // Change to your verified sender
+        subject: 'Updated Profile',
+        html: `<h2>Am ${Name}, </h2>
+        <h4>Just Want to let you know that i have updated my profile</h4>
+        <p><b>Please ensure to verify this on the Felt Teacher Platform</b></p>
+        <p>My Email is <b>${Email}</b> and am a <b>${Account}</b> on the Platform</p>`,
+    }
+    sgMail
+        .send(msg)
+        .then((result) => {
+        })
+        .catch(error => {
+            // Log friendly error
+            console.error(error);
+
+            if (error.response) {
+                // Extract error msg
+                const { message, code, response } = error;
+
+                // Extract response msg
+                const { headers, body } = response;
+
+                console.error(body);
+            }
+        });
+}

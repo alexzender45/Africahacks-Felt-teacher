@@ -3,6 +3,7 @@ import { BaseController } from '.';
 import Parent from '../../model/parent.model';
 const cloud = require("../../server/cloudinaryConfig");
 const ObjectId = require('mongodb').ObjectID;
+import { completeProfile } from '../../utils/sendgrid';
 dotenv.config();
 
 export class UploadImage extends BaseController {
@@ -28,6 +29,10 @@ export class UploadImage extends BaseController {
       }, function (err) {
         return err;
       })
+      const Name = user.nameOfParent;
+      const Email = user.email;
+      const Account = 'Parent'
+      completeProfile(Name, Email, Account);
       return res.status(200).json({
         user
       });

@@ -111,6 +111,23 @@ export class AdminController extends BaseController {
     }
   }
 
+  async fetchOneParentByEmail(req, res, next) {
+    try {
+      const email = req.body.email;
+      if (!email) {
+        return res.status(400).send({ error: 'Please Type in the email of the Parent' });
+      } else {
+        const user = await Parent.find({ email: email });
+        if (!user) {
+          return res.status(404).send({ error: 'Parent does not exist' });
+        }
+        if (user)
+          return res.status(200).send(user);
+      }
+    } catch (e) {
+      super.error(res, e);
+    }
+  }
 
   async adminApprovedParents(req, res) {
     if (req.user.approved !== true && req.user.status !== 'Approved') {
@@ -212,6 +229,24 @@ export class AdminController extends BaseController {
     }
   }
 
+  async fetchOneTeacherByEmail(req, res, next) {
+    try {
+      const email = req.body.email;
+      if (!email) {
+        return res.status(400).send({ error: 'Please Type in the email of the Teacher' });
+      } else {
+        const user = await Teacher.find({ email: email });
+        if (!user) {
+          return res.status(404).send({ error: 'Teacher does not exist' });
+        }
+        if (user)
+          return res.status(200).send(user);
+      }
+    } catch (e) {
+      super.error(res, e);
+    }
+  }
+
   async deleteOneTeacher(req, res) {
     try {
       const teacher = await Teacher.findByIdAndDelete(req.params._id);
@@ -294,6 +329,25 @@ export class AdminController extends BaseController {
       super.error(res, e);
     }
   }
+
+  async fetchOneSchoolByEmail(req, res, next) {
+    try {
+      const email = req.body.email;
+      if (!email) {
+        return res.status(400).send({ error: 'Please Type in the email of the School' });
+      } else {
+        const user = await School.find({ email: email });
+        if (!user) {
+          return res.status(404).send({ error: 'School does not exist' });
+        }
+        if (user)
+          return res.status(200).send(user);
+      }
+    } catch (e) {
+      super.error(res, e);
+    }
+  }
+
   async deleteAllSchools(req, res) {
     if (req.user.approved !== true && req.user.status !== 'Approved') {
       return res.status(400).send({ message: 'You Are Not Approved To Perform This Action' });
