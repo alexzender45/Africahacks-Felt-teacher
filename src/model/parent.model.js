@@ -135,7 +135,7 @@ parentSchema.pre('save', async function save(next) {
 });
 
 parentSchema.statics.findByCredentials = async (loginKey, password) => {
-  const user = await Parent.findOne({ phone: loginKey })
+  const user = await Parent.findOne({ email: loginKey })
 
   if (!user) {
     throw new Error('Invalid login details');

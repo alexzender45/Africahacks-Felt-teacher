@@ -42,8 +42,8 @@ export class ParentController extends BaseController {
 
   async parentLogin(req, res) {
     try {
-      const { phone, password } = req.body;
-      const parent = await Parent.findByCredentials(phone, password);
+      const { email, password } = req.body;
+      const parent = await Parent.findByCredentials(email, password);
       const token = await parent.generateAuthToken();
       const body = { parent, token };
 
