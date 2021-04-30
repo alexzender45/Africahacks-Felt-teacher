@@ -53,7 +53,7 @@ const teacherSchema = new Schema(
       minlength: 6
     },
     imageName: {
-     type: String
+      type: String
     },
     role: {
       type: String,
@@ -131,8 +131,8 @@ const teacherSchema = new Schema(
       type: String
     }]
   },
-  
-  
+
+
   {
     timestamps: true,
     toJSON: {
@@ -166,7 +166,7 @@ teacherSchema.pre('save', async function save(next) {
 
 teacherSchema.statics.findByCredentials = async (loginKey, password) => {
 
-  const user = await Teacher.findOne({ email: loginKey})
+  const user = await Teacher.findOne({ email: loginKey })
 
   if (!user) {
     throw new Error('Invalid login details');
@@ -176,14 +176,14 @@ teacherSchema.statics.findByCredentials = async (loginKey, password) => {
 
   if (comparePassword(password, user.password)) {
     return user
-    
+
   }
   throw new Error('Invalid login details');
 };
 
 teacherSchema.methods.generateAuthToken = async function () {
   const user = this;
-  const token = jwt.sign({ _id: user._id, type: 'teacher' }, process.env.JWT_SECRETE_KEY);
+  const token = jwt.sign({ _id: user._id, name: user.fullname, type: 'teacher' }, process.env.JWT_SECRETE_KEY, { expiresIn: '4hrs' });
   await user.save();
 
   return token;
