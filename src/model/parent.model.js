@@ -152,7 +152,7 @@ parentSchema.statics.findByCredentials = async (loginKey, password) => {
 
 parentSchema.methods.generateAuthToken = async function () {
   const user = this;
-  const token = jwt.sign({ _id: user._id, name: user.nameOfParent, type: 'parent' }, process.env.JWT_SECRETE_KEY, { expiresIn: '4hrs' });
+  const token = jwt.sign({ _id: user._id, name: user.nameOfParent, type: 'parent' }, process.env.JWT_SECRETE_KEY, { expiresIn: '24h' });
   await user.save();
   return token;
 };
