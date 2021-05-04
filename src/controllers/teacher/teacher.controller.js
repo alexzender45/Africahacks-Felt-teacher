@@ -220,7 +220,7 @@ export class TeacherController extends BaseController {
       return res.status(400).send({ message: 'You Are Not Approved To Perform This Action' });
     } else {
       try {
-        const teachers = await Teacher.find({ approved: true, $or: [{ subjectOrClass: 'ChristianReligiousStudies' }] });
+        const teachers = await Teacher.find({ approved: true, $or: [{ subjectOrClass: 'Christian Religious Studies' }] });
 
         super.success(res, teachers || [], 'Successfully Retrieved all Teachers.');
       } catch (e) {
