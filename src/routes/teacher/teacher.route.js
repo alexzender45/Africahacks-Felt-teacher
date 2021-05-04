@@ -92,7 +92,7 @@ router.route('/teachers/Economics')
 router.route('/teachers/Primary')
   .get(authenticate, permit(['user', 'school', 'admin', 'parent']), approvedTeachersForPrimary)
 
-router.route('/teacher/JuniorSecondary')
+router.route('/teachers/JuniorSecondary')
   .get(authenticate, permit(['user', 'school', 'admin', 'parent']), approvedTeachersForJuniorSecondary)
 
 router
