@@ -3,6 +3,7 @@ import Teacher from '../../model/teacher.model';
 import { throwError } from '../../utils/handleErrors';
 import { vonage } from '../../utils/verifyVonage';
 import { sendEmail, deleteAccountEmail } from '../../utils/sendgrid';
+import jwt_decode from 'jwt-decode';
 
 export class TeacherController extends BaseController {
   constructor() {
@@ -291,7 +292,6 @@ export class TeacherController extends BaseController {
     } else {
       try {
         const teachers = await Teacher.find({ approved: true, $or: [{ subjectOrClass: 'Junior Secondary Class ' }] });
-
         super.success(res, teachers || [], 'Successfully Retrieved all Teachers.');
       } catch (e) {
         super.error(res, e);
