@@ -277,7 +277,7 @@ export class TeacherController extends BaseController {
       return res.status(400).send({ message: 'You Are Not Approved To Perform This Action' });
     } else {
       try {
-        const teachers = await Teacher.find({ approved: true, $or: [{ subjectOrClass: 'Primary Class ' }] });
+        const teachers = await Teacher.find({ approved: true, $or: [{ subjectOrClass: 'Primary Class' }] });
 
         super.success(res, teachers || [], 'Successfully Retrieved all Teachers.');
       } catch (e) {
@@ -291,7 +291,7 @@ export class TeacherController extends BaseController {
       return res.status(400).send({ message: 'You Are Not Approved To Perform This Action' });
     } else {
       try {
-        const teachers = await Teacher.find({ approved: true, $or: [{ subjectOrClass: 'Junior Secondary Class ' }] });
+        const teachers = await Teacher.find({ approved: true, $or: [{ subjectOrClass: 'Junior Secondary Class' }] });
         super.success(res, teachers || [], 'Successfully Retrieved all Teachers.');
       } catch (e) {
         super.error(res, e);
