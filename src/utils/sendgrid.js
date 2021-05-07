@@ -36,10 +36,12 @@ export function passwordEmail(Name, Email, link) {
     const msg = {
         to: Email, // Change to your recipient
         from: process.env.VERIFIED_EMAIL, // Change to your verified sender
-        subject: 'Password Reset',
-        html: `<h1>Hello ${Name} You Request A Password Reset </h1>
-        <p><b>To Complete Your Password Reset Please Click On This Link <a href = "${link}">Click Link </a></b></p>
-        <p>Note That This Link Will Expires In The Next 1 Hour</p>`,
+        subject: 'Reset Your Password',
+        html: `<h1>Dear ${Name},</h1>
+        <p>You Have recently asked to reset your Felt-Teachers profile password.</p>
+         <p><b>Please follow this link <a href = "${link}">Click Here To Reset Your Password</a></b></p>
+        <p>Best Regards,</p>
+        <p>Felt-Teachers</p>`,
     }
 
     sgMail
@@ -67,11 +69,12 @@ export function SuccessfulPasswordReset(Name, Email) {
     const msg = {
         to: Email, // Change to your recipient
         from: process.env.VERIFIED_EMAIL, // Change to your verified sender
-        subject: 'Password Reset',
-        html: `<h1>Hello ${Name} Your Password Reset Was Successful</h1>
-        <p><b>You can login in with your new password</b></p>
-        <p>If you are a <b>Teacher</b> go to the teacher login, if you are a <b>School</b> go to the school login,
-        If you are a <b>Parent</b> go to the parent login</p>`,
+        subject: 'Your Password Reset Was Successfully Updated',
+        html: `<h1>Dear ${Name},</h1>
+        <p>Your recent request to reset your Felt-Teachers password is successful. Upon your next login
+        please use your new password.</p>
+        <p>Best Regards,</p>
+        <p>Felt-Teachers</p>`,
     }
 
     sgMail
@@ -100,13 +103,14 @@ export function deleteAccountEmail(Name, Email) {
     const msg = {
         to: Email, // Change to your recipient
         from: process.env.VERIFIED_EMAIL, // Change to your verified sender
-        subject: 'Account Deleted So Sad',
-        html: `<h1>Hello ${Name} Your Account with Felt-Teacher Was Deleted</h1>
-        <p><b>So Sad To See You Go</b></p>
-        <p>Please we will like to know why you deleted your account</p>
-        <p><b>Come Back To Us, We are Eager to welcome you back</b></p>
-        <p> Bye for now</p>
-        <p> You Can Email us <b>alexzendersamuel33@gmail.com</b>`
+        subject: 'Account Deletion',
+        html: `<h1>Hello ${Name},</h1>
+        <p>Your account with Felt-Teacher has been Deleted. <b>We Hate To See You Go</b></p>
+        <p>Please do send us a review via our official mail feltteacher@gmail.com, bcause we would love to
+        know why you've decided to delete your account with us</p>
+        <p>Anytime you change your mind, please reach out us, we'll be glad to welcome you back</p>
+        <p> Best Regards,</p>
+        <p>Felt-Teachers</b>`
     }
 
     sgMail
@@ -134,7 +138,7 @@ export function connectWithUser(sendMessage, Email) {
     const msg = {
         to: Email, // Change to your recipient
         from: process.env.VERIFIED_EMAIL, // Change to your verified sender
-        subject: 'Someone Requested To Connect With You',
+        subject: 'Your Connection Status Has Been Updated',
         html: sendMessage,
     }
 

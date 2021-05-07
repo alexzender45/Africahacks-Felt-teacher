@@ -321,7 +321,7 @@ export class TeacherController extends BaseController {
         'phone',
         'fullname',
         'password',
-        'yearsOfExperience',
+        'yearOfExperience',
         'nameOfSchool',
         'courseOfStudy',
         'dateOfBirth',

@@ -39,10 +39,11 @@ export class Connect extends BaseController {
           user.messages.push(`${visitor.fullname} requested to connect with you, ${visitor.email}, ${visitor.link}`)
           user.save()
           const message = `You can email me ${visitor.email}, and also check my profile on Felt Teacher Platform ${visitor.link}`
-          const sendMessage = `<h1> Congrats ${user.fullname} Someone Wants To Connect With You </h1>
-          <p> I will love to connect with you</p>
-          <p> You can email me ${visitor.email}, and also check my profile on Felt Teacher Platform <a href = "${visitor.link}"> <b>My Profile</b> </a></p>
-          <p><b> Thanks For Reading My Message </b></p>`
+          const sendMessage = `<h1> Hello ${user.fullname},</h1>
+          <p>Someone on the Felt-Teachers platform has requested to connect with you</p>
+          <p>Hi ${visitor.fullname}, i will love to connect with you, am a <b>Teacher</b> on the Platform</p>
+          <p> You can send a email to me via ${visitor.email}, and also check my profile on Felt Teacher Platform <a href = "${visitor.link}"> <b>My Profile</b> </a></p>
+          <p><strong> Thanks For Reading My Message </strong></p>`
           const Email = user.email;
           connect(user.phone, message);
           connectWithUser(sendMessage, Email);
