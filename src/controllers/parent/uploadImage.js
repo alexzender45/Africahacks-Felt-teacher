@@ -2,7 +2,6 @@ import dotenv from 'dotenv';
 import { BaseController } from '.';
 import Parent from '../../model/parent.model';
 const cloud = require("../../server/cloudinaryConfig");
-const ObjectId = require('mongodb').ObjectID;
 import { completeProfile } from '../../utils/sendgrid';
 dotenv.config();
 
@@ -20,21 +19,18 @@ export class UploadImage extends BaseController {
       imageName: req.files[0].originalname,
       imageUrl: req.files[0].path,
     };
-    cloud.uploads(attempt.imageUrl).then((result) => {
+    cloud.uploads(attempt.imageUrl).then(async (result) => {
       const view = result.url;
-      Parent.updateOne({ "_id": ObjectId(user._id) },
-        { $set: { "image": view, "link": ` https://felt-teacher.herokuapp.com/api/parents/${user._id}` }, }, {
+      await Parent.findOneAndUpdate({ _id: user._id },
+        { $set: { image: view, link: ` https://felt-teacher.herokuapp.com/api/parents/${user._id}` }, }, {
         new: true,
-        upsert: true
-      }, function (err) {
-        return err;
       })
       const Name = user.nameOfParent;
       const Email = user.email;
       const Account = 'Parent'
       completeProfile(Name, Email, Account);
       return res.status(200).json({
-        user
+        message: "Uploaded Successfully"
       });
     })
   } catch(e) {

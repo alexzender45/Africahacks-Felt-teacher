@@ -2,7 +2,6 @@ import dotenv from 'dotenv';
 import { BaseController } from '.';
 import School from '../../model/school.model';
 const cloud = require("../../server/cloudinaryConfig");
-const ObjectId = require('mongodb').ObjectID;
 import { completeProfile } from '../../utils/sendgrid';
 dotenv.config();
 
@@ -20,15 +19,12 @@ export class UploadImage extends BaseController {
       imageName: req.files[0].originalname,
       imageUrl: req.files[0].path,
     };
-    cloud.uploads(attempt.imageUrl).then((result) => {
+    cloud.uploads(attempt.imageUrl).then(async (result) => {
       const view = result.url;
-      School.updateOne({ "_id": ObjectId(user._id) },
-        { $set: { "image": view, "link": ` https://felt-teacher.herokuapp.com/api/schools/${user._id}` } },
+      await School.findOneAndUpdate({ _id: user._id },
+        { $set: { image: view, link: ` https://felt-teacher.herokuapp.com/api/schools/${user._id}` }, },
         {
           new: true,
-        },
-        function (err) {
-          err
         })
       const Name = user.nameOfSchool;
       const Email = user.email;
