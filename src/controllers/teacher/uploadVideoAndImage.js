@@ -24,7 +24,7 @@ export class UploadVideoAndImage extends BaseController {
     cloud.uploads(attempt.imageUrl).then(async (result) => {
       const view = result.url;
       await Teacher.findOneAndUpdate({ _id: user._id },
-        { $set: { image: view, link: `https://felt-teacher.herokuapp.com/api/teachers/${btoa(user._id)}` }, }, {
+        { $set: { image: view, link: `https://felt-teacher.herokuapp.com/api/teachers/${user._id}` }, }, {
         new: true,
       })
       return res.status(200).json({
