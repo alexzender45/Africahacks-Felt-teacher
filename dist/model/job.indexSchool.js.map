@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../src/model/job.indexSchool.js"],"names":[],"mappings":";;;;;;;;;;;;AAAA","sourcesContent":["export { default } from './jobPostSchool';"],"file":"job.indexSchool.js"}

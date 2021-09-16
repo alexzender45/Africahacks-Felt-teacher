@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../src/routes/admin/index.js"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;AAAA;;AACA","sourcesContent":["export { default as adminRoute } from './admin.route';\r\nexport { default as healthRoute3 } from './health.route';\r\n"],"file":"index.js"}
