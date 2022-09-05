@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../src/model/sch.js"],"names":[],"mappings":";;;;;;;;;;;;AAAA","sourcesContent":["export { default } from './school.model';"],"file":"sch.js"}

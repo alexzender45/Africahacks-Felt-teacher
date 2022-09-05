@@ -1,0 +1,258 @@
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.SchoolController = void 0;
+
+var _ = require(".");
+
+var _dotenv = require("dotenv");
+
+require("dotenv/config");
+
+var _sch = _interopRequireDefault(require("../../model/sch"));
+
+var _handleErrors = require("../../utils/handleErrors");
+
+var _sendgrid = require("../../utils/sendgrid");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const Vonage = require('@vonage/server-sdk');
+
+(0, _dotenv.config)();
+const vonage = new Vonage({
+  apiKey: process.env.API_KEY_VONAGEAPP,
+  apiSecret: process.env.API_SECRET_VONAGEAPP
+});
+
+class SchoolController extends _.BaseController {
+  constructor() {
+    super();
+  }
+
+  async register(req, res) {
+    const data = req.body;
+
+    try {
+      const generatedCode = Math.floor(100000 + Math.random() * 100000).toString();
+      const newSchool = new _sch.default(data);
+      const school = await newSchool.save();
+      const token = await school.generateAuthToken();
+      const body = {
+        school,
+        token
+      };
+      const mail = {
+        to: school.email,
+        subject: 'Felt Teacher Verification Code',
+        from: {
+          name: 'Felt Teacher Team',
+          email: 'juniorefe45@gmail.com'
+        },
+        text: `Your Email Verification Code has been Sent to ${school.email}`,
+        html: `<p>Hi ${school.nameOfSchool}</p>
+              <br>
+              <p>Please use this code below to verify your account</p>
+              <br>
+              <p><strong>Code:</strong> ${generatedCode}</p>
+              <p>Thanks,</p>
+              <p>Felt Teacher Team</p>
+              `
+      };
+      await (0, _sendgrid.send)(mail);
+      super.success(res, body, 'School Registration Successful', 201);
+    } catch (e) {
+      super.error(res, e);
+    }
+  }
+
+  async verifyUser(req, res) {
+    // We require clients to submit a request id (for identification) and a code (to check)
+    if (!req.body.code) {
+      res.status(400).send({
+        message: "You must supply a `code` parameter"
+      });
+      return;
+    } // Run the check against Vonage's servers
+
+
+    const school = await _sch.default.findOne({
+      code: req.body.code
+    });
+
+    if (school === null) {
+      return res.status(400).send({
+        message: "Invalid Code"
+      });
+    }
+
+    school.emailVerified = true;
+    school.code = null;
+    await school.save();
+    super.success(res, teacher, 'Email Verified Successfully');
+  }
+
+  async cancel(req, res) {
+    nexmo.verify.control({
+      request_id: 'REQUEST_ID',
+      cmd: 'cancel'
+    }, (err, result) => {
+      console.log(err ? err : result);
+    });
+  }
+
+  async schoolLogin(req, res) {
+    try {
+      const {
+        email,
+        password
+      } = req.body;
+      const school = await _sch.default.findByCredentials(email, password);
+      const token = await school.generateAuthToken();
+      const body = {
+        school,
+        token
+      };
+      super.success(res, body, 'Login Successful');
+    } catch (e) {
+      console.log(e);
+      super.error(res, e);
+    }
+  }
+
+  async schoolLogOut(req, res) {
+    try {
+      req.user.tokens = req.user.tokens.filter(token => {
+        return token.token !== req.token;
+      });
+      await req.user.save();
+      super.success(res, [], 'Logout Successful');
+    } catch (e) {
+      super.error(res, e);
+    }
+  }
+
+  async readAllSchool(req, res) {
+    if (req.user.approved !== true && req.user.status !== 'Approved') {
+      return res.status(400).send({
+        message: 'You Are Not Approved To Perform This Action'
+      });
+    } else {
+      try {
+        const schools = await _sch.default.find({});
+        super.success(res, schools || [], 'Successfully Retrieved all Schools.');
+      } catch (e) {
+        super.error(res, e);
+      }
+    }
+  }
+
+  async approvedSchools(req, res) {
+    try {
+      const schools = await _sch.default.find({
+        approved: true
+      });
+      super.success(res, schools || [], 'Successfully Retrieved all Schools.');
+    } catch (e) {
+      super.error(res, e);
+    }
+  }
+
+  async deleteAllSchool(req, res) {
+    if (req.user.approved !== true && req.user.status !== 'Approved') {
+      return res.status(400).send({
+        message: 'You Are Not Approved To Perform This Action'
+      });
+    } else {
+      try {
+        await _sch.default.deleteMany({});
+        super.success(res, [], 'Delete Successful.');
+      } catch (e) {
+        super.error(res, e);
+      }
+    }
+  }
+
+  async fetchOne(req, res, next) {
+    try {
+      const user = await _sch.default.findById(req.params._id);
+
+      if (!user) {
+        return res.status(400).send({
+          error: 'School does not exist'
+        });
+      }
+
+      if (user) return res.status(200).send(user);
+    } catch (e) {
+      super.error(res, e);
+    }
+  }
+
+  async adminApprovedSchools(req, res) {
+    if (req.user.approved !== true && req.user.status !== 'Approved') {
+      return res.status(400).send({
+        message: 'You Are Not Approved To Perform This Action'
+      });
+    } else {
+      try {
+        const updates = Object.keys(req.body);
+        const allowedUpdates = ['approved', 'status', 'role'];
+        const isValidUpdate = updates.every(update => {
+          return allowedUpdates.includes(update);
+        });
+
+        if (!isValidUpdate) {
+          (0, _handleErrors.throwError)(400, 'Invalid Field.');
+        }
+
+        const schoolUpdate = req.body;
+        updates.map(update => {
+          req.user[update] = schoolUpdate[update];
+        });
+        const updatedSchool = await req.user.save();
+        super.success(res, updatedSchool, 'Update Successful');
+      } catch (e) {
+        super.error(res, e);
+      }
+    }
+  }
+
+  async update(req, res) {
+    try {
+      const updates = Object.keys(req.body);
+      const allowedUpdates = ['Phone', 'RCNumber', 'password', 'address', 'schoolName', 'ownerOfSchool', 'neededTeacher', 'state', 'country', 'about', 'requirements'];
+      const isValidUpdate = updates.every(update => {
+        return allowedUpdates.includes(update);
+      });
+
+      if (!isValidUpdate) {
+        (0, _handleErrors.throwError)(400, 'Invalid Field.');
+      }
+
+      const schoolUpdate = req.body;
+      updates.map(update => {
+        req.user[update] = schoolUpdate[update];
+      });
+      const updatedSchool = await req.user.save();
+      super.success(res, updatedSchool, 'Update Successful');
+    } catch (e) {
+      super.error(res, e);
+    }
+  }
+
+  async deleteOne(req, res) {
+    try {
+      const school = await req.user.remove();
+      super.success(res, school, 'Delete Successful');
+    } catch (e) {
+      super.error(res, e);
+    }
+  }
+
+}
+
+exports.SchoolController = SchoolController;
+//# sourceMappingURL=school.controller.js.map

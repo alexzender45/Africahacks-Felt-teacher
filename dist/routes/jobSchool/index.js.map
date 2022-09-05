@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../src/routes/jobSchool/index.js"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;AAAA;;AACA","sourcesContent":["export { default as schoolJobRoute } from './jobSchool.route';\nexport { default as healthRoute } from './health.route';\n"],"file":"index.js"}

@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../src/routes/jobParent/index.js"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;AAAA;;AACA","sourcesContent":["export { default as parentJobRoute } from './jobParent.route';\nexport { default as healthRoute } from './health.route';\n"],"file":"index.js"}
