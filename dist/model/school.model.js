@@ -33,7 +33,7 @@ const schoolSchema = new _mongoose.Schema({
     type: String,
     default: 'Please Update'
   },
-  country: {
+  contry: {
     type: String,
     default: 'Please Update'
   },
@@ -118,6 +118,13 @@ const schoolSchema = new _mongoose.Schema({
     type: Boolean,
     default: false
   },
+  code: {
+    type: String
+  },
+  emailVerified: {
+    type: Boolean,
+    default: false
+  },
   jobs: [{
     type: _mongoose.Schema.Types.ObjectId,
     ref: 'Job'
@@ -180,10 +187,9 @@ schoolSchema.methods.generateAuthToken = async function () {
 
   const token = _jsonwebtoken.default.sign({
     _id: user._id,
-    name: user.nameOfSchool,
     type: 'school'
   }, process.env.JWT_SECRETE_KEY, {
-    expiresIn: '1440m'
+    expiresIn: '4hrs'
   });
 
   await user.save();

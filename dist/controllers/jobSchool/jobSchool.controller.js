@@ -9,6 +9,8 @@ var _ = require(".");
 
 var _job = _interopRequireDefault(require("../../model/job.indexSchool"));
 
+var _handleErrors = require("../../utils/handleErrors");
+
 var _sch = _interopRequireDefault(require("../../model/sch"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -91,19 +93,22 @@ class JobController extends _.BaseController {
       });
     } else {
       try {
-        const {
-          neededTeacher,
-          shortNoteAboutTeacherYouWant
-        } = req.body;
-        const updatedJobSchool = await _job.default.findOneAndUpdate({
-          _id: req.params._id
-        }, {
-          neededTeacher,
-          shortNoteAboutTeacherYouWant
-        }, {
-          new: true
+        const updates = Object.keys(req.body);
+        const allowedUpdates = [' neededTeacher', 'shortNoteAboutTeacherYouWant'];
+        const isValidUpdate = updates.every(update => {
+          return allowedUpdates.includes(update);
         });
-        super.success(res, updatedJobSchool, 'Update Successful');
+
+        if (!isValidUpdate) {
+          (0, _handleErrors.throwError)(400, 'Invalid Field.');
+        }
+
+        const jobUpdate = req.body;
+        updates.map(update => {
+          req.user[update] = jobUpdate[update];
+        });
+        const updatedJob = await req.user.save();
+        super.success(res, updatedJob, 'Update Successful');
       } catch (e) {
         super.error(res, e);
       }
@@ -117,18 +122,8 @@ class JobController extends _.BaseController {
       });
     } else {
       try {
-        const ID = req.params._id;
-        await _sch.default.updateOne({
-          jobs: ID
-        }, {
-          $pull: {
-            jobs: ID
-          }
-        });
-        await _job.default.deleteOne({
-          _id: ID
-        });
-        super.success(res, 'Delete Successful');
+        const job = await req.user.remove();
+        super.success(res, job, 'Delete Successful');
       } catch (e) {
         super.error(res, e);
       }

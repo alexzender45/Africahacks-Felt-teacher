@@ -5,6 +5,7 @@ import { config as dotConfig } from 'dotenv';
 import 'dotenv/config';
 import Parent from '../../model/parent.index';
 import { throwError } from '../../utils/handleErrors';
+import {send} from '../../utils/sendgrid';
 dotConfig();
 
 const vonage = new Vonage({
@@ -26,61 +27,53 @@ export class ParentController extends BaseController {
     const data = req.body;
 
     try {
+      const generatedCode = Math.floor(
+        100000 + Math.random() * 100000,
+      ).toString();
+      data.code = generatedCode;
       const newParent = new Parent(data);
       const parent = await newParent.save();
       const token = await parent.generateAuthToken();
-      vonage.verify.request({
-        number: req.body.phone,
-        // You can customize this to show the name of your company
-        brand: 'Felt Teacher',
-        // We could put `'6'` instead of `'4'` if we wanted a longer verification code
-        code_length: '4'
-    }, (err, result) => {
-        if (err) {
-            // If there was an error, return it to the client
-            res.status(500).send(err.error_text);
-            return;
-        }
-    });
-
-    //Mailgun
-    const mailgun = new Mailgun({apiKey: api_key, domain: domain});
-       const data1 = {
-       //Specify email data
-       from: from_who,
-       //The email to contact
-       to: req.body.email,
-       //Subject and text data  
-       subject: 'Hello from Mailgun',
-       html: `<h1>Welcom to Felt-Teacher Platform  ${req.body.nameOfParent} </h1> <p>We are happy to see you register with us</p>`
-       }
-     //Invokes the method to send emails given the above data with the helper library
-      mailgun.messages().send(data1)
       const body = { parent, token };
-
+      const mail = {
+        to: parent.email,
+        subject: 'Felt Teacher Verification Code',
+        from: {
+          name: 'Felt Teacher Team',
+          email: 'juniorefe45@gmail.com',
+        },
+        text: `Your Email Verification Code has been Sent to ${parent.email}`,
+        html: `<p>Hi ${parent.nameOfParent}</p>
+              <br>
+              <p>Please use this code below to verify your account</p>
+              <br>
+              <p><strong>Code:</strong> ${generatedCode}</p>
+              <p>Thanks,</p>
+              <p>Felt Teacher Team</p>
+              `,
+      };
+      await send(mail);
       super.success(res, body, 'Parent Registration Successful', 201);
     } catch (e) {
-      supper.error(e);
+      supper.error(res, e);
     }
   }
 
-  async verifyUser() {
+  async verifyUser(req, res) {
     // We require clients to submit a request id (for identification) and a code (to check)
-    if (!req.body.requestId || !req.body.code) {
-        res.status(400).send({message: "You must supply a `code` and `request_id` prop to send the request to"})
+    if (!req.body.code) {
+        res.status(400).send({message: "You must supply a `code` parameter"});
         return;
     }
     // Run the check against Vonage's servers
-    vonage.verify.check({
-        request_id: req.body.requestId,
-        code: req.body.code
-    }, (err, result) => {
-        if (err) {
-            res.status(500).send(err.error_text);
-            return;
-        }
-        res.send(result);
-    });
+   const parent = await Parent.findOne({code: req.body.code});
+    if(parent === null){
+      return res.status(400).send({message: "Invalid Code"});
+    }
+    parent.emailVerified = true;
+    parent.code = null;
+    await parent.save();
+    super.success(res, parent, 'Email Verified Successfully');
 }
 
   async cancel(req, res){

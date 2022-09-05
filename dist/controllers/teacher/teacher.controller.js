@@ -7,17 +7,25 @@ exports.TeacherController = void 0;
 
 var _ = require(".");
 
+var _dotenv = require("dotenv");
+
+require("dotenv/config");
+
 var _teacher = _interopRequireDefault(require("../../model/teacher.model"));
 
 var _handleErrors = require("../../utils/handleErrors");
 
-var _verifyVonage = require("../../utils/verifyVonage");
-
 var _sendgrid = require("../../utils/sendgrid");
 
-var _jwtDecode = _interopRequireDefault(require("jwt-decode"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const Vonage = require('@vonage/server-sdk');
+
+(0, _dotenv.config)();
+const vonage = new Vonage({
+  apiKey: process.env.API_KEY_VONAGEAPP,
+  apiSecret: process.env.API_SECRET_VONAGEAPP
+});
 
 class TeacherController extends _.BaseController {
   constructor() {
@@ -26,47 +34,74 @@ class TeacherController extends _.BaseController {
 
   async register(req, res) {
     try {
-      if (!req.body.code) {
-        res.status(400).send({
-          message: "You must supply a `code` to verify your number"
-        });
-        return;
-      }
-
-      let code = req.body.code;
-      let requestId = req.body.requestId;
-
-      _verifyVonage.vonage.verify.check({
-        request_id: requestId,
-        code: code
-      }, async (err, result) => {
-        if (err) {
-          res.status(500).send({
-            message: 'Please Provide a Code'
-          });
-        } else if (result.status != 0) {
-          res.status(500).send({
-            message: 'Invalid Code'
-          });
-        } else {
-          if (result && result.status == '0') {
-            const data = req.body;
-            const newTeacher = new _teacher.default(data);
-            const teacher = await newTeacher.save();
-            const token = await teacher.generateAuthToken();
-            const body = {
-              teacher,
-              token
-            };
-            const Email = teacher.email;
-            (0, _sendgrid.sendEmail)(Email);
-            super.success(res, body, 'Teacher Registration Successful', 201);
-          }
-        }
-      });
+      const generatedCode = Math.floor(100000 + Math.random() * 100000).toString();
+      const data = req.body;
+      data.code = generatedCode;
+      const newTeacher = new _teacher.default(data);
+      const teacher = await newTeacher.save();
+      const token = await teacher.generateAuthToken();
+      const body = {
+        teacher,
+        token
+      };
+      const mail = {
+        to: teacher.email,
+        subject: 'Felt Teacher Verification Code',
+        from: {
+          name: 'Felt Teacher Team',
+          email: 'juniorefe45@gmail.com'
+        },
+        text: `Your Email Verification Code has been Sent to ${teacher.email}`,
+        html: `<p>Hi ${teacher.fullname}</p>
+              <br>
+              <p>Please use this code below to verify your account</p>
+              <br>
+              <p><strong>Code:</strong> ${generatedCode}</p>
+              <p>Thanks,</p>
+              <p>Felt Teacher Team</p>
+              `
+      };
+      await (0, _sendgrid.send)(mail);
+      super.success(res, body, 'Teacher Registration Successful', 201);
     } catch (e) {
-      super.error(res, 400, e);
+      super.error(res, e);
     }
+  }
+
+  async verifyUser(req, res) {
+    // We require clients to submit a request id (for identification) and a code (to check)
+    if (!req.body.code) {
+      res.status(400).send({
+        message: "You must supply a `code` parameter"
+      });
+      return;
+    } // Run the check against Vonage's servers
+
+
+    const teacher = await _teacher.default.findOne({
+      code: req.body.code
+    });
+    console.log(teacher === null);
+
+    if (teacher === null) {
+      return res.status(400).send({
+        message: "Invalid Code"
+      });
+    }
+
+    teacher.emailVerified = true;
+    teacher.code = null;
+    await teacher.save();
+    super.success(res, teacher, 'Email Verified Successfully');
+  }
+
+  async cancel(req, res) {
+    nexmo.verify.control({
+      request_id: 'REQUEST_ID',
+      cmd: 'cancel'
+    }, (err, result) => {
+      console.log(err ? err : result);
+    });
   }
 
   async login(req, res) {
@@ -83,6 +118,7 @@ class TeacherController extends _.BaseController {
       };
       super.success(res, body, 'Login Successful');
     } catch (e) {
+      console.log(e);
       super.error(res, e);
     }
   }
@@ -96,6 +132,21 @@ class TeacherController extends _.BaseController {
       super.success(res, [], 'Logout Successful');
     } catch (e) {
       super.error(res, e);
+    }
+  }
+
+  async readAll(req, res) {
+    if (req.user.approved !== true && req.user.status !== 'Approved') {
+      return res.status(400).send({
+        message: 'You Are Not Approved To Perform This Action'
+      });
+    } else {
+      try {
+        const teachers = await _teacher.default.find({});
+        super.success(res, teachers || [], 'Successfully Retrieved all Teachers.');
+      } catch (e) {
+        super.error(res, e);
+      }
     }
   }
 
@@ -329,7 +380,7 @@ class TeacherController extends _.BaseController {
         const teachers = await _teacher.default.find({
           approved: true,
           $or: [{
-            subjectOrClass: 'Christian Religious Studies'
+            subjectOrClass: 'ChristianReligiousStudies'
           }]
         });
         super.success(res, teachers || [], 'Successfully Retrieved all Teachers.');
@@ -409,7 +460,7 @@ class TeacherController extends _.BaseController {
         const teachers = await _teacher.default.find({
           approved: true,
           $or: [{
-            subjectOrClass: 'Primary Class'
+            subjectOrClass: 'Primary Class '
           }]
         });
         super.success(res, teachers || [], 'Successfully Retrieved all Teachers.');
@@ -429,10 +480,25 @@ class TeacherController extends _.BaseController {
         const teachers = await _teacher.default.find({
           approved: true,
           $or: [{
-            subjectOrClass: 'Junior Secondary Class'
+            subjectOrClass: 'Junior Secondary Class '
           }]
         });
         super.success(res, teachers || [], 'Successfully Retrieved all Teachers.');
+      } catch (e) {
+        super.error(res, e);
+      }
+    }
+  }
+
+  async deleteAll(req, res) {
+    if (req.user.approved !== true && req.user.status !== 'Approved') {
+      return res.status(400).send({
+        message: 'You Are Not Approved To Perform This Action'
+      });
+    } else {
+      try {
+        await _teacher.default.deleteMany({});
+        super.success(res, [], 'Delete Successful.');
       } catch (e) {
         super.error(res, e);
       }
@@ -457,10 +523,39 @@ class TeacherController extends _.BaseController {
     }
   }
 
+  async adminApprovedTeachers(req, res) {
+    if (req.user.approved !== true && req.user.status !== 'Approved') {
+      return res.status(400).send({
+        message: 'You Are Not Approved To Perform This Action'
+      });
+    } else {
+      try {
+        const updates = Object.keys(req.body);
+        const allowedUpdates = ['approved', 'status', 'role'];
+        const isValidUpdate = updates.every((update, link) => {
+          return allowedUpdates.includes(update);
+        });
+
+        if (!isValidUpdate) {
+          (0, _handleErrors.throwError)(400, 'Invalid Field.');
+        }
+
+        const teacherUpdate = req.body;
+        updates.map(update => {
+          req.user[update] = teacherUpdate[update];
+        });
+        const updatedTeacher = await req.user.save();
+        super.success(res, updatedTeacher, 'Update Successful');
+      } catch (e) {
+        super.error(res, e);
+      }
+    }
+  }
+
   async update(req, res) {
     try {
       const updates = Object.keys(req.body);
-      const allowedUpdates = ['phone', 'fullname', 'password', 'yearOfExperience', 'nameOfSchool', 'courseOfStudy', 'dateOfBirth', 'state', 'country', 'subjectOrClass', 'address', 'approved', 'about'];
+      const allowedUpdates = ['phone', 'fullname', 'password', 'yearsOfExperience', 'nameOfSchool', 'courseOfStudy', 'dateOfBirth', 'state', 'country', 'subjectOrClass', 'address', 'approved', 'about'];
       const isValidUpdate = updates.every(update => {
         return allowedUpdates.includes(update);
       });
@@ -483,9 +578,6 @@ class TeacherController extends _.BaseController {
   async deleteOne(req, res) {
     try {
       const teacher = await req.user.remove();
-      const Name = teacher.fullname;
-      const Email = teacher.email;
-      (0, _sendgrid.deleteAccountEmail)(Name, Email);
       super.success(res, teacher, 'Delete Successful');
     } catch (e) {
       super.error(res, e);

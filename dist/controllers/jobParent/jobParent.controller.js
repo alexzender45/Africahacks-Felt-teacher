@@ -93,18 +93,21 @@ class JobParentController extends _.BaseController {
       });
     } else {
       try {
-        const {
-          neededTeacher,
-          shortNoteAboutTeacherYouWant
-        } = req.body;
-        const updatedJobParent = await _job.default.findOneAndUpdate({
-          _id: req.params._id
-        }, {
-          neededTeacher,
-          shortNoteAboutTeacherYouWant
-        }, {
-          new: true
+        const updates = Object.keys(req.body);
+        const allowedUpdates = [' neededTeacher', 'shortNoteAboutTeacherYouWant'];
+        const isValidUpdate = updates.every(update => {
+          return allowedUpdates.includes(update);
         });
+
+        if (!isValidUpdate) {
+          (0, _handleErrors.throwError)(400, 'Invalid Field.');
+        }
+
+        const jobParentUpdate = req.body;
+        updates.map(update => {
+          req.user[update] = jobParentUpdate[update];
+        });
+        const updatedJobParent = await req.user.save();
         super.success(res, updatedJobParent, 'Update Successful');
       } catch (e) {
         super.error(res, e);
@@ -119,18 +122,8 @@ class JobParentController extends _.BaseController {
       });
     } else {
       try {
-        const ID = req.params._id;
-        await _parent.default.updateOne({
-          jobs: ID
-        }, {
-          $pull: {
-            jobs: ID
-          }
-        });
-        await _job.default.deleteOne({
-          _id: ID
-        });
-        super.success(res, 'Delete Successful');
+        const job = await req.user.remove();
+        super.success(res, job, 'Delete Successful');
       } catch (e) {
         super.error(res, e);
       }

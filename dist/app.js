@@ -25,18 +25,12 @@ var _jobSchool = require("./routes/jobSchool");
 
 var _jobParent = require("./routes/jobParent");
 
-var _admin = require("./routes/admin");
-
 var _db = require("./db");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-const swaggerUi = require('swagger-ui-express');
-
-const swaggerDocument = require('../swagger.json'); //
+//
 // Initialize DB
-
-
 _db.Database.db().then(); // Configs
 
 
@@ -50,11 +44,7 @@ const limiter = new _expressRateLimit.default({
 }); // Middleware
 
 app.enable('trust proxy');
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-  next();
-});
+app.use((0, _cors.default)());
 app.use((0, _helmet.default)());
 app.use(_express.default.json({
   limit: '50mb'
@@ -74,8 +64,6 @@ app.use('/api/', _school.schoolConnectRoute);
 app.use('/api/', _jobSchool.schoolJobRoute);
 app.use('/api/', _jobParent.parentJobRoute);
 app.use('/api/', _parent.parentConnectRoute);
-app.use('/api/admin/felt-teacher', _admin.adminRoute);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 var _default = app;
 exports.default = _default;
 //# sourceMappingURL=app.js.map

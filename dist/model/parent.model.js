@@ -29,7 +29,7 @@ const parentSchema = new _mongoose.Schema({
     type: String,
     default: 'Please Update'
   },
-  country: {
+  contry: {
     type: String,
     default: 'Please Update'
   },
@@ -110,6 +110,13 @@ const parentSchema = new _mongoose.Schema({
     type: Boolean,
     default: false
   },
+  code: {
+    type: String
+  },
+  emailVerified: {
+    type: Boolean,
+    default: false
+  },
   jobs: [{
     type: _mongoose.Schema.Types.ObjectId,
     ref: 'JobParent'
@@ -151,7 +158,7 @@ parentSchema.pre('save', async function save(next) {
 
 parentSchema.statics.findByCredentials = async (loginKey, password) => {
   const user = await Parent.findOne({
-    email: loginKey
+    phone: loginKey
   });
 
   if (!user) {
@@ -172,10 +179,9 @@ parentSchema.methods.generateAuthToken = async function () {
 
   const token = _jsonwebtoken.default.sign({
     _id: user._id,
-    name: user.nameOfParent,
     type: 'parent'
   }, process.env.JWT_SECRETE_KEY, {
-    expiresIn: '1440m'
+    expiresIn: '4hrs'
   });
 
   await user.save();

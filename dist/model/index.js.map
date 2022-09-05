@@ -1,1 +1,1 @@
-{"version":3,"sources":["../../src/model/index.js"],"names":[],"mappings":";;;;;;;;;;;;AAAA","sourcesContent":["export { default } from './teacher.model';\r\n"],"file":"index.js"}
+{"version":3,"sources":["../../src/model/index.js"],"names":[],"mappings":";;;;;;;;;;;;AAAA","sourcesContent":["export { default } from './teacher.model';\n"],"file":"index.js"}

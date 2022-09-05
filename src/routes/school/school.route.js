@@ -22,7 +22,7 @@ const {
 
 router.route('/login/school').post(schoolLogin);
 router.route('/logout/school').get(authenticate, schoolLogOut);
-router.route('/verifyschool').get(verifyUser);
+router.route('/verify/school').post(verifyUser);
 router.route('/cancelschool').get(cancel);
 router
   .route('/schools')

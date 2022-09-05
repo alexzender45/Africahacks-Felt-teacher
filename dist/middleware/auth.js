@@ -7,7 +7,6 @@ exports.authenticate = authenticate;
 exports.decodeJwtToken = decodeJwtToken;
 exports.getUserTeacherPayload = getUserTeacherPayload;
 exports.getUserSchoolPayload = getUserSchoolPayload;
-exports.getUserModratorPayload = getUserModratorPayload;
 exports.getUserParentPayload = getUserParentPayload;
 exports.userPayload = userPayload;
 exports.permit = permit;
@@ -18,13 +17,13 @@ require("dotenv/config");
 
 var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 
+var _path = _interopRequireDefault(require("path"));
+
 var _teacher = _interopRequireDefault(require("../model/teacher.model"));
 
 var _school = _interopRequireDefault(require("../model/school.model"));
 
 var _parent = _interopRequireDefault(require("../model/parent.model"));
-
-var _admin = _interopRequireDefault(require("../model/admin.model"));
 
 var _handleErrors = require("../utils/handleErrors");
 
@@ -35,6 +34,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 async function authenticate(req, res, next) {
   try {
     const jwtPayload = decodeJwtToken(req);
+    console.log(jwtPayload.type);
 
     if (jwtPayload.type === "teacher") {
       const user = await getUserTeacherPayload(jwtPayload);
@@ -43,11 +43,6 @@ async function authenticate(req, res, next) {
       next();
     } else if (jwtPayload.type === "school") {
       const user = await getUserSchoolPayload(jwtPayload);
-      req.token = jwtPayload.token;
-      req.user = user;
-      next();
-    } else if (jwtPayload.type === "modrator") {
-      const user = await getUserModratorPayload(jwtPayload);
       req.token = jwtPayload.token;
       req.user = user;
       next();
@@ -92,11 +87,6 @@ function getUserTeacherPayload(payload) {
 
 function getUserSchoolPayload(payload) {
   const user = userPayload(_school.default, payload);
-  return user;
-}
-
-function getUserModratorPayload(payload) {
-  const user = userPayload(_admin.default, payload);
   return user;
 }
 

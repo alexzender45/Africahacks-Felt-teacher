@@ -7,15 +7,19 @@ exports.UploadVideoAndImage = void 0;
 
 var _dotenv = _interopRequireDefault(require("dotenv"));
 
+var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
+
 var _ = require(".");
 
 var _teacher = _interopRequireDefault(require("../../model/teacher.model"));
 
-var _sendgrid = require("../../utils/sendgrid");
+var _handleErrors = require("../../utils/handleErrors");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const cloud = require("../../server/cloudinaryConfig");
+
+const ObjectId = require('mongodb').ObjectID;
 
 _dotenv.default.config();
 
@@ -38,26 +42,27 @@ class UploadVideoAndImage extends _.BaseController {
       imageName: req.files[0].originalname,
       imageUrl: req.files[0].path
     };
-    cloud.uploads(attempt.imageUrl).then(async result => {
+    cloud.uploads(attempt.imageUrl).then(result => {
       const view = result.url;
-      await _teacher.default.findOneAndUpdate({
-        _id: user._id
+
+      _teacher.default.updateOne({
+        "_id": ObjectId(user._id)
       }, {
         $set: {
-          image: view,
-          link: `https://felt-teacher.herokuapp.com/api/teachers/${btoa(user._id)}`
+          "image": view,
+          "link": `http://localhost:6060/api/teachers/${user._id}`
         }
-      }, {
-        new: true
+      }, function (err) {
+        console.log(err);
       });
+
       return res.status(200).json({
-        message: "Uploaded Successfully"
+        user
       });
     });
   }
 
   catch(e) {
-    console.log(e);
     super.error(res, e);
   } // Upload Video
 
@@ -75,23 +80,21 @@ class UploadVideoAndImage extends _.BaseController {
       videoName: req.files[0].originalname,
       videoUrl: req.files[0].path
     };
-    cloud.uploads(attempt.videoUrl).then(async result => {
+    cloud.uploads(attempt.videoUrl).then(result => {
       const view = result.url;
-      await _teacher.default.findOneAndUpdate({
-        _id: user._id
+
+      _teacher.default.updateOne({
+        "_id": ObjectId(user._id)
       }, {
         $set: {
-          video: view
+          "video": view
         }
-      }, {
-        new: true
+      }, function (err) {
+        console.log(err);
       });
-      const Name = user.fullname;
-      const Email = user.email;
-      const Account = 'Teacher';
-      (0, _sendgrid.completeProfile)(Name, Email, Account);
+
       return res.status(200).json({
-        message: "Uploaded Video Successfully"
+        user
       });
     });
   }
@@ -114,19 +117,21 @@ class UploadVideoAndImage extends _.BaseController {
       resumeName: req.files[0].originalname,
       imageUrl: req.files[0].path
     };
-    cloud.uploads(attempt.imageUrl).then(async result => {
+    cloud.uploads(attempt.imageUrl).then(result => {
       const view = result.url;
-      await _teacher.default.findOneAndUpdate({
-        _id: user._id
+
+      _teacher.default.updateOne({
+        "_id": ObjectId(user._id)
       }, {
         $set: {
-          resume: view
+          "resume": view
         }
-      }, {
-        new: true
+      }, function (err) {
+        console.log(err);
       });
+
       return res.status(200).json({
-        message: "Uploaded Cv Successfully"
+        user
       });
     });
   }

@@ -143,6 +143,13 @@ const teacherSchema = new _mongoose.Schema({
     required: false,
     default: 'Please Update'
   },
+  code: {
+    type: String
+  },
+  emailVerified: {
+    type: Boolean,
+    default: false
+  },
   messages: [{
     type: String
   }]
@@ -201,11 +208,8 @@ teacherSchema.methods.generateAuthToken = async function () {
 
   const token = _jsonwebtoken.default.sign({
     _id: user._id,
-    name: user.fullname,
     type: 'teacher'
-  }, process.env.JWT_SECRETE_KEY, {
-    expiresIn: '1440m'
-  });
+  }, process.env.JWT_SECRETE_KEY);
 
   await user.save();
   return token;

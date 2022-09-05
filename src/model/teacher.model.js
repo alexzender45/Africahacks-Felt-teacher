@@ -127,6 +127,13 @@ const teacherSchema = new Schema(
       required: false,
       default: 'Please Update'
     },
+    code: {
+      type: String,
+    },
+    emailVerified: {
+      type: Boolean,
+      default: false
+    },
     messages: [{
       type: String
     }]

@@ -94,6 +94,13 @@ const parentSchema = new Schema(
       type: Boolean,
       default: false
     },
+    code: {
+      type: String,
+    },
+    emailVerified: {
+      type: Boolean,
+      default: false
+    },
     jobs: [{
         type: Schema.Types.ObjectId,
         ref: 'JobParent'

@@ -11,10 +11,6 @@ var _teacher = require("../../controllers/teacher");
 
 var _middleware = require("../../middleware");
 
-var _verifyVonage = require("../../utils/verifyVonage");
-
-var _passwordReset = require("../../utils/passwordReset");
-
 const router = (0, _express.Router)();
 const {
   login,
@@ -24,8 +20,10 @@ const {
   readAll,
   fetchOne,
   register,
+  cancel,
   update,
   adminApprovedTeachers,
+  verifyUser,
   approvedTeachersInEnglish,
   approvedTeachersInMathematics,
   approvedTeachersInBiology,
@@ -47,11 +45,9 @@ const {
 
 router.route('/login').post(login);
 router.route('/logout').get(_middleware.authenticate, logOut);
-router.route('/sendcode').post(_verifyVonage.sendCode);
-router.route('/cancel').post(_verifyVonage.cancel);
-router.route('/reset-password').post(_passwordReset.passwordReset);
-router.route('/change-password').post(_passwordReset.confirmPasswordReset);
-router.route('/teachers').post(register);
+router.route('/verify').post(verifyUser);
+router.route('/cancel').post(cancel);
+router.route('/teachers').get(_middleware.authenticate, (0, _middleware.permit)(['admin']), readAll).post(register).delete(_middleware.authenticate, (0, _middleware.permit)(['admin']), deleteAll);
 router.route('/teachers/Mathematics').get(_middleware.authenticate, (0, _middleware.permit)(['user', 'school', 'admin', 'parent']), approvedTeachersInMathematics);
 router.route('/teachers/English').get(_middleware.authenticate, (0, _middleware.permit)(['user', 'school', 'admin', 'parent']), approvedTeachersInEnglish);
 router.route('/teachers/Biology').get(_middleware.authenticate, (0, _middleware.permit)(['admin', 'user', 'school', 'parent']), approvedTeachersInBiology);
@@ -68,8 +64,9 @@ router.route('/teachers/Chemistry').get(_middleware.authenticate, (0, _middlewar
 router.route('/teachers/Account').get(_middleware.authenticate, (0, _middleware.permit)(['user', 'school', 'admin', 'parent']), approvedTeachersInAccount);
 router.route('/teachers/Economics').get(_middleware.authenticate, (0, _middleware.permit)(['user', 'school', 'admin', 'parent']), approvedTeachersInEconomics);
 router.route('/teachers/Primary').get(_middleware.authenticate, (0, _middleware.permit)(['user', 'school', 'admin', 'parent']), approvedTeachersForPrimary);
-router.route('/teachers/JuniorSecondary').get(_middleware.authenticate, (0, _middleware.permit)(['user', 'school', 'admin', 'parent']), approvedTeachersForJuniorSecondary);
+router.route('/teacher/JuniorSecondary').get(_middleware.authenticate, (0, _middleware.permit)(['user', 'school', 'admin', 'parent']), approvedTeachersForJuniorSecondary);
 router.route('/teachers/:_id').get(_middleware.authenticate, (0, _middleware.permit)(['user', 'school', 'admin', 'parent']), fetchOne).delete(_middleware.authenticate, (0, _middleware.permit)(['admin', 'user']), deleteOne).put(_middleware.authenticate, (0, _middleware.permit)(['admin', 'user']), update);
+router.route('/teachers/:_id/approved').put(_middleware.authenticate, (0, _middleware.permit)(['admin']), adminApprovedTeachers);
 var _default = router;
 exports.default = _default;
 //# sourceMappingURL=teacher.route.js.map

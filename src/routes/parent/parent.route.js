@@ -22,7 +22,7 @@ const {
 
 router.route('/login/parent').post(parentLogin);
 router.route('/logout/parent').get(authenticate, parentLogOut);
-router.route('/verifyparent').get(verifyUser);
+router.route('/verify/parent').post(verifyUser);
 router.route('/cancelparent').get(cancel);
 router
   .route('/parents')

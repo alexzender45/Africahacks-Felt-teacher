@@ -30,6 +30,7 @@
   "homepage": "https://github.com/alexzender45/Africahacks-Felt-teacher/blob/main/README.md",
   "license": "MIT",
   "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
     "@vonage/server-sdk": "^2.10.4",
     "bcrypt": "^5.0.0",
     "cloudinary": "^1.23.0",

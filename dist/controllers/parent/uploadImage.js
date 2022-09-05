@@ -11,11 +11,11 @@ var _ = require(".");
 
 var _parent = _interopRequireDefault(require("../../model/parent.model"));
 
-var _sendgrid = require("../../utils/sendgrid");
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const cloud = require("../../server/cloudinaryConfig");
+
+const ObjectId = require('mongodb').ObjectID;
 
 _dotenv.default.config();
 
@@ -37,24 +37,22 @@ class UploadImage extends _.BaseController {
       imageName: req.files[0].originalname,
       imageUrl: req.files[0].path
     };
-    cloud.uploads(attempt.imageUrl).then(async result => {
+    cloud.uploads(attempt.imageUrl).then(result => {
       const view = result.url;
-      await _parent.default.findOneAndUpdate({
-        _id: user._id
+
+      _parent.default.updateOne({
+        "_id": ObjectId(user._id)
       }, {
         $set: {
-          image: view,
-          link: ` https://felt-teacher.herokuapp.com/api/parents/${btoa(user._id)}`
+          "image": view,
+          "link": `http://localhost:6060/api/parents/${user._id}`
         }
-      }, {
-        new: true
+      }, function (err) {
+        return err;
       });
-      const Name = user.nameOfParent;
-      const Email = user.email;
-      const Account = 'Parent';
-      (0, _sendgrid.completeProfile)(Name, Email, Account);
+
       return res.status(200).json({
-        message: "Uploaded Successfully"
+        user
       });
     });
   }

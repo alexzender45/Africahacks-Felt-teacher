@@ -4,6 +4,7 @@ import { config as dotConfig } from 'dotenv';
 import 'dotenv/config';
 import Teacher from '../../model/teacher.model';
 import { throwError } from '../../utils/handleErrors';
+import {send} from '../../utils/sendgrid';
 
 dotConfig();
 
@@ -19,24 +20,33 @@ export class TeacherController extends BaseController {
 
   async register(req, res) {
     try {
+      const generatedCode = Math.floor(
+        100000 + Math.random() * 100000,
+      ).toString();
       const data = req.body;
+      data.code = generatedCode;
       const newTeacher = new Teacher(data);
-    vonage.verify.request({
-        number: req.body.phone,
-        // You can customize this to show the name of your company
-        brand: 'Felt Teacher',
-        // We could put `'6'` instead of `'4'` if we wanted a longer verification code
-        code_length: '4'
-    }, (err, result) => {
-        if (err) {
-            // If there was an error, return it to the client
-            res.status(500).send(err.error_text);
-            return;
-        }
-    });
       const teacher = await newTeacher.save();
       const token = await teacher.generateAuthToken();
       const body = { teacher, token };
+      const mail = {
+        to: teacher.email,
+        subject: 'Felt Teacher Verification Code',
+        from: {
+          name: 'Felt Teacher Team',
+          email: 'juniorefe45@gmail.com',
+        },
+        text: `Your Email Verification Code has been Sent to ${teacher.email}`,
+        html: `<p>Hi ${teacher.fullname}</p>
+              <br>
+              <p>Please use this code below to verify your account</p>
+              <br>
+              <p><strong>Code:</strong> ${generatedCode}</p>
+              <p>Thanks,</p>
+              <p>Felt Teacher Team</p>
+              `,
+      };
+      await send(mail);
       super.success(res, body, 'Teacher Registration Successful', 201);
     } catch (e) {
       super.error(res, e);
@@ -44,23 +54,22 @@ export class TeacherController extends BaseController {
   }
 
 
-  async verifyUser() {
+  async verifyUser(req, res) {
     // We require clients to submit a request id (for identification) and a code (to check)
-    if (!req.body.requestId || !req.body.code) {
-        res.status(400).send({message: "You must supply a `code` and `request_id` prop to send the request to"})
+    if (!req.body.code) {
+        res.status(400).send({message: "You must supply a `code` parameter"});
         return;
     }
     // Run the check against Vonage's servers
-    vonage.verify.check({
-        request_id: req.body.requestId,
-        code: req.body.code
-    }, (err, result) => {
-        if (err) {
-            res.status(500).send(err.error_text);
-            return;
-        }
-        res.send(result);
-    });
+   const teacher = await Teacher.findOne({code: req.body.code});
+   console.log(teacher === null)
+    if(teacher === null){
+      return res.status(400).send({message: "Invalid Code"});
+    }
+    teacher.emailVerified = true;
+    teacher.code = null;
+    await teacher.save();
+    super.success(res, teacher, 'Email Verified Successfully');
 }
 
   async cancel(req, res){

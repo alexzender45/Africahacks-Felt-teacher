@@ -5,6 +5,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Connect = void 0;
 
+var _dotenv = require("dotenv");
+
+require("dotenv/config");
+
 var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 
 var _ = require(".");
@@ -15,9 +19,15 @@ var _school = _interopRequireDefault(require("../../model/school.model"));
 
 var _parent = _interopRequireDefault(require("../../model/parent.model"));
 
-var _connect = require("../../utils/connect");
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const Vonage = require('@vonage/server-sdk');
+
+(0, _dotenv.config)();
+const vonage = new Vonage({
+  apiKey: process.env.API_KEY_VONAGEAPP,
+  apiSecret: process.env.API_SECRET_VONAGEAPP
+});
 
 class Connect extends _.BaseController {
   constructor() {
@@ -54,7 +64,7 @@ class Connect extends _.BaseController {
             if (err) return new Error(err);
           });
 
-          const user = await _parent.default.findById(req.params._id);
+          const user = await _school.default.findById(req.params._id);
 
           if (!user) {
             return res.status(400).send({
@@ -65,14 +75,21 @@ class Connect extends _.BaseController {
 
           user.messages.push(`${visitor.nameOfSchool} requested to connect with you, ${visitor.email}, ${visitor.link}`);
           user.save();
-          const message = `You can email me ${visitor.email}, and also check my profile on Felt Teacher Platform ${visitor.link}`;
-          const sendMessage = `<h1> Congrats ${user.nameOfParent} Someone Wants To Connect With You </h1>
-          <p> I will love to connect with you</p>
-          <p> You can email me ${visitor.email},  and also check my Profile on Felt Teacher Platform <a href = "${visitor.link}"> <b>My Profile</b> </a></p>
-          <p><b> Thanks For Reading My Message </b></p>`;
-          const Email = user.email;
-          (0, _connect.connect)(user.phone, message);
-          connectWithUser(sendMessage, Email);
+          const from = " From Felt Teacher";
+          const to = user.phone;
+          const more = `You can email me ${visitor.email}, and also check School on Felt Teacher Platform ${visitor.link}`;
+          const text = `I will love to connect with you ${more}`;
+          vonage.message.sendSms(from, to, text, (err, responseData) => {
+            if (err) {
+              return err;
+            } else {
+              if (responseData.messages[0]['status'] === "0") {
+                return "Message sent successfully.";
+              } else {
+                return `Message failed with error: ${responseData.messages[0]['error-text']}`;
+              }
+            }
+          });
         } // User that is a Teacher
 
       } else if (decoded.type === "teacher") {
@@ -105,14 +122,21 @@ class Connect extends _.BaseController {
 
           user.messages.push(`${visitor.fullname} requested to connect with you, ${visitor.email}, ${visitor.link}`);
           user.save();
-          const message = `You can email me ${visitor.email}, and also check my profile on Felt Teacher Platform ${visitor.link}`;
-          const sendMessage = `<h1> Congrats ${user.nameOfParent} Someone Wants To Connect With You </h1>
-          <p> I will love to connect with you</p>
-          <p> You can email me ${visitor.email},  and also check my Profile on Felt Teacher Platform <a href = "${visitor.link}"> <b>My Profile</b> </a></p>
-          <p><b> Thanks For Reading My Message </b></p>`;
-          const Email = user.email;
-          (0, _connect.connect)(user.phone, message);
-          connectWithUser(sendMessage, Email);
+          const from = " From Felt Teacher";
+          const to = user.phone;
+          const more = `You can email me ${visitor.email}, and also check my profile on Felt Teacher Platform ${visitor.link}`;
+          const text = `I will love to connect with you. ${more}`;
+          vonage.message.sendSms(from, to, text, (err, responseData) => {
+            if (err) {
+              return err;
+            } else {
+              if (responseData.messages[0]['status'] === "0") {
+                return "Message sent successfully.";
+              } else {
+                return `Message failed with error: ${responseData.messages[0]['error-text']}`;
+              }
+            }
+          });
         } // User that is a Parent
 
       } else if (decoded.type === "parent") {
@@ -144,14 +168,21 @@ class Connect extends _.BaseController {
 
           user.messages.push(`${visitor.nameOfParent} requested to connect with you, ${visitor.email}, ${visitor.link}`);
           user.save();
-          const message = `You can email me ${visitor.email}, and also check my profile on Felt Teacher Platform ${visitor.link}`;
-          const sendMessage = `<h1> Congrats ${user.nameOfParent} Someone Wants To Connect With You </h1>
-          <p> I will love to connect with you</p>
-          <p> You can email me ${visitor.email},  and also check my Profile on Felt Teacher Platform <a href = "${visitor.link}"> <b>My Profile</b> </a></p>
-          <p><b> Thanks For Reading My Message </b></p>`;
-          const Email = user.email;
-          (0, _connect.connect)(user.phone, message);
-          connectWithUser(sendMessage, Email);
+          const from = " From Felt Teacher";
+          const to = user.phone;
+          const more = `You can email me ${visitor.email}, and also check my profile on Felt Teacher Platform ${visitor.link}`;
+          const text = `I will love to connect with you. ${more}`;
+          vonage.message.sendSms(from, to, text, (err, responseData) => {
+            if (err) {
+              return err;
+            } else {
+              if (responseData.messages[0]['status'] === "0") {
+                return "Message sent successfully.";
+              } else {
+                return `Message failed with error: ${responseData.messages[0]['error-text']}`;
+              }
+            }
+          });
         }
       }
 
