@@ -42,6 +42,7 @@ class ParentController extends _.BaseController {
 
     try {
       const generatedCode = Math.floor(100000 + Math.random() * 100000).toString();
+      data.code = generatedCode;
       const newParent = new _parent.default(data);
       const parent = await newParent.save();
       const token = await parent.generateAuthToken();
@@ -96,7 +97,7 @@ class ParentController extends _.BaseController {
     parent.emailVerified = true;
     parent.code = null;
     await parent.save();
-    super.success(res, teacher, 'Email Verified Successfully');
+    super.success(res, parent, 'Email Verified Successfully');
   }
 
   async cancel(req, res) {

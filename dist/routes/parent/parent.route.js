@@ -29,7 +29,7 @@ const {
 } = new _parent.ParentController();
 router.route('/login/parent').post(parentLogin);
 router.route('/logout/parent').get(_middleware.authenticate, parentLogOut);
-router.route('/verifyparent').get(verifyUser);
+router.route('/verify/parent').post(verifyUser);
 router.route('/cancelparent').get(cancel);
 router.route('/parents').get(_middleware.authenticate, (0, _middleware.permit)(['admin']), readAllParent).post(register).delete(_middleware.authenticate, (0, _middleware.permit)(['admin']), deleteAllParent);
 router.route('/parents/approved').get(_middleware.authenticate, (0, _middleware.permit)(['admin', 'user', 'school', 'parent']), approvedParents);

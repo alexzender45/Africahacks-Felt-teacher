@@ -29,7 +29,7 @@ const {
 } = new _school.SchoolController();
 router.route('/login/school').post(schoolLogin);
 router.route('/logout/school').get(_middleware.authenticate, schoolLogOut);
-router.route('/verifyschool').get(verifyUser);
+router.route('/verify/school').post(verifyUser);
 router.route('/cancelschool').get(cancel);
 router.route('/schools').get(_middleware.authenticate, (0, _middleware.permit)(['admin']), readAllSchool).post(register).delete(_middleware.authenticate, (0, _middleware.permit)(['admin']), deleteAllSchool);
 router.route('/schools/approved').get(_middleware.authenticate, (0, _middleware.permit)(['admin', 'user', 'school', 'parent']), approvedSchools);

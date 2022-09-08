@@ -37,6 +37,7 @@ class SchoolController extends _.BaseController {
 
     try {
       const generatedCode = Math.floor(100000 + Math.random() * 100000).toString();
+      data.code = generatedCode;
       const newSchool = new _sch.default(data);
       const school = await newSchool.save();
       const token = await school.generateAuthToken();
@@ -91,7 +92,7 @@ class SchoolController extends _.BaseController {
     school.emailVerified = true;
     school.code = null;
     await school.save();
-    super.success(res, teacher, 'Email Verified Successfully');
+    super.success(res, school, 'Email Verified Successfully');
   }
 
   async cancel(req, res) {
