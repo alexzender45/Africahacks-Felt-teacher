@@ -70,7 +70,7 @@ class ParentController extends _.BaseController {
       await (0, _sendgrid.send)(mail);
       super.success(res, body, 'Parent Registration Successful', 201);
     } catch (e) {
-      supper.error(res, e);
+      super.error(res, e);
     }
   }
 
